@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mx.edu.utez.saem.model.diagnostic.DiagnosticBean;
+import mx.edu.utez.saem.model.user.UserBean;
 
-import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "doctor")
@@ -18,18 +20,12 @@ public class DoctorBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "DATE", nullable = false)
-    private LocalDate birthdate;
     @Column(length = 20, nullable = false)
-    private String phoneNumber;
-    @Column(nullable = false)
-    private Integer age;
-    @Column(length = 100, nullable = false)
-    private String birthState;
-    @Column(length = 50, nullable = false)
-    private String gender;
-    @Column(length = 18, nullable = false)
-    private String curp;
+    private String card;
 
+    @OneToOne
+    private UserBean userBean;
 
+    @OneToMany(mappedBy = "doctorBean", cascade = CascadeType.ALL )
+    private Set<DiagnosticBean> diagnosticBeans;
 }

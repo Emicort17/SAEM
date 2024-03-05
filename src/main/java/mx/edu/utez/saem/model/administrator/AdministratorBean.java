@@ -1,27 +1,23 @@
-package mx.edu.utez.saem.model.rol;
+package mx.edu.utez.saem.model.administrator;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mx.edu.utez.saem.model.user.UserBean;
-
-import java.util.Set;
 
 @Entity
-@Table(name = "rol")
+@Table(name = "administrator")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class RolBean {
+public class AdministratorBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 50, nullable = false)
-    private String rol;
-
-    @OneToMany(mappedBy = "rol")
-    private Set<UserBean> user;
+    @Column(length = 5, nullable = false)
+    private String user;
+    @Column(length = 8, nullable = false)
+    private String password;
 }

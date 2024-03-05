@@ -1,8 +1,8 @@
-package mx.edu.utez.saem.model.patient;
+package mx.edu.utez.saem.model.result;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PatientRepository extends JpaRepository<PatientBean, Long> {
+public interface ResultRepository extends JpaRepository<ResultBean, Long> {
 }

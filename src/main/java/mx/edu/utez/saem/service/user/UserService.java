@@ -2,10 +2,8 @@ package mx.edu.utez.saem.service.user;
 
 import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
-import mx.edu.utez.saem.model.rol.RolBean;
 import mx.edu.utez.saem.model.user.UserBean;
 import mx.edu.utez.saem.model.user.UserRepository;
-import org.apache.catalina.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

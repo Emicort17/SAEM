@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mx.edu.utez.saem.model.rol.RolBean;
+import mx.edu.utez.saem.model.doctor.DoctorBean;
+import mx.edu.utez.saem.model.person.PersonBean;
 
 @Entity
 @Table(name = "user")
@@ -17,22 +18,16 @@ public class UserBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 100, nullable = false)
-    private String username;
-    @Column(length = 100, nullable = false)
-    private String password;
-    @Column(length = 100, nullable = false)
+    @Column(length = 50, nullable = false)
     private String email;
-    @Column(length = 100, nullable = false)
-    private String name;
-    @Column(length = 100, nullable = false)
-    private String surname;
-    @Column(length = 100, nullable = false)
-    private String lastname;
+    @Column(length = 8, nullable = false)
+    private String password;
     @Column(nullable = false)
     private String status;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "rol_id")
-    private RolBean rol;
+    @OneToOne
+    private PersonBean personBean;
+
+    @OneToOne(mappedBy = "userBean")
+    private DoctorBean doctorBean;
 }

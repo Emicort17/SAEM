@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mx.edu.utez.saem.model.person.PersonBean;
 
 @Entity
 @Table(name = "address")
@@ -36,6 +37,7 @@ public class AddressBean {
     @Column(length = 100)
     private String street3;
 
-
+    @OneToOne
+    private PersonBean personBean;
 
 }
