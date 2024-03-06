@@ -20,4 +20,9 @@ public class AdministratorBean {
     private String user;
     @Column(length = 8, nullable = false)
     private String password;
+
+    public AdministratorBean(String user, String password) {
+        this.user = user;
+        this.password = password;
+    }
 }
