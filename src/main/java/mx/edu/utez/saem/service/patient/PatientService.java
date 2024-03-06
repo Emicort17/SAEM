@@ -21,23 +21,21 @@ public class PatientService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
-        return new ResponseEntity<>(new ApiResponse(repository.findAll(), HttpStatus.OK, "Okey"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(repository.findAll(), HttpStatus.OK, "Ok"), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getOne(Long id) {
-        Optional<PatientBean> optionalAddressBean = repository.findById(id);
-        if (optionalAddressBean.isPresent()) {
-            Long id2 = optionalAddressBean.get().getId();
+        Optional<PatientBean> optionalPatientBean = repository.findById(id);
+        if (optionalPatientBean.isPresent()) {
+            Long id2 = optionalPatientBean.get().getId();
             System.out.println(id);
-            PatientBean address = repository.getOne(id2);
-            return new ResponseEntity<>(new ApiResponse(address, HttpStatus.OK, "Recuperado"), HttpStatus.OK);
+            PatientBean patient = repository.getOne(id2);
+            return new ResponseEntity<>(new ApiResponse(patient, HttpStatus.OK, "Recuperado"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ApiResponse(null, HttpStatus.NOT_FOUND, "No encontrado"), HttpStatus.NOT_FOUND);
         }
     }
-
-
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> save(PatientBean patient){
@@ -50,23 +48,21 @@ public class PatientService {
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> update(PatientBean patient){
-        Optional<PatientBean> optionalPatientBean = repository.findById(patient.getId());
-        if(optionalPatientBean.isPresent()){
+        Optional<PatientBean> foundPatient = repository.findById(patient.getId());
+        if(foundPatient.isPresent()){
             return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(patient), HttpStatus.OK, "Actualización guardada Exitosamente"), HttpStatus.OK);
         } else{
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Esta sección no almacena datos nuevos"), HttpStatus.BAD_REQUEST);
-
         }
     }
 
     @Transactional
     public ResponseEntity<ApiResponse> delete(Long id) {
-        Optional<PatientBean> foundCategory = repository.findById(id);
-        if (foundCategory.isPresent() ) {
+        Optional<PatientBean> foundPatient = repository.findById(id);
+        if (foundPatient.isPresent() ) {
             repository.deleteById(id);
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Paciente Eliminada"), HttpStatus.OK);
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Registro Eliminado"), HttpStatus.OK);
         }
-
         return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Error de eliminación"), HttpStatus.BAD_REQUEST);
     }
 }

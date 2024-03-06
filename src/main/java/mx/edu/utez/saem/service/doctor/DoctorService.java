@@ -1,20 +1,22 @@
-package mx.edu.utez.saem.service.address;
+package mx.edu.utez.saem.service.doctor;
 
 import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
-import mx.edu.utez.saem.model.address.AddressBean;
-import mx.edu.utez.saem.model.address.AddressRepository;
+import mx.edu.utez.saem.model.doctor.DoctorBean;
+import mx.edu.utez.saem.model.doctor.DoctorRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
+
 import java.sql.SQLException;
+import java.util.Optional;
+
 @Service
 @Transactional
 @AllArgsConstructor
-public class AddressService {
-    private final AddressRepository repository;
+public class DoctorService {
+    private final DoctorRepository repository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
@@ -23,31 +25,31 @@ public class AddressService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getOne(Long id) {
-        Optional<AddressBean> optionalAddressBean = repository.findById(id);
-        if (optionalAddressBean.isPresent()) {
-            Long id2 = optionalAddressBean.get().getId();
+        Optional<DoctorBean> optionalDoctorBean = repository.findById(id);
+        if (optionalDoctorBean.isPresent()) {
+            Long id2 = optionalDoctorBean.get().getId();
             System.out.println(id);
-            AddressBean address = repository.getOne(id2);
-            return new ResponseEntity<>(new ApiResponse(address, HttpStatus.OK, "Recuperado"), HttpStatus.OK);
+            DoctorBean doctor = repository.getOne(id2);
+            return new ResponseEntity<>(new ApiResponse(doctor, HttpStatus.OK, "Recuperado"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ApiResponse(null, HttpStatus.NOT_FOUND, "No encontrado"), HttpStatus.NOT_FOUND);
         }
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> save(AddressBean address){
-        Optional<AddressBean> addressBeanOptional = repository.findById(address.getId());
-        if(addressBeanOptional.isPresent())
+    public ResponseEntity<ApiResponse> save(DoctorBean doctor){
+        Optional<DoctorBean> optionalDoctorBean = repository.findById(doctor.getId());
+        if(optionalDoctorBean.isPresent())
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Registro duplicado"), HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(address), HttpStatus.OK, "Guardado Exitosamente"), HttpStatus.OK);
+        return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(doctor), HttpStatus.OK, "Guardado Exitosamente"), HttpStatus.OK);
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> update(AddressBean address){
-        Optional<AddressBean> foundAddress = repository.findById(address.getId());
-        if(foundAddress.isPresent()){
-            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(address), HttpStatus.OK, "Actualización guardada Exitosamente"), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> update(DoctorBean doctor){
+        Optional<DoctorBean> foundDoctor = repository.findById(doctor.getId());
+        if(foundDoctor.isPresent()){
+            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(doctor), HttpStatus.OK, "Actualización guardada Exitosamente"), HttpStatus.OK);
         } else{
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Esta sección no almacena datos nuevos"), HttpStatus.BAD_REQUEST);
         }
@@ -55,8 +57,8 @@ public class AddressService {
 
     @Transactional
     public ResponseEntity<ApiResponse> delete(Long id) {
-        Optional<AddressBean> foundAddress = repository.findById(id);
-        if (foundAddress.isPresent() ) {
+        Optional<DoctorBean> foundDoctor = repository.findById(id);
+        if (foundDoctor.isPresent() ) {
             repository.deleteById(id);
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Registro Eliminado"), HttpStatus.OK);
         }
