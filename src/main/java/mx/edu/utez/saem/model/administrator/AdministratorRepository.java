@@ -8,7 +8,7 @@ import java.util.Optional;
 @Repository
 public interface AdministratorRepository extends JpaRepository<AdministratorBean, Long> {
     Optional<AdministratorBean> findById(Long id);
-
+    Optional<AdministratorBean> findByUser(String user);
     // Método para verificar si ya existen registros
     boolean existsByIdIsNotNull();
 }

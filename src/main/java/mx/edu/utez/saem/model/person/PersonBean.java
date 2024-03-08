@@ -40,6 +40,18 @@ public class PersonBean {
     @OneToOne(mappedBy = "personBean")
     private UserBean userBean;
 
-    @OneToOne(mappedBy = "personBean")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private AddressBean addressBean;
+
+    public PersonBean(String name, String middleName, String lastName, LocalDate birthdate, String birthplace, String curp, String phoneNumber, String sex) {
+        this.name = name;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.birthdate = birthdate;
+        this.birthplace = birthplace;
+        this.curp = curp;
+        this.phoneNumber = phoneNumber;
+        this.sex = sex;
+    }
 }

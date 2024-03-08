@@ -21,9 +21,15 @@ public class PatientBean {
     @Column(nullable = false)
     private boolean external;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserBean userBean;
 
     @OneToOne(mappedBy = "patientBean")
     private MedicalRecordBean medicalRecordBean;
+
+    public PatientBean(boolean external, UserBean userBean) {
+        this.external = external;
+        this.userBean = userBean;
+    }
 }

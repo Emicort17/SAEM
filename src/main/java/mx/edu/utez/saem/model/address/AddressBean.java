@@ -37,7 +37,7 @@ public class AddressBean {
     @Column(length = 100)
     private String street3;
 
-    @OneToOne
+    @OneToOne(mappedBy = "addressBean")
     private PersonBean personBean;
 
 }

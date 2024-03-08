@@ -25,9 +25,17 @@ public class UserBean {
     @Column(nullable = false)
     private String status;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
     private PersonBean personBean;
 
     @OneToOne(mappedBy = "userBean")
     private DoctorBean doctorBean;
+
+    public UserBean(String email, String password, String status, PersonBean personBean) {
+        this.email = email;
+        this.password = password;
+        this.status = status;
+        this.personBean = personBean;
+    }
 }

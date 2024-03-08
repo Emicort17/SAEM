@@ -23,9 +23,15 @@ public class DoctorBean {
     @Column(length = 20, nullable = false)
     private String card;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserBean userBean;
 
     @OneToMany(mappedBy = "doctorBean", cascade = CascadeType.ALL )
     private Set<DiagnosticBean> diagnosticBeans;
+
+    public DoctorBean(String card, UserBean userBean) {
+        this.card = card;
+        this.userBean = userBean;
+    }
 }
