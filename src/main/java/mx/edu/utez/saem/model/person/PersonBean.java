@@ -41,10 +41,10 @@ public class PersonBean {
     private UserBean userBean;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
     private AddressBean addressBean;
 
-    public PersonBean(String name, String middleName, String lastName, LocalDate birthdate, String birthplace, String curp, String phoneNumber, String sex) {
+    public PersonBean(String name, String middleName, String lastName, LocalDate birthdate, String birthplace, String curp, String phoneNumber, String sex, AddressBean address) {
         this.name = name;
         this.middleName = middleName;
         this.lastName = lastName;
@@ -53,5 +53,6 @@ public class PersonBean {
         this.curp = curp;
         this.phoneNumber = phoneNumber;
         this.sex = sex;
+        addressBean = address;
     }
 }

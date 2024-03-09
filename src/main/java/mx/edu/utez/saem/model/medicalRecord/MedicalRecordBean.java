@@ -24,7 +24,8 @@ public class MedicalRecordBean {
     @Column(length = 20, nullable = false)
     private String number;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
     private PatientBean patientBean;
 
     @OneToMany(mappedBy = "medicalRecordBean", cascade = CascadeType.ALL )

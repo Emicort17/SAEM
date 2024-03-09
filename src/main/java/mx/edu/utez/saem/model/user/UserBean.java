@@ -26,7 +26,7 @@ public class UserBean {
     private String status;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
     private PersonBean personBean;
 
     @OneToOne(mappedBy = "userBean")

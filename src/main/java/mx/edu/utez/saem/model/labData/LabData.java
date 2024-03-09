@@ -1,4 +1,4 @@
-package mx.edu.utez.saem.model.values;
+package mx.edu.utez.saem.model.labData;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,12 +10,12 @@ import mx.edu.utez.saem.model.result.ResultBean;
 import java.util.Set;
 
 @Entity
-@Table(name = "values")
+@Table(name = "lab_data")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ValuesBean {
+public class LabData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +32,7 @@ public class ValuesBean {
     @Column(nullable = false)
     private Integer platelets;
 
-    @OneToMany(mappedBy = "valuesBean", cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "labData")
     private Set<ResultBean> resultBeans;
 
 }

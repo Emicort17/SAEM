@@ -19,8 +19,6 @@ public class AddressBean {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 100, nullable = false)
-    private String country;
-    @Column(length = 100, nullable = false)
     private String state;
     @Column(length = 100, nullable = false)
     private String town;
@@ -29,7 +27,7 @@ public class AddressBean {
     @Column(length = 10, name = "interior_number")
     private String interiorNumber;
     @Column(length = 10, nullable = false, name = "exterior_number")
-    private Integer exteriorNumber;
+    private String exteriorNumber;
     @Column(length = 100, nullable = false)
     private String street1;
     @Column(length = 100)
@@ -40,4 +38,14 @@ public class AddressBean {
     @OneToOne(mappedBy = "addressBean")
     private PersonBean personBean;
 
+    public AddressBean(String state, String town, String zip, String interiorNumber, String exteriorNumber, String street1, String street2, String street3) {
+        this.state = state;
+        this.town = town;
+        this.zip = zip;
+        this.interiorNumber = interiorNumber;
+        this.exteriorNumber = exteriorNumber;
+        this.street1 = street1;
+        this.street2 = street2;
+        this.street3 = street3;
+    }
 }

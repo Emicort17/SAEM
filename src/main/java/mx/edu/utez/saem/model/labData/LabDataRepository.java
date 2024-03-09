@@ -1,8 +1,8 @@
-package mx.edu.utez.saem.model.values;
+package mx.edu.utez.saem.model.labData;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ValuesRepository extends JpaRepository<ValuesBean, Long> {
+public interface LabDataRepository extends JpaRepository<LabData, Long> {
 }

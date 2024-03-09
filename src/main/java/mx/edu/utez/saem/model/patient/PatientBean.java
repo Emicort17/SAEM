@@ -22,7 +22,7 @@ public class PatientBean {
     private boolean external;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private UserBean userBean;
 
     @OneToOne(mappedBy = "patientBean")

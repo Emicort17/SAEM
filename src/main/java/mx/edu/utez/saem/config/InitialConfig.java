@@ -1,5 +1,7 @@
 package mx.edu.utez.saem.config;
 
+import mx.edu.utez.saem.model.address.AddressBean;
+import mx.edu.utez.saem.model.address.AddressRepository;
 import mx.edu.utez.saem.model.administrator.AdministratorBean;
 import mx.edu.utez.saem.model.administrator.AdministratorRepository;
 import mx.edu.utez.saem.model.doctor.DoctorBean;
@@ -14,32 +16,61 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Configuration
 public class InitialConfig implements CommandLineRunner {
+    private final AddressRepository addressRepository;
     private final PersonRepository personRepository;
     private final UserRepository userRepository;
     private final AdministratorRepository administratorRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
 
-    public InitialConfig(PersonRepository personRepository, UserRepository userRepository, AdministratorRepository administratorRepository, DoctorRepository doctorRepository, PatientRepository patientRepository) {
+    public InitialConfig(PersonRepository personRepository, UserRepository userRepository, AdministratorRepository administratorRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AddressRepository addressRepository) {
         this.personRepository = personRepository;
         this.userRepository = userRepository;
         this.administratorRepository = administratorRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
+        this.addressRepository = addressRepository;
     }
 
     @Override
     @Transactional(rollbackFor = SQLException.class)
     public void run(String... args) throws Exception {
         //Admin por defecto
-        getOrSaveAdmin(new AdministratorBean("Shago", "1234"));
+        saveAdmin(new AdministratorBean("Shago", "1234"));
 
+        //Direccion de persona doctor
+        AddressBean addressPerson = getOrSaveAddress(new AddressBean(
+                "Morelos", // Estado
+                "Cuernavaca", // Ciudad o Municipio
+                "62400", // Código Postal
+                "Int. 3", // Número Interior
+                "123", // Número Exterior
+                "Avenida de los Emperadores", // Calle 1
+                "Colonia del Sol", // Calle 2
+                "Entre Calle Benito Juárez y Calle Miguel Hidalgo" // Calle 3
+        ));
+        //Direccion de persona paciente
+        // Creando otro objeto de ejemplo
+        AddressBean addressPerson2 = getOrSaveAddress(new AddressBean(
+                "Morelos", // Estado
+                "Cuautla", // Ciudad o Municipio
+                "62740", // Código Postal
+                "Int. 2", // Número Interior
+                "456", // Número Exterior
+                "Calle de la Revolución", // Calle 1
+                "Barrio de San Juan", // Calle 2
+                "Entre Calle Hidalgo y Calle Morelos" // Calle 3
+        ));
+
+
+        //Persona doctor
         PersonBean doctorPerson = getOrSavePerson(new PersonBean(
                 "Juan",
                 "Carlos",
@@ -48,8 +79,11 @@ public class InitialConfig implements CommandLineRunner {
                 "Ciudad de México",
                 "ABC123456DEF789",
                 "5512345678",
-                "Hombre"
+                "Hombre",
+                addressPerson
         ));
+
+        //Persona paciente
         PersonBean patientPerson = getOrSavePerson(new PersonBean(
                 "María",
                 "Guadalupe",
@@ -58,19 +92,27 @@ public class InitialConfig implements CommandLineRunner {
                 "Monterrey",
                 "XYZ987654ABC321",
                 "5543210987",
-                "Mujer"
+                "Mujer",
+                addressPerson2
         ));
 
         UserBean doctorUser = getOrSaveUser(new UserBean("doctor@gmail.com", "123", "Activo", doctorPerson));
         UserBean patientUser = getOrSaveUser(new UserBean("patient@gmail.com", "123", "Activo", patientPerson));
 
-       /* saveDoctor(new DoctorBean("12344264123", doctorUser));
-        savePatient(new PatientBean(false, patientUser));*/
+        DoctorBean doctor = getOrSaveDoctor(new DoctorBean("12344264123", doctorUser));
+        PatientBean patient = getOrSavePatient(new PatientBean(false, patientUser));
     }
     @Transactional
-    public AdministratorBean getOrSaveAdmin(AdministratorBean admin){
+    public void saveAdmin(AdministratorBean admin){
         Optional<AdministratorBean> foundAdmin = administratorRepository.findByUser(admin.getUser());
-        return foundAdmin.orElseGet(()-> administratorRepository.saveAndFlush(admin));
+        if(foundAdmin.isEmpty()){
+            administratorRepository.saveAndFlush(admin);
+        }
+    }
+    @Transactional
+    public AddressBean getOrSaveAddress(AddressBean address){
+        Optional<AddressBean> foundAddress = addressRepository.findByZipAndStreet1(address.getZip(), address.getStreet1());
+        return foundAddress.orElseGet(()-> addressRepository.saveAndFlush(address));
     }
     @Transactional
     public PersonBean getOrSavePerson(PersonBean person){
@@ -83,11 +125,13 @@ public class InitialConfig implements CommandLineRunner {
         return foundUser.orElseGet(()-> userRepository.saveAndFlush(user));
     }
     @Transactional
-    public void saveDoctor(DoctorBean doctor){
-        doctorRepository.saveAndFlush(doctor);
+    public DoctorBean getOrSaveDoctor(DoctorBean doctor){
+        Optional<DoctorBean> foundDoctor = doctorRepository.findByCard(doctor.getCard());
+        return foundDoctor.orElseGet(()-> doctorRepository.saveAndFlush(doctor));
     }
     @Transactional
-    public void savePatient(PatientBean patient){
-        patientRepository.saveAndFlush(patient);
+    public PatientBean getOrSavePatient(PatientBean patient){
+        Optional<PatientBean> foundPatient = patientRepository.findByUserBeanEmail(patient.getUserBean().getEmail());
+        return foundPatient.orElseGet(()-> patientRepository.saveAndFlush(patient));
     }
 }
