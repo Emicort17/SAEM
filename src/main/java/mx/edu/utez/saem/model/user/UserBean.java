@@ -20,10 +20,10 @@ public class UserBean {
     private Long id;
     @Column(length = 50, nullable = false)
     private String email;
-    @Column(length = 8, nullable = false)
+    @Column(length = 60, nullable = false)
     private String password;
     @Column(nullable = false)
-    private String status;
+    private Boolean status;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
@@ -32,7 +32,7 @@ public class UserBean {
     @OneToOne(mappedBy = "userBean")
     private DoctorBean doctorBean;
 
-    public UserBean(String email, String password, String status, PersonBean personBean) {
+    public UserBean(String email, String password, Boolean status, PersonBean personBean) {
         this.email = email;
         this.password = password;
         this.status = status;

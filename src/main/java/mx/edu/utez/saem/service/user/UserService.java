@@ -2,14 +2,23 @@ package mx.edu.utez.saem.service.user;
 
 import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
+import mx.edu.utez.saem.model.administrator.AdministratorRepository;
+import mx.edu.utez.saem.model.doctor.DoctorRepository;
+import mx.edu.utez.saem.model.patient.PatientRepository;
 import mx.edu.utez.saem.model.user.UserBean;
 import mx.edu.utez.saem.model.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,6 +26,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository repository;
+    private final DoctorRepository doctorRepository;
+    private final PatientRepository patientRepository;
+    private final AdministratorRepository administratorRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
@@ -57,7 +69,6 @@ public class UserService {
 
         }
     }
-
     @Transactional
     public ResponseEntity<ApiResponse> delete(Long id) {
         Optional<UserBean> userBeanOptional = repository.findById(id);
@@ -67,5 +78,25 @@ public class UserService {
         }
 
         return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Error de eliminación"), HttpStatus.BAD_REQUEST);
+    }
+
+    //ay no!!, creo que esto no sigue para nada las buenas practicas
+    @Transactional(readOnly = true)
+    public Collection<? extends GrantedAuthority> getAuthorities(String email) {
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if(doctorRepository.existsByUserBeanEmail(email)){
+            authorities.add(new SimpleGrantedAuthority("ROLE_DOCTOR"));
+        }else if(patientRepository.existsByUserBeanEmail(email)){
+            authorities.add(new SimpleGrantedAuthority("ROLE_PATIENT"));
+        }else if(administratorRepository.existsByUser(email)){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        return authorities;
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<UserBean> findUserByEmail(String email){
+        return repository.findByEmail(email);
     }
 }

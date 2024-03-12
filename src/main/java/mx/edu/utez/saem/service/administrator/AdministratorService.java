@@ -69,4 +69,9 @@ public class AdministratorService {
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Error de eliminación"), HttpStatus.BAD_REQUEST);
     }
+
+    @Transactional(readOnly = true)
+    public Optional<AdministratorBean> findAdminByUsername(String username){
+        return repository.findByUser(username);
+    }
 }

@@ -14,9 +14,9 @@ import mx.edu.utez.saem.model.user.UserBean;
 import mx.edu.utez.saem.model.user.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -29,21 +29,23 @@ public class InitialConfig implements CommandLineRunner {
     private final AdministratorRepository administratorRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public InitialConfig(PersonRepository personRepository, UserRepository userRepository, AdministratorRepository administratorRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AddressRepository addressRepository) {
+    public InitialConfig(PersonRepository personRepository, UserRepository userRepository, AdministratorRepository administratorRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AddressRepository addressRepository, PasswordEncoder passwordEncoder) {
         this.personRepository = personRepository;
         this.userRepository = userRepository;
         this.administratorRepository = administratorRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
         this.addressRepository = addressRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional(rollbackFor = SQLException.class)
     public void run(String... args) throws Exception {
         //Admin por defecto
-        saveAdmin(new AdministratorBean("Shago", "1234"));
+        saveAdmin(new AdministratorBean("Shago", passwordEncoder.encode("1234")));
 
         //Direccion de persona doctor
         AddressBean addressPerson = getOrSaveAddress(new AddressBean(
@@ -96,8 +98,8 @@ public class InitialConfig implements CommandLineRunner {
                 addressPerson2
         ));
 
-        UserBean doctorUser = getOrSaveUser(new UserBean("doctor@gmail.com", "123", "Activo", doctorPerson));
-        UserBean patientUser = getOrSaveUser(new UserBean("patient@gmail.com", "123", "Activo", patientPerson));
+        UserBean doctorUser = getOrSaveUser(new UserBean("doctor@gmail.com", passwordEncoder.encode("123"), true, doctorPerson));
+        UserBean patientUser = getOrSaveUser(new UserBean("patient@gmail.com", passwordEncoder.encode("1234"), true, patientPerson));
 
         DoctorBean doctor = getOrSaveDoctor(new DoctorBean("12344264123", doctorUser));
         PatientBean patient = getOrSavePatient(new PatientBean(false, patientUser));

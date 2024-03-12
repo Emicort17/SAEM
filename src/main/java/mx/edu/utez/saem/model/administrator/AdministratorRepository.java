@@ -11,4 +11,5 @@ public interface AdministratorRepository extends JpaRepository<AdministratorBean
     Optional<AdministratorBean> findByUser(String user);
     // Método para verificar si ya existen registros
     boolean existsByIdIsNotNull();
+    Boolean existsByUser(String user);
 }

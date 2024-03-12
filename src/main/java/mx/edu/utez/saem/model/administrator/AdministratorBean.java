@@ -18,7 +18,7 @@ public class AdministratorBean {
     private Long id;
     @Column(length = 5, nullable = false)
     private String user;
-    @Column(length = 8, nullable = false)
+    @Column(length = 60, nullable = false)
     private String password;
 
     public AdministratorBean(String user, String password) {
