@@ -5,8 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mx.edu.utez.saem.model.medicalRecord.MedicalRecordBean;
+import mx.edu.utez.saem.model.user.UserBean;
 
-import java.time.LocalDate;
 @Entity
 @Table(name = "patient")
 @AllArgsConstructor
@@ -17,16 +18,18 @@ public class PatientBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "DATE", nullable = false)
-    private LocalDate birthdate;
-    @Column(length = 20, nullable = false)
-    private String phoneNumber;
     @Column(nullable = false)
-    private Integer age;
-    @Column(length = 100, nullable = false)
-    private String birthState;
-    @Column(length = 50, nullable = false)
-    private String gender;
-    @Column(length = 18, nullable = false)
-    private String curp;
+    private boolean external;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private UserBean userBean;
+
+    @OneToOne(mappedBy = "patientBean")
+    private MedicalRecordBean medicalRecordBean;
+
+    public PatientBean(boolean external, UserBean userBean) {
+        this.external = external;
+        this.userBean = userBean;
+    }
 }
