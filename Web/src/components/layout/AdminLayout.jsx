@@ -46,13 +46,13 @@ const AdminLayout = () => {
                 </div>
 
                 <div className="centrar">
-                <button className="menuconfgitem"><IoSettingsOutline size={25} className="iconoseparacion" /><p>Gestionar tu cuenta</p></button>
-                <button className="menuconfgitem"><IoIosLogOut size={30}  className="iconoseparacion"/><p>Cerrar sesión</p></button>
-                
+                  <button className="menuconfgitem"><IoSettingsOutline size={25} className="iconoseparacion" /><p>Gestionar tu cuenta</p></button>
+                  <button className="menuconfgitem"><IoIosLogOut size={30} className="iconoseparacion" /><p>Cerrar sesión</p></button>
+
 
                 </div>
-             
-          
+
+
 
               </Dropdown>
               <Navbar.Toggle />
@@ -93,7 +93,7 @@ const AdminLayout = () => {
                 </li>
                 <li>
                   <Link
-                    to={'medicos'}
+                    to={'pacientes'}
                     className="flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                   >
                     <PiUserListLight className="h-6 w-6 flex-shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
@@ -103,15 +103,34 @@ const AdminLayout = () => {
                   </Link>
 
                 </li>
-                <Link
-                  to={'Subirdatos'}
-                  className="flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                >
-                  <GoUpload className="h-6 w-6 flex-shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                  <span className="px-3 flex-1 whitespace-nowrap">
-                    Subir datos
-                  </span>
-                </Link>
+
+
+         
+
+              <Link
+                to={'Subirdatos'}
+                className="flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+              >
+                <GoUpload className="h-6 w-6 flex-shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                <span className="px-3 flex-1 whitespace-nowrap">
+                  Subir datos
+                </span>
+              </Link>
+            
+
+                <li>
+                  <Link
+                    to={'users'}
+                    className="flex items-center justify-center rounded-lg p-2 text-base font-normal text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  >
+                    <PiUserListLight className="h-6 w-6 flex-shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                    <span className="px-3 flex-1 whitespace-nowrap">
+                      Usuarios
+                    </span>
+                  </Link>
+
+                </li>
+
 
               </Sidebar.ItemGroup>
             </Sidebar.Items>

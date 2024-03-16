@@ -6,7 +6,7 @@ const Subirdatos = () => {
             <div className=" p-6">
                 <Table>
                     <Table.Head className='text'>
-                        <Table.HeadCell>Nombre</Table.HeadCell>
+                        <Table.HeadCell>Cargar Datos</Table.HeadCell>
                         <Table.HeadCell>Color</Table.HeadCell>
                         <Table.HeadCell>Category</Table.HeadCell>
                         <Table.HeadCell>Price</Table.HeadCell>
