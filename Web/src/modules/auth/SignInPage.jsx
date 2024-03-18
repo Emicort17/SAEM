@@ -54,7 +54,7 @@ const SignInPage = () => {
   return (
     <>
       <header>
-        <Navbar fluid className="navbar flex justify-center">
+        <Navbar style={{backgroundColor:"#03104A"}} fluid className="navbar flex justify-center">
           <Navbar.Brand as={Link} href="">
 
             <span className="title self-center whitespace-nowrap text-xl font-semibold dark:text-white ml-1">SAEM</span>

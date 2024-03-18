@@ -1,5 +1,4 @@
 import { FiMenu } from "react-icons/fi";
-
 import { Outlet, Link } from 'react-router-dom';
 import { Navbar, Sidebar } from 'flowbite-react';
 import { FaUserDoctor } from "react-icons/fa6";
@@ -10,32 +9,35 @@ import { IoIosLogOut } from "react-icons/io";
 
 import { PiUserListLight } from "react-icons/pi";
 import { GoUpload } from "react-icons/go";
-import './style.css';
+
+import  './style.css'
 
 const AdminLayout = () => {
   return (
     <>
-      <header>
-        <Navbar fluid className="navbar">
+    
+      <header> 
+        <Navbar style={{backgroundColor:"#03104A",color: "#ffffff"}} fluid className="">
           <Navbar.Brand as={Link} href="https://flowbite-react.com">
             <FiMenu className="iconmenuNav" name="menu" size={34} color="white" />
             <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white ml-1">SAEM</span>
           </Navbar.Brand>
 
-          <Navbar.Collapse>
+          <Navbar.Collapse >
 
-            <div className="flex md:order-2">
-              <Dropdown
+            <div className="flex md:order-2 "   >
+              <Dropdown 
                 arrowIcon={false}
                 inline
                 label={
                   <Avatar alt="User settings" img="https://flowbite.com/docs/images/people/profile-picture-5.jpg" rounded />
                 }
-                className="menuconfg"
-              >
-                <div className="contimg">
+                style={{backgroundColor:"#282A2C"}}
+                className="menuconfg">
 
-                  <img className="imgmenuconfig" alt="User settings" src="src\assets\Images\Login.png" />
+                <div  className="contimg">
+
+                  <img className="imgmenuconfig" alt="User settings" src="src/assets/Images/Login.png" />
 
                 </div>
 
@@ -49,10 +51,7 @@ const AdminLayout = () => {
                   <button className="menuconfgitem"><IoSettingsOutline size={25} className="iconoseparacion" /><p>Gestionar tu cuenta</p></button>
                   <button className="menuconfgitem"><IoIosLogOut size={30} className="iconoseparacion" /><p>Cerrar sesión</p></button>
 
-
                 </div>
-
-
 
               </Dropdown>
               <Navbar.Toggle />
