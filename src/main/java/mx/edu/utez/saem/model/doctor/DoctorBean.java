@@ -1,5 +1,6 @@
 package mx.edu.utez.saem.model.doctor;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class DoctorBean {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JsonManagedReference("user-doctor")
     private UserBean userBean;
 
     @OneToMany(mappedBy = "doctorBean", cascade = CascadeType.ALL )

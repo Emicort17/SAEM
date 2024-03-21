@@ -1,6 +1,7 @@
 package mx.edu.utez.saem.model.address;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,7 +36,8 @@ public class AddressBean {
     @Column(length = 100)
     private String street3;
 
-    @OneToOne(mappedBy = "addressBean")
+    @OneToOne(mappedBy = "addressBean", cascade = CascadeType.ALL)
+    @JsonBackReference
     private PersonBean personBean;
 
     public AddressBean(String state, String town, String zip, String interiorNumber, String exteriorNumber, String street1, String street2, String street3) {

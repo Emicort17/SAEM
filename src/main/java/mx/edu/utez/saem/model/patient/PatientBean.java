@@ -1,5 +1,6 @@
 package mx.edu.utez.saem.model.patient;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,10 +20,11 @@ public class PatientBean {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private boolean external;
+    private Boolean external;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    @JsonManagedReference("user-patient")
     private UserBean userBean;
 
     @OneToOne(mappedBy = "patientBean")

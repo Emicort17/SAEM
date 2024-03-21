@@ -1,11 +1,14 @@
 package mx.edu.utez.saem.model.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mx.edu.utez.saem.model.doctor.DoctorBean;
+import mx.edu.utez.saem.model.patient.PatientBean;
 import mx.edu.utez.saem.model.person.PersonBean;
 
 @Entity
@@ -27,10 +30,16 @@ public class UserBean {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id", referencedColumnName = "id", nullable = false)
+    @JsonManagedReference
     private PersonBean personBean;
 
-    @OneToOne(mappedBy = "userBean")
+    @OneToOne(mappedBy = "userBean", cascade = CascadeType.ALL)
+    @JsonBackReference("user-doctor")
     private DoctorBean doctorBean;
+
+    @OneToOne(mappedBy = "userBean", cascade = CascadeType.ALL)
+    @JsonBackReference("user-patient")
+    private PatientBean patientBean;
 
     public UserBean(String email, String password, Boolean status, PersonBean personBean) {
         this.email = email;

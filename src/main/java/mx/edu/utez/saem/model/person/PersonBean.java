@@ -1,5 +1,7 @@
 package mx.edu.utez.saem.model.person;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,11 +39,13 @@ public class PersonBean {
     @Column(length = 6, nullable = false)
     private String sex;
 
-    @OneToOne(mappedBy = "personBean")
+    @OneToOne(mappedBy = "personBean", cascade = CascadeType.ALL)
+    @JsonBackReference
     private UserBean userBean;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
+    @JsonManagedReference
     private AddressBean addressBean;
 
     public PersonBean(String name, String middleName, String lastName, LocalDate birthdate, String birthplace, String curp, String phoneNumber, String sex, AddressBean address) {
