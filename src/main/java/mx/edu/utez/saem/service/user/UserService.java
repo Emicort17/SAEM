@@ -80,17 +80,16 @@ public class UserService {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Error de eliminación"), HttpStatus.BAD_REQUEST);
     }
 
-    //ay no!!, creo que esto no sigue para nada las buenas practicas
     @Transactional(readOnly = true)
     public Collection<? extends GrantedAuthority> getAuthorities(String email) {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         if(doctorRepository.existsByUserBeanEmail(email)){
-            authorities.add(new SimpleGrantedAuthority("ROLE_DOCTOR"));
+            authorities.add(new SimpleGrantedAuthority("DOCTOR_ROLE"));
         }else if(patientRepository.existsByUserBeanEmail(email)){
-            authorities.add(new SimpleGrantedAuthority("ROLE_PATIENT"));
+            authorities.add(new SimpleGrantedAuthority("PATIENT_ROLE"));
         }else if(administratorRepository.existsByUser(email)){
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority("ADMIN_ROLE"));
         }
         return authorities;
     }
