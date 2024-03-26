@@ -7,6 +7,7 @@ import mx.edu.utez.saem.model.doctor.DoctorRepository;
 import mx.edu.utez.saem.model.patient.PatientRepository;
 import mx.edu.utez.saem.model.user.UserBean;
 import mx.edu.utez.saem.model.user.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
@@ -79,16 +80,17 @@ public class UserService {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Error de eliminación"), HttpStatus.BAD_REQUEST);
     }
 
+    //ay no!!, creo que esto no sigue para nada las buenas practicas
     @Transactional(readOnly = true)
     public Collection<? extends GrantedAuthority> getAuthorities(String email) {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
         if(doctorRepository.existsByUserBeanEmail(email)){
-            authorities.add(new SimpleGrantedAuthority("DOCTOR_ROLE"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_DOCTOR"));
         }else if(patientRepository.existsByUserBeanEmail(email)){
-            authorities.add(new SimpleGrantedAuthority("PATIENT_ROLE"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_PATIENT"));
         }else if(administratorRepository.existsByUser(email)){
-            authorities.add(new SimpleGrantedAuthority("ADMIN_ROLE"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         return authorities;
     }
