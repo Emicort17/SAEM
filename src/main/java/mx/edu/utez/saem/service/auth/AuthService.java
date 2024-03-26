@@ -2,6 +2,7 @@ package mx.edu.utez.saem.service.auth;
 
 import jakarta.transaction.Transactional;
 import mx.edu.utez.saem.config.ApiResponse;
+import mx.edu.utez.saem.controller.auth.dto.SignedDto;
 import mx.edu.utez.saem.model.administrator.AdministratorBean;
 import mx.edu.utez.saem.model.user.UserBean;
 import mx.edu.utez.saem.security.jwt.JwtProvider;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@jakarta.transaction.Transactional
+@Transactional
 public class AuthService {
     private final UserService userService;
     private final AdministratorService administratorService;
@@ -39,8 +40,10 @@ public class AuthService {
         try {
             Optional<UserBean> foundUser = userService.findUserByEmail(emailOrUsername);
             Optional<AdministratorBean> foundAdmin = administratorService.findAdminByUsername(emailOrUsername);
-            if (foundUser.isEmpty() && foundAdmin.isEmpty())
+
+            if (foundUser.isEmpty() && foundAdmin.isEmpty()) {
                 return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "UserNotFound"), HttpStatus.BAD_REQUEST);
+            }
 
             if(foundUser.isPresent()) {
                 if(!foundUser.get().getStatus()) {
@@ -54,7 +57,10 @@ public class AuthService {
             SecurityContextHolder.getContext().setAuthentication(auth);
             String token = provider.generateToken(auth);
             /*Payload - DTO (token, attrs)*/
-            return new ResponseEntity<>(new ApiResponse(token, HttpStatus.OK,"Token generado"), HttpStatus.OK);
+
+            SignedDto signedDto = new SignedDto(token, "Bearer", foundUser.isPresent()? foundUser:foundAdmin, userService.getAuthorities(emailOrUsername).stream().toList());
+
+            return new ResponseEntity<>(new ApiResponse(signedDto, HttpStatus.OK,"Token generado"), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             String message = "CredentialsMismatch";

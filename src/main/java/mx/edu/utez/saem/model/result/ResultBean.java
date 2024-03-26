@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mx.edu.utez.saem.model.diagnostic.DiagnosticBean;
-import mx.edu.utez.saem.model.labData.LabData;
+import mx.edu.utez.saem.model.labData.LabDataBean;
 
 import java.time.LocalDate;
 
@@ -31,5 +31,5 @@ public class ResultBean {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "lab_data_id", nullable = false)
-    private LabData labData;
+    private LabDataBean labDataBean;
 }

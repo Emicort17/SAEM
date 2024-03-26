@@ -15,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LabData {
+public class LabDataBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
