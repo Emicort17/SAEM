@@ -1,5 +1,6 @@
 import { Table } from 'flowbite-react';
 
+
 const Pacientes = () => {
     return (
         <div className={' w-screen h-screen justify-center align-middle mt-6 p-6'}>

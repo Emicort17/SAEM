@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-//URL base -> http://localhost:8080/api
+//URL base -> http://localhost:8080/api/saem
 const SERVER_URL = import.meta.env.VITE_APP_SERVER_URL;
 const APP_JSON = 'application/json';
 const AxiosClient = axios.create({

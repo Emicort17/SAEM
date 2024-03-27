@@ -1,102 +1,89 @@
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, Alert, Image, StyleSheet } from 'react-native';
 import { Button } from '@rneui/themed';
 import { StatusBar } from "expo-status-bar";
+import { useNavigation } from '@react-navigation/native';
 
-import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Alert, Image } from 'react-native';
-
-Login = () => {
-  let [userName, setUserName] = useState("");
-  let [password, setPassword] = useState("");
-
-  let [tries, setTries] = useState(0);
-
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [tries, setTries] = useState(0);
   const navigation = useNavigation();
 
-  const user = {
-    userName: 'Martin',
-    password: '123'
+  const handleLogin = () => {
+    
+    fetch('http://localhost:8080/api/saem/auth/signIn', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        emailOrUsername: username,
+        password: password
+      }),
+    }).then(response => response.json())
+      .then(data => {
+          navigation.replace('TabNav');
+      })
+      .catch(error => {
+        console.error('Error al realizar la solicitud POST:', error);
+      });
   };
 
-  const validateUser = () => {
-    console.log(user);
-    console.log(userName);
-
-    if (tries <= 3) {
-      if (userName === user.userName && password === user.password) {
-        navigation.replace('TabNav');
-      } else {
-        Alert.alert(
-          'Contraseña o Usuario incorrectos',
-          `Te quedan ${tries} intentos`,
-          [{ text: 'Intentar de nuevo', onPress: () => { setTries(tries + 1); } }]
-        );
-      }
-    } else {
-      Alert.alert(
-        'Demasiados intentos',
-        'Límite de intentos superado, inténtalo más tarde...',
-        [{ text: 'Ok' }]
-      );
-    }
-  };
-
-  const goToScreen = () => {
+  const goToForgetPasswordScreen = () => {
     navigation.replace('ForgetPass');
   };
 
-
   return (
- 
-
     <View style={styles.allScreen}>
-         <StatusBar style="auto" backgroundColor="#fff" />
-            <StatusBar barStyle={styles.status}/>
+      <StatusBar style="auto" backgroundColor="#fff" />
+      <StatusBar barStyle={styles.status} />
 
       <View style={styles.container}>
-        <Text style={styles.title}>Iniciar sessión</Text>
+        <Text style={styles.title}>Iniciar sesión</Text>
         <Image style={[styles.img]} source={require('../assets/Images/Logo.png')} />
 
         <View>
 
-          <View style={styles.contImputs}>
-            <TextInput style={styles.input} placeholder='Usuario' value={userName}
-              onChangeText={setUserName} />
-            <TextInput style={styles.input} placeholder='Contraseña' value={password}
-              onChangeText={setPassword} />
-
-
+          <View style={styles.contInputs}>
+            <TextInput
+              style={styles.input}
+              placeholder='Usuario'
+              value={username}
+              onChangeText={setUsername}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder='Contraseña'
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
 
             <Button
               type="clear"
               buttonStyle={{ width: 250 }}
               containerStyle={{ margin: 5 }}
-              disabledStyle={{
-                borderWidth: 2,
-              }}
-            
+              disabledStyle={{ borderWidth: 2 }}
               linearGradientProps={null}
               loadingProps={{ animating: true }}
               loadingStyle={{}}
-              onPress={goToScreen}
-              title="Olvide mi contraseña"
+              onPress={goToForgetPasswordScreen}
+              title="Olvidé mi contraseña"
               titleProps={{}}
-              titleStyle={{ marginHorizontal: 5 ,color:'#7C7C7C' }}
+              titleStyle={{ marginHorizontal: 5, color: '#7C7C7C' }}
             />
 
-
-
             <Button
-              buttonStyle={styles.btnlogin}
-              onPress={validateUser}
+              buttonStyle={styles.btnLogin}
+              onPress={handleLogin}
               title="Entrar"
-              titleStyle={styles.titlebtn}
+              titleStyle={styles.titleBtn}
             />
 
           </View>
 
         </View>
-
 
       </View>
 
@@ -141,7 +128,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
   },
-  contImputs: {
+  contInputs: {
 
     alignItems: 'center',
     justifyContent: 'center',
@@ -163,26 +150,24 @@ const styles = StyleSheet.create({
 
   },
 
-  btnlogin: {
+  btnLogin: {
     marginTop: 20,
     width: 250,
     margin: 5,
     borderRadius: 5,
     backgroundColor: '#092088'
   },
-  titlebtn: {
+  titleBtn: {
     marginHorizontal: 5,
     fontSize: 18
   },
-  forgetpass: {
+  forgetPass: {
     marginTop: 20,
     width: 250,
     margin: 5,
     borderRadius: 5,
-  }, status:{
-    color:'#000000'
+  },
+  status: {
+    color: '#000000'
   }
-
-
-
 });

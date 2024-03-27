@@ -1,0 +1,53 @@
+/* Ejemplo de estilos CSS personalizados para React Data Table */
+
+/* Estilos para el contenedor principal de la tabla */
+.rdt_Table {
+    margin: 20px;
+    border: 1px solid #ffffff;
+  }
+  
+  /* Estilos para cada fila de la tabla */
+  .rdt_TableRow {
+    background-color: #000000;
+border-radius: 10px;  }
+  
+  /* Estilos para cada celda de la tabla */
+  .rdt_TableCell {
+    padding: 10px;
+    background-color: #f0f0f0;
+  }
+  
+  /* Estilos para el encabezado de la tabla */
+  .rdt_TableHeader {
+    background-color: #000000;
+    color: #ffffff;
+  }
+  
+  /* Estilos para el pie de la tabla */
+  .rdt_TableFooter {
+    background-color: #007bff;
+    color: #000000;
+  }
+  
+  /* Estilos para el encabezado de cada columna */
+  .rdt_TableHead {
+    font-weight: bold;
+    color: #000000;
+  }
+  
+  /* Estilos para cada fila en el encabezado de la tabla */
+  .rdt_TableHeadRow {
+    background-color: #007bff;
+   
+  }
+  
+  /* Estilos para el cuerpo de la tabla */
+  .rdt_TableBody {
+    font-size: 14px;
+  }
+  
+  /* Estilos para las filas que contienen botones de expansión */
+  .rdt_ExpanderRow {
+    background-color: #000000;
+  }
+  

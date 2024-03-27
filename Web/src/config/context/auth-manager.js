@@ -1,3 +1,4 @@
+
 export const authManager = (state = {}, action) => {
   switch (action.type) {
     case 'SIGNIN':

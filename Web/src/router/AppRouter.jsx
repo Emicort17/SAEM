@@ -26,14 +26,14 @@ const AppRouter = () => {
         {user.signed ? (
           <>
             <Route path="/" element={<AdminLayout />}>
-              {
+              {   
                 // routesFromRole(user?.roles[0]?.name)
               }
               <Route path="dashboard" element={<DashboardPage />} />
               <Route path="medicos" element={<><Medicos/></>} />
               <Route path="Subirdatos" element={<><Subirdatos/></>} />
-              <Route path="pacientes" element={<><Pacientes/></>} />
-              <Route path="users" element={<UserPage />} />
+              <Route path="users" element={<><Pacientes/></>} />
+              <Route path="pacientes" element={<UserPage />} />
 
 
             </Route>

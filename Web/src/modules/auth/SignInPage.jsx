@@ -29,14 +29,22 @@ const SignInPage = () => {
     onSubmit: async (values, { setSubmitting }) => {
       try {
         const response = await AxiosClient({
-          url: '/auth/signin',
+          url: '/auth/signIn',
           method: 'POST',
-          data: values,
+          data: {
+            emailOrUsername: values.username,
+            password: values.password 
+          },
+          
         });
+
         console.log(response);
         if (!response.error) {
+          console.log("Supuesto token guardado");
 
-          dispatch({ type: 'SIGNIN', payload: response.data });
+          console.log(response.data);
+
+          dispatch({ type: 'SIGNIN', payload: response.data});
           navigate('/', { replace: true });
         } else throw Error('Error');
       } catch (error) {
@@ -46,7 +54,7 @@ const SignInPage = () => {
           'info'
         );
       } finally {
-        setSubmitting(false);
+        setSubmixtting(false);
       }
     },
   });

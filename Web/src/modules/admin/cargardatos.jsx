@@ -1,62 +1,47 @@
-import { Table } from 'flowbite-react';
+import { Footer } from 'flowbite-react';
+import { BsBoxArrowUpRight } from "react-icons/bs";
+import Dropzone from '../../components/dropzone';
+import { HiInformationCircle } from 'react-icons/hi';
+import { Alert } from 'flowbite-react';
+
+import { Button, Modal } from 'flowbite-react';
+import { useState } from 'react';
 
 const Subirdatos = () => {
+    const [openModal, setOpenModal] = useState(false);
+
+
     return (
-        <div className={' w-screen h-screen justify-center align-middle mt-6 p-6'}>
-            <div className=" p-6">
-                <Table>
-                    <Table.Head className='text'>
-                        <Table.HeadCell>Cargar Datos</Table.HeadCell>
-                        <Table.HeadCell>Color</Table.HeadCell>
-                        <Table.HeadCell>Category</Table.HeadCell>
-                        <Table.HeadCell>Price</Table.HeadCell>
-                        <Table.HeadCell>
-                            <span className="sr-only">Edit</span>
-                        </Table.HeadCell>
-                    </Table.Head>
-                    <Table.Body className="divide-y">
-                        <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                {'Apple MacBook Pro 17"'}
-                            </Table.Cell>
-                            <Table.Cell>Sliver</Table.Cell>
-                            <Table.Cell>Laptop</Table.Cell>
-                            <Table.Cell>$2999</Table.Cell>
-                            <Table.Cell>
-                                <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                                ver mas
-                                </a>
-                            </Table.Cell>
-                        </Table.Row>
-                        <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                Microsoft Surface Pro
-                            </Table.Cell>
-                            <Table.Cell>White</Table.Cell>
-                            <Table.Cell>Laptop PC</Table.Cell>
-                            <Table.Cell>$1999</Table.Cell>
-                            <Table.Cell>
-                                <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                                ver mas
-                                </a>
-                            </Table.Cell>
-                        </Table.Row>
-                        <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">Magic Mouse 2</Table.Cell>
-                            <Table.Cell>Black</Table.Cell>
-                            <Table.Cell>Accessories</Table.Cell>
-                            <Table.Cell>$99</Table.Cell>
-                            <Table.Cell>
-                                <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
-                                    ver mas
-                                </a>
-                            </Table.Cell>
-                        </Table.Row>
-                    </Table.Body>
-                </Table>
+        <>
+            <div className=' flex flex-col w-full items-center justify-center '>
+
+                <div style={{ width: '100%', flexDirection: 'row' }} className='p-5 flex-row'>
+                    <Alert color="info" icon={HiInformationCircle} className='p-5 flex flex-row' >
+                        <span className="font-medium flex flex-row">Info alert! Los arachivos a subir deben de contener el siguiente formato. <BsBoxArrowUpRight onClick={() => setOpenModal(true)} style={{ marginLeft: '5px', width: '14PX', marginTop: '2PX' }}> </BsBoxArrowUpRight> </span>
+                    </Alert>
+
+                    <Modal show={openModal} onClose={() => setOpenModal(false)}>
+                        <Modal.Header>Formato</Modal.Header>
+                        <Modal.Body >
+                     
+                            <div className="flex w-full items-center justify-center space-y-6 ">
+                               <img src='src\assets\Images\Logo.png'></img>
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                      
+                        </Modal.Footer>
+                    </Modal>
+                </div>
+                <div style={{ width: '85%' }} className="sm p-5">
+                    <Dropzone>
+                    </Dropzone>
+                </div>
+
             </div>
 
-        </div>
+        </>
+
 
     );
 };
