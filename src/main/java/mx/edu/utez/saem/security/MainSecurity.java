@@ -56,9 +56,9 @@ public class MainSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req.requestMatchers(WHITE_LIST).permitAll()
-                        .requestMatchers("/api/saem/administrator/**", "/api/saem/doctor/**", "/api/saem/patient/**").hasAuthority("ADMIN_ROLE")
-                        .requestMatchers("/api/person/**").hasAnyAuthority("ADMIN_ROL",
-                                "USER_ROL").anyRequest().authenticated()).httpBasic(Customizer.withDefaults())
+                        .requestMatchers("/api/saem/administrator/**", "/api/saem/doctor/**", "/api/saem/patient/**", "/api/saem/diagnostic/**").hasAuthority("ADMIN_ROLE")
+                        .requestMatchers("/api/saem/patient/**").hasAuthority("DOCTOR_ROLE")
+                        .anyRequest().authenticated()).httpBasic(Customizer.withDefaults())
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())

@@ -1,5 +1,6 @@
 package mx.edu.utez.saem.model.patient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class PatientBean {
     private UserBean userBean;
 
     @OneToOne(mappedBy = "patientBean")
+    @JsonBackReference
     private MedicalRecordBean medicalRecordBean;
 
     public PatientBean(boolean external, UserBean userBean) {

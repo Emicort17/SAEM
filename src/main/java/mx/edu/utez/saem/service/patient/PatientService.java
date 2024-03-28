@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
 import mx.edu.utez.saem.model.address.AddressBean;
 import mx.edu.utez.saem.model.address.AddressRepository;
+import mx.edu.utez.saem.model.medicalRecord.MedicalRecordBean;
+import mx.edu.utez.saem.model.medicalRecord.MedicalRecordRepository;
 import mx.edu.utez.saem.model.patient.PatientBean;
 import mx.edu.utez.saem.model.patient.PatientRepository;
 import mx.edu.utez.saem.model.person.PersonBean;
@@ -16,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Random;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +32,7 @@ public class PatientService {
     private final UserRepository userRepository;
     private final PatientRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final MedicalRecordRepository medicalRecordRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
@@ -63,7 +67,26 @@ public class PatientService {
 
         patient.setUserBean(savedUser);
 
+
         PatientBean savedPatient = repository.saveAndFlush(patient);
+
+
+        String formatnumber = String.format("%04d", savedPatient.getId());
+
+        char inicialNombre = savedPatient.getUserBean().getPersonBean().getName().charAt(0);
+        char inicialApellido = savedPatient.getUserBean().getPersonBean().getMiddleName().charAt(0);
+        char inicialApellido2 = savedPatient.getUserBean().getPersonBean().getLastName().charAt(0);
+
+        String numExp = inicialNombre + "" + inicialApellido + "" + inicialApellido2 + formatnumber;
+
+        MedicalRecordBean medicalRecordBean = new MedicalRecordBean();
+
+        medicalRecordBean.setNumber(numExp);
+        medicalRecordBean.setPatientBean(savedPatient);
+        medicalRecordBean.setDiagnosticBeans(null);
+
+        MedicalRecordBean savemedicalrecord = medicalRecordRepository.save(medicalRecordBean);
+
         return new ResponseEntity<>(new ApiResponse(savedPatient, HttpStatus.OK, "Guardado Exitosamente"), HttpStatus.OK);
     }
 
@@ -125,4 +148,5 @@ public class PatientService {
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Paciente no encontrado"), HttpStatus.NOT_FOUND);
     }
+
 }

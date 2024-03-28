@@ -1,5 +1,9 @@
 package mx.edu.utez.saem.model.medicalRecord;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +21,9 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class MedicalRecordBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +33,14 @@ public class MedicalRecordBean {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
+    @JsonManagedReference
     private PatientBean patientBean;
 
     @OneToMany(mappedBy = "medicalRecordBean", cascade = CascadeType.ALL )
     private Set<DiagnosticBean> diagnosticBeans;
+
+    public MedicalRecordBean(String number, PatientBean patientBean) {
+        this.number = number;
+        this.patientBean = patientBean;
+    }
 }
