@@ -23,6 +23,7 @@ import java.util.Set;
 @Getter
 @Setter
 @JsonIdentityInfo(
+        scope = DiagnosticBean.class,
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 public class DiagnosticBean {

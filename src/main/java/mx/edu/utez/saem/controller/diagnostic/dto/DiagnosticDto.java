@@ -1,5 +1,7 @@
 package mx.edu.utez.saem.controller.diagnostic.dto;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +14,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@JsonIdentityInfo(
+        scope = DiagnosticBean.class,
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class DiagnosticDto {
     private Long id;
     private LocalDate startDate;

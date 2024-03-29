@@ -1,5 +1,7 @@
 package mx.edu.utez.saem.model.labData;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +17,11 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LabData {
+@JsonIdentityInfo(
+        scope = LabDataBean.class,
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
+public class LabDataBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,7 +38,15 @@ public class LabData {
     @Column(nullable = false)
     private Integer platelets;
 
-    @OneToMany(mappedBy = "labData")
+    @OneToMany(mappedBy = "labDataBean", cascade = CascadeType.ALL )
     private Set<ResultBean> resultBeans;
 
+    public LabDataBean(Integer viralLoad, Double alt, String antigen, Double ast, Double creatinine, Integer platelets) {
+        this.viralLoad = viralLoad;
+        this.alt = alt;
+        this.antigen = antigen;
+        this.ast = ast;
+        this.creatinine = creatinine;
+        this.platelets = platelets;
+    }
 }

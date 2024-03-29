@@ -1,7 +1,12 @@
 package mx.edu.utez.saem.service.result;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
+import mx.edu.utez.saem.model.diagnostic.DiagnosticBean;
+import mx.edu.utez.saem.model.diagnostic.DiagnosticRepository;
+import mx.edu.utez.saem.model.labData.LabDataBean;
+import mx.edu.utez.saem.model.labData.LabDataRepository;
 import mx.edu.utez.saem.model.result.ResultBean;
 import mx.edu.utez.saem.model.result.ResultRepository;
 import org.springframework.http.HttpStatus;
@@ -17,6 +22,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ResultService {
     private final ResultRepository repository;
+    private final LabDataRepository labDataRepository;
+    private final DiagnosticRepository diagnosticRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getOne(Long id) {
@@ -32,28 +39,53 @@ public class ResultService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> save(ResultBean LabData){
-        Optional<ResultBean> optionalResultBean = repository.findById(LabData.getId());
-        if(optionalResultBean.isPresent())
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Registro duplicado"), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse> save(ResultBean result){
+        DiagnosticBean diagnosticBean = diagnosticRepository.findById(result.getDiagnosticBean().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Diagnostico no encontrado con el número: " + result.getDiagnosticBean().getId().longValue()));
 
-        return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(LabData), HttpStatus.OK, "Guardado Exitosamente"), HttpStatus.OK);
+        LabDataBean savedLabDataBean = labDataRepository.save(result.getLabDataBean());
+
+        result.setDiagnosticBean(diagnosticBean);
+        result.setLabDataBean(savedLabDataBean);
+
+        ResultBean saveResult = repository.save(result);
+        return new ResponseEntity<>(new ApiResponse(saveResult, HttpStatus.OK, "Guardado Exitosamente"), HttpStatus.OK);
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> update(ResultBean LabData){
-        Optional<ResultBean> foundLabData = repository.findById(LabData.getId());
-        if(foundLabData.isPresent()){
-            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(LabData), HttpStatus.OK, "Actualización guardada Exitosamente"), HttpStatus.OK);
-        } else{
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Esta sección no almacena datos nuevos"), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse> update(ResultBean result) {
+        Optional<ResultBean> foundResultOpt = repository.findById(result.getId());
+        if (foundResultOpt.isPresent()) {
+            ResultBean foundResult = foundResultOpt.get();
+
+            foundResult.setResultDate(result.getResultDate());
+
+            DiagnosticBean diagnostic = diagnosticRepository.findById(result.getDiagnosticBean().getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Diagnostico no encontrado"));
+            foundResult.setDiagnosticBean(diagnostic);
+
+            LabDataBean labData = labDataRepository.findById(result.getLabDataBean().getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Datos de laboratorio no encontrados"));
+            labData.setAlt(result.getLabDataBean().getAlt());
+            labData.setAntigen(result.getLabDataBean().getAntigen());
+            labData.setAst(result.getLabDataBean().getAst());
+            labData.setCreatinine(result.getLabDataBean().getCreatinine());
+            labData.setPlatelets(result.getLabDataBean().getPlatelets());
+            labData.setViralLoad(result.getLabDataBean().getViralLoad());
+
+            foundResult.setLabDataBean(labData);
+
+            return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(foundResult), HttpStatus.OK, "Actualización guardada Exitosamente"), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Resultado no encontrado"), HttpStatus.BAD_REQUEST);
         }
     }
+
 
     @Transactional
     public ResponseEntity<ApiResponse> delete(Long id) {
         Optional<ResultBean> foundLabData = repository.findById(id);
-        if (foundLabData.isPresent() ) {
+        if (foundLabData.isPresent()) {
             repository.deleteById(id);
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Registro Eliminado"), HttpStatus.OK);
         }
