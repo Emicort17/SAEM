@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,12 @@ public class ResultService {
     private final ResultRepository repository;
     private final LabDataRepository labDataRepository;
     private final DiagnosticRepository diagnosticRepository;
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getAll(){
+        List<ResultBean> results = repository.findAll();
+        return new ResponseEntity<>(new ApiResponse(results, HttpStatus.OK, "Ok"), HttpStatus.OK);
+    }
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getOne(Long id) {
@@ -80,7 +87,6 @@ public class ResultService {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Resultado no encontrado"), HttpStatus.BAD_REQUEST);
         }
     }
-
 
     @Transactional
     public ResponseEntity<ApiResponse> delete(Long id) {

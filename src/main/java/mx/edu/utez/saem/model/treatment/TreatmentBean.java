@@ -32,7 +32,7 @@ public class TreatmentBean {
     @Column(length = 30, nullable = false)
     private String indications;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "treatment_id")
     private DiagnosticBean diagnosticBean;
 

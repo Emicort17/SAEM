@@ -30,10 +30,10 @@ public class ResultController {
         return service.delete(id);
     }
 
-   /* @GetMapping("/findAll")
+    @GetMapping("/findAll")
     public ResponseEntity<ApiResponse> verTodos(){
         return service.getAll();
-    }*/
+    }
 
     @GetMapping("/findOne/{id}")
     public ResponseEntity<ApiResponse> verUno(@PathVariable Long id){

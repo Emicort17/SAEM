@@ -14,7 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Data
 public class TreatmentDto {
-
     private Long id;
     private LocalDate treatDate;
     private String indications;
