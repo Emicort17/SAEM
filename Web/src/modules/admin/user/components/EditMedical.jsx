@@ -9,33 +9,33 @@ import { useLocation } from 'react-router-dom';
 
 
 
-const EditMedical = (props) => {
+const EditMedical = () => {
 
     const location = useLocation();
-    const datos = location.state?.datos;
+    const datos = location.state || {};
     
     console.log(datos);
 
     const formik = useFormik({
         initialValues: {
-            email: "",
-            password: "",
-            confirmPassword: "",
+            email: datos.userBean.email ,
+            password: datos.userBean.password,
+            confirmPassword: datos.userBean.password,
             roles: '',
-            name: "",
-            surname: "",
-            lastname: "",
-            curp: "",
-            birthdate: "",
-            phoneNumber: "",
-            state: "",
-            municipio: "",
-            cp: "",
-            sexo: "",
+            name: datos.userBean.personBean.name,
+            surname: datos.userBean.personBean.middleName,
+            lastname: datos.userBean.personBean.lastName,
+            curp: datos.userBean.personBean.curp,
+            birthdate: datos.userBean.personBean.birthdate,
+            phoneNumber: datos.userBean.personBean.phoneNumber,
+            state: datos.userBean.personBean.addressBean.state,
+            municipio: datos.userBean.personBean.addressBean.town,
+            cp: datos.userBean.personBean.addressBean.zip,
+            sexo: datos.userBean.personBean.sex,
             colonia: '',
-            calle: "",
-            calle2: "",
-            calle3: "",
+            calle: datos.userBean.personBean.addressBean.street1,
+            calle2: datos.userBean.personBean.addressBean.street2,
+            calle3: datos.userBean.personBean.addressBean.street3,
             fechapadecimiento: "",
             resultado: "",
             fechatratamiento: "",
@@ -216,7 +216,7 @@ const EditMedical = (props) => {
 
                             <div className='grid-col-7'>
                                 <Label htmlFor='roles' className='font-bold' value='Sexo' />
-                                <Select id="sexo" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
+                                <Select style={{ backgroundColor: '#E6ECF1' }} id="sexo" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
                                     <option value=''></option>
                                     <option value='Hombre'>Hombre</option>
                                     <option value='Mujer'>Mujer</option>
@@ -277,23 +277,7 @@ const EditMedical = (props) => {
                                         )
                                     } />
                             </div>
-                            <div className='grid-col-6 pb-2'>
-                                <Label style={{ color: '#03104A' }} htmlFor='colonia' className='font-bold' value='Colonia' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                    type='colonia'
-                                    title="colonia"
-                                    id='colonia'
-                                    name='colonia'
-                                    value={formik.values.colonia}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    helperText={
-                                        formik.touched.colonia &&
-                                        formik.errors.colonia && (
-                                            <span className='text-red-600'>{formik.errors.colonia}</span>
-                                        )
-                                    } />
-                            </div>
+                           
 
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle' className='font-bold' value='Calle' />
@@ -337,13 +321,13 @@ const EditMedical = (props) => {
                                     title="calle3"
                                     id='calle3'
                                     name='calle3'
-                                    value={formik.values.calle}
+                                    value={formik.values.calle3}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     helperText={
-                                        formik.touched.calle &&
-                                        formik.errors.calle && (
-                                            <span className='text-red-600'>{formik.errors.calle}</span>
+                                        formik.touched.calle3 &&
+                                        formik.errors.calle3 && (
+                                            <span className='text-red-600'>{formik.errors.calle3}</span>
                                         )
                                     } />
                             </div>

@@ -3,7 +3,7 @@ import CustomDataTable from '../../components/CustomDatatable'
 import AxiosClient from '../../config/http-client/axios-client';
 import { Table } from 'flowbite-react';
 import { TextInput, Label, Button, Card, Tooltip } from 'flowbite-react'
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import { deletePatient } from '../../config/alerts/alert';
 
 
@@ -16,22 +16,31 @@ import { AiOutlineDelete } from "react-icons/ai";
 const Medicos = () => {
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
+    const navigate= useNavigate();
+
 
     const [editingUser, setEditingUser] = useState(null);
 
     const estado = (estado) => {
         if (estado === true) {
-            return ('Activo')
+            return('Activo')
 
-        } else { return ('Inactivo') }
-    }
+        } else {return('Inactivo')}
+    };
 
     const asignation = (medical) => {
         if (medical === null) {
             return ('Sin asignar')
 
-        } else { return (medical) }
-    }
+        } else {return(medical)}
+    };
+
+
+    const pasardatos=(row)=> {
+
+        navigate('/editmedico',{state:row});
+
+    } 
 
     const columns = useMemo(() => [
         {
@@ -62,11 +71,11 @@ const Medicos = () => {
         },
         {
             name: '',
-            cell: (row) => <><Link to={{ pathname: '/editmedico', state: { datos: editingUser } }}>
-                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => setEditingUser(row) }>
+            cell: (row) => <> 
+                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() =>  pasardatos(row) }>
                     <CiEdit style={{ cursor: 'pointer' }} size={24} color={'#000'} />
                 </button>
-            </Link>
+         
 
                 <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.userBean.personBean.curp)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
             </>,

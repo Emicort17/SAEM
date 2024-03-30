@@ -2,7 +2,7 @@ import RegisterUserForm from './components/RegisterUserForm';
 import CustomDataTable from '../../../components/CustomDatatable'
 import AxiosClient from '../../../config/http-client/axios-client';
 import { TextInput, Label, Button, Card, Tooltip } from 'flowbite-react'
-import { Outlet, Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import { deletePatient } from '../../../config/alerts/alert';
 import React, { useMemo, useState, useEffect } from 'react'
 
@@ -12,13 +12,18 @@ import { AiOutlineDelete } from "react-icons/ai";
 
 const UserPage = () => {
 
+    const navigate= useNavigate();
     const [loading, setLoading] = useState(false);
-    const [filterText, setFilterText] = useState('');
     const [users, setUsers] = useState([]);
     const [isCreating, setIsCreating] = useState(false);
-    
-    const [editingUser, setEditingUser] = useState(null);
 
+    const [editingUser, setEditingUser] = useState(null);
+    
+    const pasardatos=(row)=> {
+
+        navigate('/editperson',{state:row});
+
+    } 
 
     const estado = (estado) => {
         if (estado === true) {
@@ -65,36 +70,38 @@ const UserPage = () => {
         },
         {
             name: '',
-            cell: (row) => <> <Link to={ '/editperson' }> <button style={{ background: '#ffff', width: '48px', outline: 'none' ,cursor:'pointer' }} onClick={() =>  setEditingUser(row)} > <CiEdit  style={{cursor:'pointer'}} size={24} color={'#000'} /></button></Link>
-           <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor:'pointer' }} onClick={() => deleteUser(row.userBean.personBean.curp)} > <AiOutlineDelete style={{cursor:'pointer'}}  size={24} color={'#000'} /></button>
+            cell: (row) => <><button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => pasardatos(row)}>
+                <CiEdit style={{ cursor: 'pointer' }} size={24} color={'#000'} />
+            </button>
+                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.userBean.personBean.curp)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
             </>,
             sortable: false,
         },
-        
+
 
     ]);
 
     const deleteUser = async (curp) => {
         try {
-          const result = await deletePatient(); // Mostrar la alerta
-          if (result.isConfirmed) { // Si el usuario confirmó la acción
-            try {
-                const response =  AxiosClient({
-                    url:`/patient/delete${curp}` ,
-                    method: 'DELETE',
-                });
-                console.log(response);
-                if (!response.error) setUsers(response.data);
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
+            const result = await deletePatient(); // Mostrar la alerta
+            if (result.isConfirmed) { // Si el usuario confirmó la acción
+                try {
+                    const response = AxiosClient({
+                        url: `/patient/delete${curp}`,
+                        method: 'DELETE',
+                    });
+                    console.log(response);
+                    if (!response.error) setUsers(response.data);
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    setLoading(false);
+                }
             }
-          }
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      };
+    };
 
 
 
@@ -133,7 +140,6 @@ const UserPage = () => {
                     <Label htmlFor='' />
                     <TextInput type='text' id='filter' placeholder='Buscar...' />
                 </div>
-                <RegisterUserForm isCreating={isCreating} setIsCreating={setIsCreating} getAllUsers={getUsers} />
             </div>
 
             <CustomDataTable
@@ -146,11 +152,10 @@ const UserPage = () => {
             <div className='flex justify-end'>
 
 
-            <Link  to={'/registerperson'} > <Button style={{ background: '#03104A', borderRadius: '100%', width: '48px', outline: 'none' }}   pill> <LuPlus size={24} /></Button> </Link> 
+                <Link to={'/registerperson'} > <Button style={{ background: '#03104A', borderRadius: '100%', width: '48px', outline: 'none' }} pill> <LuPlus size={24} /></Button> </Link>
 
             </div>
             <div style={{}} className=''>
-            <RegisterUserForm isCreating={isCreating} setIsCreating={setIsCreating} getAllUsers={getUsers} />
             </div>
 
 

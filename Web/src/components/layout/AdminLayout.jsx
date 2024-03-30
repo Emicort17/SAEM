@@ -51,6 +51,7 @@ const AdminLayout = () => {
         await new Promise((resolve) => setTimeout(resolve, 1000));
 
         const userData = localStorage.getItem('user');
+
         if (userData) {
           const user = JSON.parse(userData);
           if (user && user.user) {

@@ -6,41 +6,47 @@ import React from 'react'
 import *  as yup from "yup"
 import { Link } from 'react-router-dom';
 import Switch from '@mui/material/Switch';
+import { useLocation } from 'react-router-dom';
 
 
 
-const EditPerson = ({ getUser }) => {
+const EditPerson = () => {
+
+    const location = useLocation();
+    const datos = location.state || {};
 
 
+    console.log(datos)
 
-    console.log(getUser)    
 
-    
     const [checked, setChecked] = React.useState(false);
 
-    const handleChange = (event) => {
-        setChecked(event.target.checked);
+    const handleChange = () => {
+        setChecked(!checked); // Cambiamos el estado del switch al valor opuesto cada vez que se haga clic en él
     };
-        
+
+  
+
     const formik = useFormik({
         initialValues: {
-            
-            email: "",
-            password: "",
-            confirmPassword: "",
+
+            email: datos.userBean.email,
+            password: datos.userBean.password,
+            confirmPassword: datos.userBean.password,
             roles: '',
-            name: "",
-            surname: "",
-            lastname: "",
-            curp: "",
-            birthdate: "",
-            phoneNumber: "",
-            state: "",
-            municipio: "",
-            cp: "",
-            sexo: "",
-            colonia:'',
-            calle: "",
+            name: datos.userBean.personBean.name,
+            surname: datos.userBean.personBean.middleName,
+            lastname: datos.userBean.personBean.lastName,
+            curp: datos.userBean.personBean.curp,
+            birthdate: datos.userBean.personBean.birthdate,
+            phoneNumber: datos.userBean.personBean.phoneNumber,
+            state: datos.userBean.personBean.addressBean.state,
+            municipio: datos.userBean.personBean.addressBean.town,
+            cp: datos.userBean.personBean.addressBean.zip,
+            sexo: datos.userBean.personBean.sex,
+            calle: datos.userBean.personBean.addressBean.street1,
+            calle2: datos.userBean.personBean.addressBean.street2,
+            calle3: datos.userBean.personBean.addressBean.street3,
             fechapadecimiento: "",
             resultado: "",
             fechatratamiento: "",
@@ -60,7 +66,6 @@ const EditPerson = ({ getUser }) => {
             municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres'),
             sexo: yup.string().required('Campo obligatorio'),
-            colonia: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             fechapadecimiento: yup.string().required('Campo obligatorio'),
             resultado: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
@@ -125,7 +130,7 @@ const EditPerson = ({ getUser }) => {
                         <h3 className='font-bold text-2xl text-center'>Paciente</h3>
 
                         <div className='flex flex-col gap-2 pb-2'>
-                        <div className='flex flex-row'>
+                            <div className='flex flex-row'>
                                 <div className='w-full'>
                                     <Label style={{ color: '#03104A' }} htmlFor='name' className='font-bold' value='Nombre' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Nombre" id="name" name="name"
@@ -140,11 +145,11 @@ const EditPerson = ({ getUser }) => {
                                         } />
                                 </div>
 
-                                <div style={{marginRight:'10px'}}  className='w-full flex justify-end items-center'>
-                                <Label style={{ color: '#03104A',marginRight:'5x'}} htmlFor='name' className='font-bold' value='Externo' />
+                                <div style={{ marginRight: '10px' }} className='w-full flex justify-end items-center'>
+                                    <Label style={{ color: '#03104A', marginRight: '5x' }} htmlFor='name' className='font-bold' value='Externo' />
 
                                     <Switch
-                                        checked={checked}
+                                        checked={datos.external}
                                         onChange={handleChange}
                                         inputProps={{ 'aria-label': 'controlled' }}
                                     />
@@ -233,11 +238,10 @@ const EditPerson = ({ getUser }) => {
 
                             <div className='grid-col-7'>
                                 <Label htmlFor='roles' className='font-bold' value='Sexo' />
-                                <Select style={{ backgroundColor: '#E6ECF1' }} id="role" name="roles" >
-                                    <option selected value=''></option>
+                                <Select style={{ backgroundColor: '#E6ECF1' }}  id="sexo" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
+                                    <option value=''></option>
                                     <option value='Hombre'>Hombre</option>
                                     <option value='Mujer'>Mujer</option>
-
                                 </Select>
                             </div>
 
@@ -295,23 +299,7 @@ const EditPerson = ({ getUser }) => {
                                         )
                                     } />
                             </div>
-                            <div className='grid-col-6 pb-2'>
-                                <Label style={{ color: '#03104A' }} htmlFor='colonia' className='font-bold' value='Colonia' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                    type='colonia'
-                                    title="colonia"
-                                    id='colonia'
-                                    name='colonia'
-                                    value={formik.values.colonia}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    helperText={
-                                        formik.touched.colonia &&
-                                        formik.errors.colonia && (
-                                            <span className='text-red-600'>{formik.errors.colonia}</span>
-                                        )
-                                    } />
-                            </div>
+
 
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle' className='font-bold' value='Calle' />
@@ -441,7 +429,7 @@ const EditPerson = ({ getUser }) => {
                                 <div className='w-full flex-col gap-3 justify-center items-center'>
                                     <div className='mb-6'>
                                         <Label
-                                            style={{ color: '#03104A', textAlign:'center',}}
+                                            style={{ color: '#03104A', textAlign: 'center', }}
                                             htmlFor='fechapadecimiento'
                                             className='font-bold'
                                             value='Fecha de padecimiento'

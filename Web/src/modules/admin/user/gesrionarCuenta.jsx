@@ -13,16 +13,19 @@ import { Link } from 'react-router-dom';
 
 const GetionarCuenta = () => {
 
+    const datos = localStorage.getItem('user');
+
     const [file, setFile] = useState(null);
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
     };
+
     const formik = useFormik({
         initialValues: {
             email: "",
-            password: "",
+            password:"",
             confirmPassword: "",
             roles: '',
             name: "",

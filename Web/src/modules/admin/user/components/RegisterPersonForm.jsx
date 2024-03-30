@@ -293,23 +293,7 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                                         )
                                     } />
                             </div>
-                            <div className='grid-col-6 pb-2'>
-                                <Label style={{ color: '#03104A' }} htmlFor='colonia' className='font-bold' value='Colonia' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                    type='colonia'
-                                    title="colonia"
-                                    id='colonia'
-                                    name='colonia'
-                                    value={formik.values.colonia}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    helperText={
-                                        formik.touched.colonia &&
-                                        formik.errors.colonia && (
-                                            <span className='text-red-600'>{formik.errors.colonia}</span>
-                                        )
-                                    } />
-                            </div>
+                           
 
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle' className='font-bold' value='Calle' />
