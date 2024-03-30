@@ -1,5 +1,7 @@
 package mx.edu.utez.saem.model.treatment;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +19,10 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIdentityInfo(
+        scope = TreatmentBean.class,
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class TreatmentBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +38,11 @@ public class TreatmentBean {
 
     @ManyToMany(mappedBy = "treatmentBeans")
     Set<MedicineBean> medicineBeans;
+
+    public TreatmentBean(LocalDate treatDate, String indications, DiagnosticBean diagnosticBean, Set<MedicineBean> medicineBeans) {
+        this.treatDate = treatDate;
+        this.indications = indications;
+        this.diagnosticBean = diagnosticBean;
+        this.medicineBeans = medicineBeans;
+    }
 }

@@ -18,26 +18,31 @@ import java.util.Optional;
 @AllArgsConstructor
 public class MedicineService {
     private final MedicineRepository repository;
+
     @Transactional(readOnly = true)
-    public ResponseEntity<ApiResponse> getOne(Long id) {
-        Optional<MedicineBean> optionalMedicineBean = repository.findById(id);
+    public ResponseEntity<ApiResponse> getAll(){
+        return new ResponseEntity<>(new ApiResponse(repository.findAll(), HttpStatus.OK, "Ok"), HttpStatus.OK);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getOne(String manufacturer, String name) {
+        Optional<MedicineBean> optionalMedicineBean = repository.findByManufacturerAndName(manufacturer, name);
         if (optionalMedicineBean.isPresent()) {
-            Long id2 = optionalMedicineBean.get().getId();
-            System.out.println(id);
-            MedicineBean MedicineBean = repository.getOne(id2);
-            return new ResponseEntity<>(new ApiResponse(MedicineBean, HttpStatus.OK, "Recuperado"), HttpStatus.OK);
+            MedicineBean medicineBean = optionalMedicineBean.get();
+            return new ResponseEntity<>(new ApiResponse(medicineBean, HttpStatus.OK, "Recuperado"), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new ApiResponse(null, HttpStatus.NOT_FOUND, "No encontrado"), HttpStatus.NOT_FOUND);
         }
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> save(MedicineBean MedicineBean){
-        Optional<MedicineBean> optionalMedicineBean = repository.findById(MedicineBean.getId());
-        if(optionalMedicineBean.isPresent())
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Registro duplicado"), HttpStatus.BAD_REQUEST);
-
-        return new ResponseEntity<>(new ApiResponse(repository.saveAndFlush(MedicineBean), HttpStatus.OK, "Guardado Exitosamente"), HttpStatus.OK);
+    public ResponseEntity<ApiResponse> save(MedicineBean medicineBean){
+        MedicineBean savedMedicine = repository.saveAndFlush(medicineBean);
+        if(savedMedicine!= null)
+        return new ResponseEntity<>(new ApiResponse(savedMedicine, HttpStatus.OK, "Guardado Exitosamente"), HttpStatus.OK);
+        else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "Error el guardar medicina"), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Transactional(rollbackFor = {SQLException.class})
