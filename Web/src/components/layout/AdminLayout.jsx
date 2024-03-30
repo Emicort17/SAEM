@@ -1,5 +1,5 @@
 
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FiMenu } from "react-icons/fi";
 import { Outlet, Link } from 'react-router-dom';
 import { Navbar, Sidebar } from 'flowbite-react';
@@ -19,7 +19,7 @@ import '../../assets/adminlayout.css';
 
 const AdminLayout = () => {
   const [selectedSection, setSelectedSection] = useState('');
-
+  const [userName, setUserName] = useState('');
 
   const handleSectionChange = (section) => {
     setSelectedSection(section);
@@ -39,7 +39,39 @@ const AdminLayout = () => {
       console.error(error);
     }
   };
-  
+
+
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadUserName = async () => {
+      try {
+        // Simulando la carga de datos de sesión
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const userData = localStorage.getItem('user');
+        if (userData) {
+          const user = JSON.parse(userData);
+          if (user && user.user) {
+            if (user.user.user != null) {
+              setUserName(user.user.user);
+            } else {
+              setUserName(user.user.personBean.name);
+            }
+          }
+        }
+        setIsLoading(false); // Marcar la carga como completada
+      } catch (error) {
+        console.error('Error loading user name:', error);
+      }
+    };
+
+    loadUserName();
+  }, []);
+
+  console.log('User name:', userName); // Debug statement
+
   return (
     <>
 
@@ -71,13 +103,17 @@ const AdminLayout = () => {
 
                 <div className="saludo">
 
-                  <p >¡Hola, Celeb!</p>
+                  {userName ? (
+                    <p>¡Hola, {userName}!</p>
+                  ) : (
+                    <p>Cargando...</p>
+                  )}
 
                 </div>
 
                 <div className="centrar">
-                  <button className="menuconfgitem"><IoSettingsOutline size={25} className="iconoseparacion" /><p>Gestionar tu cuenta</p></button>
-                 <Link> <button className="menuconfgitem" onClick={Logout}><IoIosLogOut size={30} className="iconoseparacion"  /><p>Cerrar sesión</p></button> </Link> 
+                  <Link to={'/gestionarCuenta'}><button className="menuconfgitem"><IoSettingsOutline size={25} className="iconoseparacion" /><p>Gestionar tu cuenta</p></button> </Link>
+                  <Link> <button className="menuconfgitem" onClick={Logout}><IoIosLogOut size={30} className="iconoseparacion" /><p>Cerrar sesión</p></button> </Link>
 
                 </div>
 
@@ -102,7 +138,8 @@ const AdminLayout = () => {
         */
       }
 
-      <main className="flex">
+      <main className="flex ">
+
         <aside >
           <Sidebar style={{ height: "100vh" }} className="grid gap-y-7">
             <Sidebar.Items  >
@@ -160,11 +197,6 @@ const AdminLayout = () => {
 
                 </li>
 
-
-
-
-
-
               </Sidebar.ItemGroup>
             </Sidebar.Items>
           </Sidebar>
@@ -173,6 +205,11 @@ const AdminLayout = () => {
         <section className="w-full">
           <Outlet />
         </section>
+
+
+
+
+
       </main>
     </>
   );

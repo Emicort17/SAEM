@@ -13,7 +13,7 @@ import AuthContext from '../../config/context/auth-context';
 
 import './style.css';
 
-const SignInPage = () => {
+const Forgetpass = () => {
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -137,7 +137,7 @@ const SignInPage = () => {
                   </div>
                   <div className="flex justify-end">
                     
-                  <Link to={'/forgetpass'}> ¿Olvidaste tu contraseña?</Link>
+                      <Link to={''}>¿Olvidaste tu contraseña?</Link>
                       
                   </div>
                   <Button
@@ -179,4 +179,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default Forgetpass;

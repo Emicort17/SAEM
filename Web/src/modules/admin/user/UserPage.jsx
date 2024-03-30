@@ -2,7 +2,8 @@ import RegisterUserForm from './components/RegisterUserForm';
 import CustomDataTable from '../../../components/CustomDatatable'
 import AxiosClient from '../../../config/http-client/axios-client';
 import { TextInput, Label, Button, Card, Tooltip } from 'flowbite-react'
-
+import { Outlet, Link } from 'react-router-dom';
+import { deletePatient } from '../../../config/alerts/alert';
 import React, { useMemo, useState, useEffect } from 'react'
 
 import { LuPlus } from "react-icons/lu";
@@ -15,6 +16,9 @@ const UserPage = () => {
     const [filterText, setFilterText] = useState('');
     const [users, setUsers] = useState([]);
     const [isCreating, setIsCreating] = useState(false);
+    
+    const [editingUser, setEditingUser] = useState(null);
+
 
     const estado = (estado) => {
         if (estado === true) {
@@ -29,7 +33,6 @@ const UserPage = () => {
 
         } else { return (medical) }
     }
-
 
 
     const columns = useMemo(() => [
@@ -62,14 +65,37 @@ const UserPage = () => {
         },
         {
             name: '',
-            cell: (row) => <> <button style={{ background: '#ffff', width: '48px', outline: 'none' ,cursor:'pointer' }} onClick={() => setIsCreating(true)} > <CiEdit  style={{cursor:'pointer'}} size={24} color={'#000'} /></button>
-           <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor:'pointer' }} onClick={() => setIsCreating(true)} > <AiOutlineDelete style={{cursor:'pointer'}}  size={24} color={'#000'} /></button>
+            cell: (row) => <> <Link to={ '/editperson' }> <button style={{ background: '#ffff', width: '48px', outline: 'none' ,cursor:'pointer' }} onClick={() =>  setEditingUser(row)} > <CiEdit  style={{cursor:'pointer'}} size={24} color={'#000'} /></button></Link>
+           <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor:'pointer' }} onClick={() => deleteUser(row.userBean.personBean.curp)} > <AiOutlineDelete style={{cursor:'pointer'}}  size={24} color={'#000'} /></button>
             </>,
             sortable: false,
         },
         
 
-    ])
+    ]);
+
+    const deleteUser = async (curp) => {
+        try {
+          const result = await deletePatient(); // Mostrar la alerta
+          if (result.isConfirmed) { // Si el usuario confirmó la acción
+            try {
+                const response =  AxiosClient({
+                    url:`/patient/delete${curp}` ,
+                    method: 'DELETE',
+                });
+                console.log(response);
+                if (!response.error) setUsers(response.data);
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setLoading(false);
+            }
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
 
 
 
@@ -93,6 +119,7 @@ const UserPage = () => {
     //Si no le mandamos nada al arreglo, solo se ejecutara una vez que todo se haya renderizado
     useEffect(() => {
         setLoading(true);
+
         getUsers();
     }, []); //Solo se ejecuta una vez al terminar de renderizar
 
@@ -118,7 +145,8 @@ const UserPage = () => {
 
             <div className='flex justify-end'>
 
-                <Button style={{ background: '#03104A', borderRadius: '100%', width: '48px', outline: 'none' }} onClick={() => setIsCreating(true)} pill> <LuPlus size={24} /></Button>
+
+            <Link  to={'/registerperson'} > <Button style={{ background: '#03104A', borderRadius: '100%', width: '48px', outline: 'none' }}   pill> <LuPlus size={24} /></Button> </Link> 
 
             </div>
             <div style={{}} className=''>

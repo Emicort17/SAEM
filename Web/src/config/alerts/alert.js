@@ -49,3 +49,18 @@ export const LogOutAlert= (preConfirm)=> SweetAlert.fire({
     allowOutsideClick:()=> !SweetAlert.isLoading(),
     preConfirm,
 })
+
+export const deletePatient= (preConfirm)=> SweetAlert.fire({
+    title:'Eliminar?',
+    text:'¿Seguro que deseas eliminar este registro?',
+    icon:'info',
+    confirmButtonColor:"#0e7490",
+    confirmButtonText:'Aceptar',
+    cancelButtonText:'Cancelar',
+    reverseButtons:true,
+    backdrop:true,
+    showCancelButton:true,
+    showLoaderOnConfirm:true,
+    allowOutsideClick:()=> !SweetAlert.isLoading(),
+    preConfirm,
+})
