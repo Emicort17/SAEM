@@ -1,5 +1,6 @@
 import { Button, Label, Modal, Select, TextInput, Datepicker } from 'flowbite-react'
 import { confimAlert, customAlert } from '../../../../config/alerts/alert';
+import AxiosClient from '../../../../config/http-client/axios-client';
 
 import { useFormik } from 'formik';
 import *  as yup from "yup"
@@ -9,7 +10,7 @@ import Switch from '@mui/material/Switch';
 
 
 
-const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
+const RegisterPerson = () => {
 
 
     const [checked, setChecked] = React.useState(false);
@@ -34,15 +35,19 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
             municipio: "",
             cp: "",
             sexo: "",
-            colonia: '',
             calle: "",
+            calle2: "",
+            calle3: "",
             fechapadecimiento: "",
             resultado: "",
             fechatratamiento: "",
+            birthplace: "",
+            interiorNumber: "",
+            exteriorNumber: "",
 
         },
         validationSchema: yup.object().shape({
-            email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
+            email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 10 caracteres').max(45, 'Máximo 45 caracteres'),
             password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres'),
             confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
             name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres'),
@@ -53,38 +58,55 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
             birthdate: yup.string().required('Campo obligatorio'),
             state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
+            birthplace: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
+            interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres'),
+            exteriorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres'),
             cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres'),
             sexo: yup.string().required('Campo obligatorio'),
-            colonia: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             fechapadecimiento: yup.string().required('Campo obligatorio'),
             resultado: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             fechatratamiento: yup.string().required('Campo obligatorio'),
         }),
-        onSubmit: async (values, { setSubmitting }) => {
+
+        onSubmit: async () => {
             confimAlert(async () => {
                 try {
                     const payload = {
-                        ...values,
-
-                        birthDate: values.birthdate,
-
-                        personBean: {
-                            name: values.name,
-                            middleName: values.middleName,
-                            lastName: values.lastname,
-                            birthdate: values.birthdate,
-                            birthplace: values.birthplace,
-                            curp: values.curp,
-                            phoneNumber: values.phoneNumber,
-                            sex: values.sex,
+                        external: checked,
+                        userBean: {
+                            email: formik.values.email,
+                            password: formik.values.password,
+                            confirmPassword: formik.values.confirmPassword,
+                            status: true, // Añadido el estado, asegúrate de que sea el correcto
+                            personBean: {
+                                name: formik.values.name,
+                                middleName: formik.values.surname,
+                                lastName: formik.values.lastname,
+                                birthdate: formik.values.birthdate,
+                                birthplace: formik.values.birthplace,
+                                curp: formik.values.curp,
+                                phoneNumber: formik.values.phoneNumber,
+                                sex: formik.values.sexo, // Asegúrate de que esta clave sea consistente con lo esperado por el backend
+                                addressBean: {
+                                    state: formik.values.state,
+                                    town: formik.values.municipio,
+                                    zip: formik.values.cp,
+                                    interiorNumber: formik.values.interiorNumber,
+                                    exteriorNumber: formik.values.exteriorNumber,
+                                    street1: formik.values.calle,
+                                    street2: formik.values.calle2,
+                                    street3: formik.values.calle3
+                                }
+                            }
                         }
+
 
 
                     };
                     const response = await AxiosClient({
                         method: 'POST',
-                        url: '/person/',
+                        url: '/patient/save',
                         data: payload
                     });
                     if (!response.error) {
@@ -92,8 +114,6 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                             'Registro exitoso',
                             'El usuario se ha registrado correctamente',
                             'success');
-                        getAllUsers();
-                        closeModal();
                     }
                 } catch (error) {
                     customAlert(
@@ -113,13 +133,14 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
 
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%', padding: '50px', color: '#03104A', }}>
 
-                <form id='userForm' name='userForm' style={{ width: '50%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px' }} noValidate onSubmit={formik.handleSubmit}>
+                <form id='patientForm' name='patientForm' style={{ width: '50%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px' }} noValidate onSubmit={formik.handleSubmit}>
 
                     <div className='flex flex-col gap-3' >
 
                         <h3 className='font-bold text-2xl text-center'>Paciente</h3>
 
                         <div className='flex flex-col gap-2 pb-2'>
+
                             <div className='flex flex-row'>
                                 <div className='w-full'>
                                     <Label style={{ color: '#03104A' }} htmlFor='name' className='font-bold' value='Nombre' />
@@ -135,8 +156,8 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                                         } />
                                 </div>
 
-                                <div style={{marginRight:'10px'}}  className='w-full flex justify-end items-center'>
-                                <Label style={{ color: '#03104A',marginRight:'5x'}} htmlFor='name' className='font-bold' value='Externo' />
+                                <div style={{ marginRight: '10px' }} className='w-full flex justify-end items-center'>
+                                    <Label style={{ color: '#03104A', marginRight: '5x' }} htmlFor='name' className='font-bold' value='Externo' />
 
                                     <Switch
                                         checked={checked}
@@ -230,14 +251,32 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                             </div>
 
                             <div className='grid-col-7'>
-                                <Label htmlFor='roles' className='font-bold' value='Sexo' />
-                                <Select style={{ backgroundColor: '#E6ECF1' }} id="role" name="roles" >
-                                    <option selected value=''></option>
+                                <Label htmlFor='sex' className='font-bold' value='Sexo' />
+                                <Select style={{ backgroundColor: '#E6ECF1' }} id="sex" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
+                                    <option value=''>Seleccionar</option>
                                     <option value='Hombre'>Hombre</option>
                                     <option value='Mujer'>Mujer</option>
-
                                 </Select>
                             </div>
+
+                            <div className='grid-col-6 pb-2'>
+                                <Label style={{ color: '#03104A' }} htmlFor='birthplace' className='font-bold' value='Lugar de nacimiento' />
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                    type='text'
+                                    title="birthplace"
+                                    id='birthplace'
+                                    name='birthplace'
+                                    value={formik.values.birthplace}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    helperText={
+                                        formik.touched.birthplace &&
+                                        formik.errors.birthplace && (
+                                            <span className='text-red-600'>{formik.errors.birthplace}</span>
+                                        )
+                                    } />
+                            </div>
+
 
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='state' className='font-bold' value='Estado' />
@@ -293,7 +332,7 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                                         )
                                     } />
                             </div>
-                           
+
 
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle' className='font-bold' value='Calle' />
@@ -312,6 +351,44 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                                         )
                                     } />
                             </div>
+
+                            <div className='flex flex-row justify-between'>
+                                <div className='grid-col-6 pb-2'>
+                                    <Label style={{ color: '#03104A' }} htmlFor='interiorNumber' className='font-bold' value='Numero Interior' />
+                                    <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                        type='interiorNumber'
+                                        title="interiorNumber"
+                                        id='interiorNumber'
+                                        name='interiorNumber'
+                                        value={formik.values.interiorNumber}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        helperText={
+                                            formik.touched.interiorNumber &&
+                                            formik.errors.interiorNumber && (
+                                                <span className='text-red-600'>{formik.errors.interiorNumber}</span>
+                                            )
+                                        } />
+                                </div>
+                                <div className='grid-col-6 pb-2'>
+                                    <Label style={{ color: '#03104A' }} htmlFor='exteriorNumber' className='font-bold' value='Numero exterior' />
+                                    <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                        type='exteriorNumber'
+                                        title="exteriorNumber"
+                                        id='exteriorNumber'
+                                        name='exteriorNumber'
+                                        value={formik.values.exteriorNumber}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        helperText={
+                                            formik.touched.exteriorNumber &&
+                                            formik.errors.exteriorNumber && (
+                                                <span className='text-red-600'>{formik.errors.exteriorNumber}</span>
+                                            )
+                                        } />
+                                </div>
+                            </div>
+
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle2' className='font-bold' value='Calle 2' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }}
@@ -337,15 +414,10 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                                     title="calle3"
                                     id='calle3'
                                     name='calle3'
-                                    value={formik.values.calle}
+                                    value={formik.values.calle3}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
-                                    helperText={
-                                        formik.touched.calle &&
-                                        formik.errors.calle && (
-                                            <span className='text-red-600'>{formik.errors.calle}</span>
-                                        )
-                                    } />
+                                />
                             </div>
 
 
@@ -406,11 +478,7 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                                             )
                                         } />
                                 </div>
-
-
                             </div>
-
-
 
                         </div>
 
@@ -517,11 +585,7 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                             </div>
                         </div>
 
-
-
-
                         <div className='flex justify-end space-x-4 mt-6'>
-
 
                             <Link to={'/pacientes'} > <Button color="failure" style={{ outline: 'none', boxShadow: 'none' }}>Cancelar</Button> </Link>
 
@@ -529,7 +593,7 @@ const RegisterPerson = ({ isCreating, setIsCreating, getAllUsers }) => {
                                 style={{ backgroundColor: '#03257A', color: '#fff' }}
                                 className=''
                                 type='submit'
-                                form='userForm'
+                                form='patientForm'
                                 disabled={formik.isSubmitting || !formik.isValid}
                                 color='succes'>
                                 Guardar

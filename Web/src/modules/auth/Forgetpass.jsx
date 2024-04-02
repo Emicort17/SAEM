@@ -10,6 +10,8 @@ import { Button, TextInput, Label, Spinner } from 'flowbite-react';
 import AxiosClient from '../../config/http-client/axios-client';
 import { customAlert } from '../../config/alerts/alert';
 import AuthContext from '../../config/context/auth-context';
+import { Alert } from 'flowbite-react';
+import { HiInformationCircle } from 'react-icons/hi';
 
 import './style.css';
 
@@ -19,12 +21,10 @@ const Forgetpass = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      password: '',
+      email: '',
     },
     validationSchema: yup.object().shape({
-      username: yup.string().required('Campo obligatorio'),
-      password: yup.string().required('Campo obligatorio'),
+      email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 10 caracteres').max(45, 'Máximo 45 caracteres'),
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
@@ -33,7 +33,6 @@ const Forgetpass = () => {
           method: 'POST',
           data: {
             emailOrUsername: values.username,
-            password: values.password
           },
 
         });
@@ -49,8 +48,8 @@ const Forgetpass = () => {
         } else throw Error('Error');
       } catch (error) {
         customAlert(
-          'Iniciar sesión',
-          'Usuario y/o contraseña incorrectos',
+          'Error',
+          'El correo ingresado no pertenece a una cuenta',
           'info'
         );
       } finally {
@@ -80,7 +79,11 @@ const Forgetpass = () => {
 
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-xl font-bold text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Inicio de sesión                </h1>
+                 Recuperar Contraseña               </h1>
+
+                 <Alert color="info" icon={HiInformationCircle} className='p-5 flex flex-row' >
+                        <span className="font-medium flex flex-row">La contraseña será enviada al correo enlazado a la cuenta </span>
+                    </Alert>
                 <form
                   className="space-y-4 md:space-y-6"
                   onSubmit={formik.handleSubmit}
@@ -88,57 +91,31 @@ const Forgetpass = () => {
                 >
                   <div>
                     <Label
-                      htmlFor="username"
+                      htmlFor="email"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Usuario
+                      Correo
                     </Label>
                     <TextInput
                       type="text"
-                      name="username"
-                      value={formik.values.username}
+                      name="email"
+                      value={formik.values.email}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       helperText={
-                        formik.errors.username && formik.touched.username ? (
+                        formik.errors.email && formik.touched.email ? (
                           <span className="text-red-600">
-                            {formik.errors.username}
+                            {formik.errors.email}
                           </span>
                         ) : null
                       }
-                      id="username"
+                      id="email"
                       placeholder="erielit"
                     />
                   </div>
-                  <div>
-                    <Label
-                      htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Contraseña
-                    </Label>
-                    <TextInput
-                      type="password"
-                      name="password"
-                      value={formik.values.password}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      helperText={
-                        formik.errors.password && formik.touched.password ? (
-                          <span className="text-red-600">
-                            {formik.errors.password}
-                          </span>
-                        ) : null
-                      }
-                      id="password"
-                      placeholder="••••••••"
-                      required
-                    />
-                  </div>
+
                   <div className="flex justify-end">
-                    
-                      <Link to={''}>¿Olvidaste tu contraseña?</Link>
-                      
+
                   </div>
                   <Button
                     type="submit"
@@ -165,8 +142,7 @@ const Forgetpass = () => {
                             d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"
                           />
                         </svg>
-                        Iniciar sesión
-                      </>
+                        Enviar                      </>
                     )}
                   </Button>
                 </form>

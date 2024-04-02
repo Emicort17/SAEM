@@ -11,11 +11,19 @@ import AxiosClient from '../../config/http-client/axios-client';
 import { customAlert } from '../../config/alerts/alert';
 import AuthContext from '../../config/context/auth-context';
 
+
 import './style.css';
 
 const SignInPage = () => {
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  const forgetpass=()=> {
+
+    navigate('/forgetpass',{ replace: true });
+
+} 
+
 
   const formik = useFormik({
     initialValues: {
@@ -137,7 +145,7 @@ const SignInPage = () => {
                   </div>
                   <div className="flex justify-end">
                     
-                  <Link to={'/forgetpass'}> ¿Olvidaste tu contraseña?</Link>
+                  <Button onClick={forgetpass}>¿Olvidaste tu contraseña?</Button>
                       
                   </div>
                   <Button
