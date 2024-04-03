@@ -3,16 +3,23 @@ package mx.edu.utez.saem.controller.patient;
 import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
 import mx.edu.utez.saem.controller.patient.dto.PatientDto;
+import mx.edu.utez.saem.model.doctor.DoctorBean;
+import mx.edu.utez.saem.model.doctor.DoctorRepository;
 import mx.edu.utez.saem.model.patient.PatientBean;
 import mx.edu.utez.saem.service.patient.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -21,12 +28,31 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PatientController {
     private final PatientService service;
+    private final DoctorRepository doctorRepository;
 
     @GetMapping("/exportation")
     public ModelAndView exportPatientsXlsx() {
         ModelAndView mav = new ModelAndView("xlsxExportation");
         ResponseEntity<ApiResponse> responseEntity = service.getAll();
         ApiResponse apiResponse = responseEntity.getBody();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = "";
+        String fullName = "";
+        String roles = "";
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            // Aquí puedes personalizar cómo obtener el nombre completo y el rol
+            name = userDetails.getUsername(); // O cualquier método que tengas para obtener el nombre real
+            // Doctor
+            Optional<DoctorBean> doctor = doctorRepository.findByUserBeanEmail(name);
+            fullName = doctor.map(doctorBean -> doctorBean.getUserBean().getPersonBean().getName() + " "
+                    + doctorBean.getUserBean().getPersonBean().getMiddleName() + " "
+                    + doctorBean.getUserBean().getPersonBean().getLastName()).orElse("");
+            roles = userDetails.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.joining(", "));
+        }
         if (apiResponse != null && apiResponse.getStatus() == HttpStatus.OK) {
             List<PatientBean> patientsList = (List<PatientBean>) apiResponse.getData();
             List<Map<String, Object>> patientsMaps = patientsList.stream().map(patient -> {
@@ -47,9 +73,13 @@ public class PatientController {
                 patientMap.put("exteriorNumber", patient.getUserBean().getPersonBean().getAddressBean().getExteriorNumber());
                 patientMap.put("interiorNumber", patient.getUserBean().getPersonBean().getAddressBean().getInteriorNumber());
                 patientMap.put("street", patient.getUserBean().getPersonBean().getAddressBean().getStreet1());
+                patientMap.put("external", patient.getExternal());
                 return patientMap;
             }).collect(Collectors.toList());
             mav.addObject("patients", patientsMaps);
+            mav.addObject("generatedByAdmin", name);
+            mav.addObject("generatedByDoctor", fullName);
+            mav.addObject("role", roles);
         }
         return mav;
     }

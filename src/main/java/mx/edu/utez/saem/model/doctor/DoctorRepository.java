@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface DoctorRepository extends JpaRepository<DoctorBean, Long>{
     Optional<DoctorBean> findByCard(String card);
     Boolean existsByUserBeanEmail(String email);
+
+    Optional<DoctorBean> findByUserBeanEmail(String email);
 }
