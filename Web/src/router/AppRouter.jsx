@@ -7,7 +7,6 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
-import DashboardPage from '../modules/admin/DashboardPage';
 import SignInPage from '../modules/auth/SignInPage';
 import Forgetpass from '../modules/auth/Forgetpass';
 
@@ -36,7 +35,6 @@ const AppRouter = () => {
               {   
                 // routesFromRole(user?.roles[0]?.name)
               }
-              <Route path="dashboard" element={<DashboardPage />} />
               <Route path="medicos" element={<><Medicos/></>} />
               <Route path="Subirdatos" element={<><Subirdatos/></>} />
               <Route path="pacientes" element={<UserPage />} />
