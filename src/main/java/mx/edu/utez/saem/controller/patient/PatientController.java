@@ -1,18 +1,11 @@
 package mx.edu.utez.saem.controller.patient;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
-import mx.edu.utez.saem.controller.address.dto.AddressDto;
 import mx.edu.utez.saem.controller.patient.dto.PatientDto;
-import mx.edu.utez.saem.controller.person.dto.PersonDto;
-import mx.edu.utez.saem.controller.user.dto.UserDto;
-import mx.edu.utez.saem.model.address.AddressBean;
 import mx.edu.utez.saem.model.doctor.DoctorBean;
 import mx.edu.utez.saem.model.doctor.DoctorRepository;
 import mx.edu.utez.saem.model.patient.PatientBean;
-import mx.edu.utez.saem.model.person.PersonBean;
-import mx.edu.utez.saem.model.user.UserBean;
 import mx.edu.utez.saem.service.patient.PatientService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +15,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
-import org.apache.poi.ss.usermodel.*;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -90,13 +82,6 @@ public class PatientController {
             mav.addObject("role", roles);
         }
         return mav;
-    }
-
-
-    @PostMapping("/import")
-    public ResponseEntity<ApiResponse> importPatientsFromExcel(@RequestParam("file") MultipartFile file) {
-        this.service.savePatientsWithExcel(file);
-        return new ResponseEntity<>(new ApiResponse(null, HttpStatus.OK, "Pacientes Agregados Exitosamente"), HttpStatus.OK);
     }
 
     @PostMapping("/save")

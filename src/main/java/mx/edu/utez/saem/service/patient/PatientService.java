@@ -12,15 +12,12 @@ import mx.edu.utez.saem.model.person.PersonBean;
 import mx.edu.utez.saem.model.person.PersonRepository;
 import mx.edu.utez.saem.model.user.UserBean;
 import mx.edu.utez.saem.model.user.UserRepository;
-import mx.edu.utez.saem.util.ExcelUploadService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Random;
 import java.sql.SQLException;
 import java.util.List;
@@ -150,18 +147,6 @@ public class PatientService {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "Registro Eliminado"), HttpStatus.OK);
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Paciente no encontrado"), HttpStatus.NOT_FOUND);
-    }
-
-    @Transactional
-    public void savePatientsWithExcel(MultipartFile file){
-        if(ExcelUploadService.isValidExcelFile(file)){
-            try{
-                List<PatientBean> patients = ExcelUploadService.getPatientsDataFromExcel(file.getInputStream());
-                this.repository.saveAll(patients);
-            }catch (IOException e){
-                throw new IllegalArgumentException("El archivo no valido");
-            }
-        }
     }
 
 }
