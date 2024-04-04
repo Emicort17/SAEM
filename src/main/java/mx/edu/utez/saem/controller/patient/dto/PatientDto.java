@@ -19,4 +19,6 @@ public class PatientDto {
         patientBean.setId(this.id);
         return patientBean;
     }
+
+
 }

@@ -19,6 +19,8 @@ public class AddressDto {
     private String street2;
     private String street3;
 
+
+
     public AddressBean toEntity() {
         AddressBean addressBean = new AddressBean(state, town, zip, interiorNumber, exteriorNumber, street1, street2, street3);
         addressBean.setId(this.id);
