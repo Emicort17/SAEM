@@ -3,6 +3,7 @@ package mx.edu.utez.saem.controller.user.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mx.edu.utez.saem.controller.person.dto.PersonDto;
 import mx.edu.utez.saem.model.person.PersonBean;
 import mx.edu.utez.saem.model.user.UserBean;
 
@@ -15,6 +16,9 @@ public class UserDto {
     private String password;
     private Boolean status;
     private PersonBean personBean;
+
+    public UserDto(String email, String password, boolean status, PersonDto personDto) {
+    }
 
     public UserBean toEntity() {
         UserBean userBean = new UserBean(email, password, status, personBean);
