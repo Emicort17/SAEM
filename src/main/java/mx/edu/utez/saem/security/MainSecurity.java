@@ -55,10 +55,15 @@ public class MainSecurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.cors(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req -> req.requestMatchers(WHITE_LIST).permitAll()
-                        .requestMatchers("/api/saem/administrator/**", "/api/saem/doctor/**", "/api/saem/patient/**", "/api/saem/diagnostic/**", "/api/saem/result/**", "/api/saem/medicine/**","/api/saem/treatment/**").hasAnyAuthority("ADMIN_ROLE", "DOCTOR_ROLE")
-                        .requestMatchers("/api/saem/patient/**").hasAuthority("DOCTOR_ROLE")
-                        .anyRequest().authenticated()).httpBasic(Customizer.withDefaults())
+                .authorizeHttpRequests(req -> req
+                        .requestMatchers(WHITE_LIST).permitAll()
+                        // Especifica accesos para ADMIN_ROLE y DOCTOR_ROLE
+                        .requestMatchers("/api/saem/administrator/**", "/api/saem/doctor/**", "/api/saem/result/**", "/api/saem/medicine/**","/api/saem/treatment/**").hasAnyAuthority("ADMIN_ROLE", "DOCTOR_ROLE")
+                        // Permite a PATIENT_ROLE acceder solo a rutas específicas
+                        .requestMatchers("/api/saem/patient/**", "/api/saem/diagnostic/**").hasAnyAuthority("ADMIN_ROLE", "DOCTOR_ROLE","PATIENT_ROLE")
+                        // Configura los accesos restantes de manera adecuada
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
@@ -67,5 +72,6 @@ public class MainSecurity {
 
         return http.build();
     }
+
 
 }

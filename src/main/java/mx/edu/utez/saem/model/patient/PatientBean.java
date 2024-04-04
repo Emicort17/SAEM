@@ -1,12 +1,15 @@
 package mx.edu.utez.saem.model.patient;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mx.edu.utez.saem.model.diagnostic.DiagnosticBean;
 import mx.edu.utez.saem.model.medicalRecord.MedicalRecordBean;
 import mx.edu.utez.saem.model.user.UserBean;
 
@@ -16,6 +19,10 @@ import mx.edu.utez.saem.model.user.UserBean;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIdentityInfo(
+        scope = PatientBean.class,
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class PatientBean {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +36,6 @@ public class PatientBean {
     private UserBean userBean;
 
     @OneToOne(mappedBy = "patientBean")
-    @JsonBackReference
     private MedicalRecordBean medicalRecordBean;
 
     public PatientBean(boolean external, UserBean userBean) {

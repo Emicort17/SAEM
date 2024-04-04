@@ -22,6 +22,7 @@ import java.util.Set;
 @Getter
 @Setter
 @JsonIdentityInfo(
+        scope = MedicalRecordBean.class,
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
 public class MedicalRecordBean {
@@ -33,7 +34,6 @@ public class MedicalRecordBean {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
-    @JsonManagedReference
     private PatientBean patientBean;
 
     @OneToMany(mappedBy = "medicalRecordBean", cascade = CascadeType.ALL )
