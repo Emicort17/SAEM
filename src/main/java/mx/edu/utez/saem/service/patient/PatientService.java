@@ -110,7 +110,7 @@ public class PatientService {
         UserBean foundUser = foundPatient.getUserBean();
 
         foundUser.setEmail(updatedUser.getEmail());
-        foundUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        foundUser.setPassword(updatedUser.getPassword());
         foundUser.setStatus(updatedUser.getStatus());
 
         PersonBean updatedPerson = updatedUser.getPersonBean();
@@ -162,6 +162,28 @@ public class PatientService {
                 throw new IllegalArgumentException("El archivo no valido");
             }
         }
+    }
+
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<ApiResponse> changePatientPassword(String curp, String oldPassword, String newPassword) {
+        // Buscar al paciente por CURP
+        Optional<PatientBean> patientOpt = repository.findByUserBeanPersonBeanCurp(curp);
+        if (!patientOpt.isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Paciente no encontrado"), HttpStatus.NOT_FOUND);
+        }
+
+        // Verificar que la contraseña actual es correcta
+        UserBean user = patientOpt.get().getUserBean();
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "contraseña incorrecta"), HttpStatus.NOT_FOUND);
+        }
+
+        // Actualizar a la nueva contraseña
+        String encodedNewPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedNewPassword);
+        userRepository.save(user);
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "contraseña actualizada de forma exitosa"), HttpStatus.OK);
     }
 
 }

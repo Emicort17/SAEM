@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
 import mx.edu.utez.saem.controller.address.dto.AddressDto;
+import mx.edu.utez.saem.controller.patient.dto.ChangePasswordDto;
 import mx.edu.utez.saem.controller.patient.dto.PatientDto;
 import mx.edu.utez.saem.controller.person.dto.PersonDto;
 import mx.edu.utez.saem.controller.user.dto.UserDto;
@@ -123,4 +124,14 @@ public class PatientController {
     public ResponseEntity<ApiResponse> verUno(@PathVariable String curp){
         return service.getOne(curp);
     }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<ApiResponse> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        return service.changePatientPassword(
+                changePasswordDto.getCurp(),
+                changePasswordDto.getOldPassword(),
+                changePasswordDto.getNewPassword());
+    }
+
 }
+

@@ -3,6 +3,7 @@ package mx.edu.utez.saem.controller.doctor;
 import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
 import mx.edu.utez.saem.controller.doctor.dto.DoctorDto;
+import mx.edu.utez.saem.controller.doctor.dto.ChangeDocPasswordDto;
 import mx.edu.utez.saem.service.doctor.DoctorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +38,14 @@ public class DoctorController {
     @GetMapping("/findOne/{card}")
     public ResponseEntity<ApiResponse> verUno(@PathVariable String card){
         return service.getOne(card);
+    }
+
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<ApiResponse> changePassword(@RequestBody ChangeDocPasswordDto changePasswordDto) {
+        return service.changeDoctorPassword(
+                changePasswordDto.getCard(),
+                changePasswordDto.getOldPassword(),
+                changePasswordDto.getNewPassword());
     }
 }

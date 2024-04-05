@@ -14,10 +14,6 @@ public class PatientDto {
     private boolean external;
     private UserBean userBean;
 
-    public PatientDto(boolean external, UserBean userBean) {
-        this.external = external;
-        this.userBean = userBean;
-    }
 
     public PatientBean toEntity() {
         PatientBean patientBean = new PatientBean(external, userBean);

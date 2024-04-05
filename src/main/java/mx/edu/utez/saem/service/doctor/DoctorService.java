@@ -126,4 +126,26 @@ public class DoctorService {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Doctor no encontrado"), HttpStatus.NOT_FOUND);
     }
 
+    public ResponseEntity<ApiResponse> changeDoctorPassword(String card, String oldPassword, String newPassword) {
+        Optional<DoctorBean> optionalDoctor = repository.findByCard(card);
+        if (!optionalDoctor.isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Doctor no encontrado"), HttpStatus.NOT_FOUND);
+        }
+
+        DoctorBean doctor = optionalDoctor.get();
+        UserBean user = doctor.getUserBean();
+
+        // Verifica si la contraseña actual es correcta
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "contraseña incorrecta"), HttpStatus.NOT_FOUND);
+        }
+
+        // Encripta y actualiza la nueva contraseña
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user); // Asume que tienes un método save en tu UserRepository
+
+        return new ResponseEntity<>(new ApiResponse(HttpStatus.OK, false, "contraseña actualizada de forma exitosa"), HttpStatus.OK);
+    }
+
+
 }
