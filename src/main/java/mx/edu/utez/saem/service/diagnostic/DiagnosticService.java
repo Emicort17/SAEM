@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -88,5 +89,18 @@ public class DiagnosticService {
         }
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Diagnóstico no encontrado"), HttpStatus.NOT_FOUND);
     }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> findByMedicalRecordNumber(String number) {
+        Optional<MedicalRecordBean> medicalRecordOpt = medicalRecordRepository.findByNumber(number);
+        if (!medicalRecordOpt.isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(null, HttpStatus.NOT_FOUND, "Registro médico no encontrado"), HttpStatus.NOT_FOUND);
+        }
+        Set<DiagnosticBean> diagnostics = medicalRecordOpt.get().getDiagnosticBeans();
+        if (diagnostics.isEmpty()) {
+            return new ResponseEntity<>(new ApiResponse(diagnostics, HttpStatus.NOT_FOUND, "No se encontraron diagnósticos para el número de registro médico proporcionado"), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new ApiResponse(diagnostics, HttpStatus.OK, "Diagnósticos encontrados"), HttpStatus.OK);
+    }
+
 
 }

@@ -36,7 +36,8 @@ public class MedicalRecordBean {
     @JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
     private PatientBean patientBean;
 
-    @OneToMany(mappedBy = "medicalRecordBean", cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "medicalRecordBean", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<DiagnosticBean> diagnosticBeans;
 
     public MedicalRecordBean(String number, PatientBean patientBean) {

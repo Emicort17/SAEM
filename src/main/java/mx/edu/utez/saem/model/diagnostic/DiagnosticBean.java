@@ -1,8 +1,6 @@
 package mx.edu.utez.saem.model.diagnostic;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,12 +35,14 @@ public class DiagnosticBean {
     @Column(length = 20, nullable = false)
     private String disease;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "medicalRecord_id", referencedColumnName = "id")
+    @JsonBackReference
     private MedicalRecordBean medicalRecordBean;
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
+    @JsonIgnore
     private DoctorBean doctorBean;
 
     @OneToMany(mappedBy = "diagnosticBean", cascade = CascadeType.ALL )

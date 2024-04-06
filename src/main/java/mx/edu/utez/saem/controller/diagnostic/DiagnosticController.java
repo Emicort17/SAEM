@@ -38,4 +38,8 @@ public class DiagnosticController {
     public ResponseEntity<ApiResponse> verUno(@PathVariable Long id){
         return service.getOne(id);
     }
+
+    @GetMapping("/findbyNumber/{number}")
+    public ResponseEntity<ApiResponse> findbyNumber(@PathVariable String number){return service.findByMedicalRecordNumber(number);
+    }
 }
