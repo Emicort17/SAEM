@@ -35,7 +35,7 @@ public class PatientBean {
     @JsonManagedReference("user-patient")
     private UserBean userBean;
 
-    @OneToOne(mappedBy = "patientBean")
+    @OneToOne(mappedBy = "patientBean", cascade = CascadeType.ALL)
     private MedicalRecordBean medicalRecordBean;
 
     public PatientBean(boolean external, UserBean userBean) {
