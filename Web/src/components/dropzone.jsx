@@ -1,10 +1,59 @@
+import React, { useState } from 'react';
+import { FileInput, Label,Button } from 'flowbite-react';
+import { customAlert,confimAlert } from '../config/alerts/alert';
+const Dropzone = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
 
-import { FileInput, Label } from 'flowbite-react';
-import 'flowbite-react';
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
+  };
 
- const Dropzone= ()=> {
+  const handleSubmit = () => {
+
+    if (selectedFile) {
+
+      confimAlert(async () => {
+        try {
+        
+            const response = await AxiosClient({
+                url: '/patient/import',
+                method: 'POST',
+                file: selectedFile,
+
+            });
+            if (!response.error) {
+                customAlert(
+                    'Registros exitosos',
+                    'Los datos se guardaron correctamente',
+                    'success');
+            }
+            
+           } catch (error) {
+            customAlert(
+                'Ocurrio un error',
+                'Error al cargar los datos',
+                'error')
+            console.log(error);
+        } finally {
+
+        }
+    });
+
+      console.log('Archivo seleccionado:', selectedFile);
+
+    } else {
+      customAlert(
+        'Sin Archivo',
+        'Seleccione un Archivo',
+        'error')
+    }
+  };
 
   return (
+
+    <>
+    
     <div className="flex w-full items-center justify-center ">
       <Label
         htmlFor="dropzone-file"
@@ -27,14 +76,27 @@ import 'flowbite-react';
               d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
             />
           </svg>
-          <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-            <span className="font-semibold ">Haga clic para cargar o arrastre y suelte</span>
-          </p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">xlsx (MAX. 5MB)</p>
+          {selectedFile ? ( // Verifica si hay un archivo seleccionado
+            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              Archivo seleccionado: <span className="font-semibold">{selectedFile.name}</span>
+            </p>
+          ) : (
+            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+              <span className="font-semibold">Haga clic para cargar o arrastre y suelte</span>
+            </p>
+          )}
+          <p className="text-xs text-gray-500 dark:text-gray-400">xlsx (MAX. 20MB)</p>
         </div>
-        <FileInput id="dropzone-file" className="hidden" />
+        <FileInput id="dropzone-file" className="hidden" onChange={handleFileChange} />
       </Label>
+   
     </div>
+
+    <div className='grid mt-6 '> <Button onClick={handleSubmit}>Enviar</Button> </div>
+    
+
+       </>
   );
-}
+};
+
 export default Dropzone;

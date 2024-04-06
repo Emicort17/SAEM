@@ -1,0 +1,29 @@
+.image-container {
+    overflow: hidden;
+    position: relative;
+    border: 2px solid transparent; /* Agregamos un borde transparente */
+    box-sizing: border-box; /* Aseguramos que el tamaño total incluya el borde */
+}
+
+.image {
+    transition: transform 0.5s ease;
+}
+
+.loupe {
+   position:fixed ;
+    width: 250px; /* Ajusta el tamaño del área de la lupa */
+    height: 250px; /* Ajusta el tamaño del área de la lupa */
+    border: 2px solid #6a6a6a; /* Puedes personalizar el borde según tus preferencias */
+    border-radius: 50%;
+    background-image: url('/src/assets/Images/formato.jpg'); /* Establece la misma imagen como fondo de la lupa */
+    background-size: 900% 900%; /* Ajusta el valor de zoom según tus necesidades */
+    display: none; /* Oculta la lupa inicialmente */
+    right: 0;
+ 
+}
+
+.image-container:hover .loupe {
+    display:block; /* Muestra la lupa cuando se pasa el mouse sobre la imagen */
+    transform: scale(1); /* Ajusta el valor de escala según tus necesidades */
+    transition: transform 0.8s ease; /* Ajusta la duración de la transición según tus necesidades */
+}

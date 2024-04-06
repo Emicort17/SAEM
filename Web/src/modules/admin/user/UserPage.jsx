@@ -1,49 +1,41 @@
-import RegisterUserForm from './components/RegisterUserForm';
 import CustomDataTable from '../../../components/CustomDatatable'
 import AxiosClient from '../../../config/http-client/axios-client';
 import { TextInput, Label, Button, Card, Tooltip } from 'flowbite-react'
-import { Link,useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { deletePatient } from '../../../config/alerts/alert';
 import React, { useMemo, useState, useEffect } from 'react'
-
+import { BsFileEarmarkText } from "react-icons/bs";
 import { LuPlus } from "react-icons/lu";
 import { CiEdit } from "react-icons/ci";
 import { AiOutlineDelete } from "react-icons/ai";
+import { LiaFileDownloadSolid } from "react-icons/lia";
+
 
 const UserPage = () => {
 
-    const navigate= useNavigate();
+    const navigate = useNavigate();
+
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
-    const [isCreating, setIsCreating] = useState(false);
+  
 
-    const [editingUser, setEditingUser] = useState(null);
-    
-    const pasardatos=(row)=> {
+    const pasardatos = (row) => {
+        navigate('/editperson', { state: row });
+    }
+    const citas = (Noexp) => {
 
-        navigate('/editperson',{state:row});
-
-    } 
-
+        navigate('/citas', { state: Noexp });
+    }
     const estado = (estado) => {
         if (estado === true) {
             return ('Activo')
-
         } else { return ('Inactivo') }
     }
-
-    const asignation = (medical) => {
-        if (medical === null) {
-            return ('Sin asignar')
-
-        } else { return (medical) }
-    }
-
 
     const columns = useMemo(() => [
         {
             name: '#',
-            selector: (row, i) => i,
+            selector: (row, i) => i+1,
             sortable: false,
         },
         {
@@ -64,8 +56,8 @@ const UserPage = () => {
         },
 
         {
-            name: 'Medico',
-            cell: (row) => <>{asignation(row.medicalRecordBean)}</>,
+            name: 'No Expediente',
+            cell: (row) => <>{row.medicalRecordBean ? row.medicalRecordBean.number : 'Sin asignar'}</>,
             sortable: false,
         },
         {
@@ -74,6 +66,9 @@ const UserPage = () => {
                 <CiEdit style={{ cursor: 'pointer' }} size={24} color={'#000'} />
             </button>
                 <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.userBean.personBean.curp)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
+                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => citas(row.medicalRecordBean.number)} > <BsFileEarmarkText style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
+
+
             </>,
             sortable: false,
         },
@@ -81,31 +76,39 @@ const UserPage = () => {
 
     ]);
 
-    const deleteUser = async (curp) => {
+
+
+    const download = async () => {
         try {
-            const result = await deletePatient(); // Mostrar la alerta
-            if (result.isConfirmed) { // Si el usuario confirmó la acción
-                try {
-                    const response = AxiosClient({
-                        url: `/patient/delete${curp}`,
-                        method: 'DELETE',
-                    });
-                    console.log(response);
-                    if (!response.error) setUsers(response.data);
-                } catch (error) {
-                    console.log(error);
-                } finally {
-                    setLoading(false);
-                }
+            const response = await AxiosClient({
+                url: `/patient/exportation`,
+                method: 'GET',
+                responseType: 'arraybuffer', // Cambiar a arraybuffer para recibir la respuesta como un array de bytes
+            });
+
+            // Verificar si la respuesta es exitosa
+            console.log(response);
+            if (response) {
+                // Crear una instancia de JSZip y cargar los datos del archivo ZIP
+                const file = new Blob([response], { type: "application/vnd.ms-excel" })
+                // Crear un objeto URL a partir del Blob
+                const url = window.URL.createObjectURL(file);
+                // Crear un enlace temporal para iniciar la descarga del archivo XLSX
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = "Pacientes.xlsx"; // Nombre del archivo XLSX
+                document.body.appendChild(link);
+                link.click();
+                // Liberar recursos del objeto URL
+                window.URL.revokeObjectURL(url);
+            } else {
+                // Manejar la respuesta en caso de que no sea exitosa
+                console.error('Error al descargar el archivo');
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error en la petición de descarga:', error);
         }
     };
-
-
-
-
 
     const getUsers = async () => {
         try {
@@ -130,17 +133,50 @@ const UserPage = () => {
         getUsers();
     }, []); //Solo se ejecuta una vez al terminar de renderizar
 
+
+    const deleteUser = async (curp) => {
+        try {
+            const result = await deletePatient(); 
+            if (result.isConfirmed) {
+                try {
+                    const response = AxiosClient({
+                        url: `/patient/delete/${curp}`,
+                        method: 'DELETE',
+                    });
+                    console.log(response);
+                    if (!response.error) getUsers();
+                
+                
+                } catch (error) {
+                    console.log(error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     return (
         <section className='w-full px-4 pt-4 flex flex-col gap-4'>
 
             <h1 className='text-2xl'>Pacientes</h1>
 
-            <div className='flex justify-between'>
+            <div className='max-w-screen-md flex justify-between  items-center'>
                 <div className='max-w-64'>
                     <Label htmlFor='' />
                     <TextInput type='text' id='filter' placeholder='Buscar...' />
                 </div>
+                <div>
+                    <Button style={{ cursor: 'pointer' }} onClick={() => download()} color="success">
+                        <LiaFileDownloadSolid style={{ cursor: 'pointer' }} size={25} />
+                    </Button>
+                </div>
+
             </div>
+
+
 
             <CustomDataTable
                 columns={columns}

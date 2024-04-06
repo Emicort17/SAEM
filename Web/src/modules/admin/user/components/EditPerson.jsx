@@ -6,7 +6,8 @@ import React from 'react'
 import *  as yup from "yup"
 import { Link } from 'react-router-dom';
 import Switch from '@mui/material/Switch';
-import { useLocation } from 'react-router-dom';
+import AxiosClient from '../../../../config/http-client/axios-client';
+import { useLocation,useNavigate } from 'react-router-dom';
 
 
 
@@ -14,18 +15,16 @@ const EditPerson = () => {
 
     const location = useLocation();
     const datos = location.state || {};
+    const navigate = useNavigate();
 
 
-    console.log(datos)
-
-
-    const [checked, setChecked] = React.useState(false);
+    const [checked, setChecked] = React.useState(datos.external);
 
     const handleChange = () => {
         setChecked(!checked); // Cambiamos el estado del switch al valor opuesto cada vez que se haga clic en él
     };
 
-  
+
 
     const formik = useFormik({
         initialValues: {
@@ -33,12 +32,13 @@ const EditPerson = () => {
             email: datos.userBean.email,
             password: datos.userBean.password,
             confirmPassword: datos.userBean.password,
-            roles: '',
+
             name: datos.userBean.personBean.name,
             surname: datos.userBean.personBean.middleName,
             lastname: datos.userBean.personBean.lastName,
             curp: datos.userBean.personBean.curp,
             birthdate: datos.userBean.personBean.birthdate,
+            birthplace: datos.userBean.personBean.birthplace,
             phoneNumber: datos.userBean.personBean.phoneNumber,
             state: datos.userBean.personBean.addressBean.state,
             municipio: datos.userBean.personBean.addressBean.town,
@@ -47,15 +47,15 @@ const EditPerson = () => {
             calle: datos.userBean.personBean.addressBean.street1,
             calle2: datos.userBean.personBean.addressBean.street2,
             calle3: datos.userBean.personBean.addressBean.street3,
-            fechapadecimiento: "",
-            resultado: "",
-            fechatratamiento: "",
+            interiorNumber: datos.userBean.personBean.addressBean.interiorNumber,
+            exteriorNumber: datos.userBean.personBean.addressBean.exteriorNumber,
+
 
         },
         validationSchema: yup.object().shape({
-            email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
-            password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres'),
-            confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
+            email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 10 caracteres').max(45, 'Máximo 45 caracteres'),
+            password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres'),
+            confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
             name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres'),
             surname: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres'),
             lastname: yup.string().min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres'),
@@ -64,51 +64,68 @@ const EditPerson = () => {
             birthdate: yup.string().required('Campo obligatorio'),
             state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
+            birthplace: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
+            interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres'),
+            exteriorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres'),
             cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres'),
             sexo: yup.string().required('Campo obligatorio'),
             calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
-            fechapadecimiento: yup.string().required('Campo obligatorio'),
-            resultado: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
-            fechatratamiento: yup.string().required('Campo obligatorio'),
+
         }),
-        onSubmit: async (values, { setSubmitting }) => {
+        onSubmit: async () => {
             confimAlert(async () => {
                 try {
                     const payload = {
-                        ...values,
-
-                        birthDate: values.birthdate,
-
-                        personBean: {
-                            name: values.name,
-                            middleName: values.middleName,
-                            lastName: values.lastname,
-                            birthdate: values.birthdate,
-                            birthplace: values.birthplace,
-                            curp: values.curp,
-                            phoneNumber: values.phoneNumber,
-                            sex: values.sex,
+                        external: checked,
+                        userBean: {
+                            email: formik.values.email,
+                            password: formik.values.password,
+                            confirmPassword: formik.values.confirmPassword,
+                            status: true,
+                            personBean: {
+                                name: formik.values.name,
+                                middleName: formik.values.surname,
+                                lastName: formik.values.lastname,
+                                birthdate: formik.values.birthdate,
+                                birthplace: formik.values.birthplace,
+                                curp: formik.values.curp,
+                                phoneNumber: formik.values.phoneNumber,
+                                sex: formik.values.sexo,
+                                addressBean: {
+                                    state: formik.values.state,
+                                    town: formik.values.municipio,
+                                    zip: formik.values.cp,
+                                    interiorNumber: formik.values.interiorNumber,
+                                    exteriorNumber: formik.values.exteriorNumber,
+                                    street1: formik.values.calle,
+                                    street2: formik.values.calle2,
+                                    street3: formik.values.calle3
+                                }
+                            }
                         }
 
 
                     };
                     const response = await AxiosClient({
-                        method: 'POST',
-                        url: '/person/',
-                        data: payload
+                        url: '/patient/update',
+                        method: 'PUT',
+                        data: payload,
+
                     });
                     if (!response.error) {
                         customAlert(
-                            'Registro exitoso',
-                            'El usuario se ha registrado correctamente',
+                            'Actualización exitosa',
+                            'El usuario se ha actualizado correctamente',
                             'success');
-                        getAllUsers();
-                        closeModal();
                     }
+                    
+                    navigate('/pacientes');
+
+
                 } catch (error) {
                     customAlert(
                         'Ocurrio un error',
-                        'Error al registrar usuario',
+                        'Error al actualizar usuario',
                         'error')
                     console.log(error);
                 } finally {
@@ -123,13 +140,14 @@ const EditPerson = () => {
 
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%', padding: '50px', color: '#03104A', }}>
 
-                <form id='userForm' name='userForm' style={{ width: '50%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px' }} noValidate onSubmit={formik.handleSubmit}>
+                <form id='editPatient' name='editPatient' style={{ width: '50%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px' }} noValidate onSubmit={formik.handleSubmit}>
 
                     <div className='flex flex-col gap-3' >
 
                         <h3 className='font-bold text-2xl text-center'>Paciente</h3>
 
                         <div className='flex flex-col gap-2 pb-2'>
+
                             <div className='flex flex-row'>
                                 <div className='w-full'>
                                     <Label style={{ color: '#03104A' }} htmlFor='name' className='font-bold' value='Nombre' />
@@ -149,12 +167,15 @@ const EditPerson = () => {
                                     <Label style={{ color: '#03104A', marginRight: '5x' }} htmlFor='name' className='font-bold' value='Externo' />
 
                                     <Switch
-                                        checked={datos.external}
+                                        checked={checked}
                                         onChange={handleChange}
                                         inputProps={{ 'aria-label': 'controlled' }}
                                     />
                                 </div>
+
                             </div>
+
+
                             <div className='grid-col-4 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='surname' className='font-bold' value='Apellido paterno' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Apellido paterno" id="surname" name="surname"
@@ -237,13 +258,32 @@ const EditPerson = () => {
                             </div>
 
                             <div className='grid-col-7'>
-                                <Label htmlFor='roles' className='font-bold' value='Sexo' />
-                                <Select style={{ backgroundColor: '#E6ECF1' }}  id="sexo" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
-                                    <option value=''></option>
+                                <Label htmlFor='sex' className='font-bold' value='Sexo' />
+                                <Select style={{ backgroundColor: '#E6ECF1' }} id="sex" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
+                                    <option value=''>Seleccionar</option>
                                     <option value='Hombre'>Hombre</option>
                                     <option value='Mujer'>Mujer</option>
                                 </Select>
                             </div>
+
+                            <div className='grid-col-6 pb-2'>
+                                <Label style={{ color: '#03104A' }} htmlFor='birthplace' className='font-bold' value='Lugar de nacimiento' />
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                    type='text'
+                                    title="birthplace"
+                                    id='birthplace'
+                                    name='birthplace'
+                                    value={formik.values.birthplace}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    helperText={
+                                        formik.touched.birthplace &&
+                                        formik.errors.birthplace && (
+                                            <span className='text-red-600'>{formik.errors.birthplace}</span>
+                                        )
+                                    } />
+                            </div>
+
 
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='state' className='font-bold' value='Estado' />
@@ -318,6 +358,44 @@ const EditPerson = () => {
                                         )
                                     } />
                             </div>
+
+                            <div className='flex flex-row justify-between'>
+                                <div className='grid-col-6 pb-2'>
+                                    <Label style={{ color: '#03104A' }} htmlFor='interiorNumber' className='font-bold' value='Numero Interior' />
+                                    <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                        type='interiorNumber'
+                                        title="interiorNumber"
+                                        id='interiorNumber'
+                                        name='interiorNumber'
+                                        value={formik.values.interiorNumber}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        helperText={
+                                            formik.touched.interiorNumber &&
+                                            formik.errors.interiorNumber && (
+                                                <span className='text-red-600'>{formik.errors.interiorNumber}</span>
+                                            )
+                                        } />
+                                </div>
+                                <div className='grid-col-6 pb-2'>
+                                    <Label style={{ color: '#03104A' }} htmlFor='exteriorNumber' className='font-bold' value='Numero exterior' />
+                                    <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                        type='exteriorNumber'
+                                        title="exteriorNumber"
+                                        id='exteriorNumber'
+                                        name='exteriorNumber'
+                                        value={formik.values.exteriorNumber}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        helperText={
+                                            formik.touched.exteriorNumber &&
+                                            formik.errors.exteriorNumber && (
+                                                <span className='text-red-600'>{formik.errors.exteriorNumber}</span>
+                                            )
+                                        } />
+                                </div>
+                            </div>
+
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle2' className='font-bold' value='Calle 2' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }}
@@ -343,15 +421,10 @@ const EditPerson = () => {
                                     title="calle3"
                                     id='calle3'
                                     name='calle3'
-                                    value={formik.values.calle}
+                                    value={formik.values.calle3}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
-                                    helperText={
-                                        formik.touched.calle &&
-                                        formik.errors.calle && (
-                                            <span className='text-red-600'>{formik.errors.calle}</span>
-                                        )
-                                    } />
+                                />
                             </div>
 
 
@@ -374,12 +447,7 @@ const EditPerson = () => {
                                     } />
 
 
-                                <div className=' pb-2' hidden>
-                                    <Label style={{ color: '#03104A' }} htmlFor='roles' className='font-bold' value='roles' />
-                                    <Select id="role" name="roles" >
-                                        <option selected value='Paciente'>Paciente</option>
-                                    </Select>
-                                </div>
+                 
 
                             </div>
 
@@ -412,122 +480,13 @@ const EditPerson = () => {
                                             )
                                         } />
                                 </div>
-
-
                             </div>
 
-
-
                         </div>
-
-                        <div className='w-full grid flex-col justify-center items-center'>
-
-                            <h4 className='text-center mb-5'>¿Lleva algún seguimiento de estas enfermedades?</h4>
-
-                            <div className='w-full flex flex-row justify-center items-center '>
-
-                                <div className='w-full flex-col gap-3 justify-center items-center'>
-                                    <div className='mb-6'>
-                                        <Label
-                                            style={{ color: '#03104A', textAlign: 'center', }}
-                                            htmlFor='fechapadecimiento'
-                                            className='font-bold'
-                                            value='Fecha de padecimiento'
-                                        />
-                                    </div>
-                                    <div className=' mb-6'>
-                                        <Label
-                                            style={{ color: '#03104A' }}
-                                            htmlFor='resultado'
-                                            className='font-bold'
-                                            value='Resultado'
-                                        />
-                                    </div>
-
-                                    <div className=''>
-                                        <Label
-                                            style={{ color: '#03104A' }}
-                                            htmlFor='fechatratamiento'
-                                            className='font-bold'
-                                            value='Fecha inicial de tratamiento'
-                                        />
-                                    </div>
-
-                                </div>
-
-                                <div className='w-full flex-col'>
-                                    <div className='mb-2'>
-                                        <TextInput
-                                            style={{ backgroundColor: '#E6ECF1', width: '150px' }}
-                                            type='date'
-                                            placeholder=''
-                                            id='fechapadecimiento'
-                                            name='fechapadecimiento'
-                                            value={formik.values.fechapadecimiento}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            helperText={
-                                                formik.touched.fechapadecimiento &&
-                                                formik.errors.fechapadecimiento && (
-                                                    <span className='text-red-600 flex flex-col'>
-                                                        {formik.errors.fechapadecimiento}
-                                                    </span>
-                                                )
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className='mb-2'>
-                                        <TextInput
-                                            style={{ backgroundColor: '#E6ECF1', width: '150px' }}
-                                            type='text'
-                                            placeholder=''
-                                            id='resultado'
-                                            name='resultado'
-                                            value={formik.values.resultado}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            helperText={
-                                                formik.touched.resultado &&
-                                                formik.errors.resultado && (
-                                                    <span className='text-red-600 flex flex-col'>
-                                                        {formik.errors.resultado}
-                                                    </span>
-                                                )
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className='mb-2'>
-                                        <TextInput
-                                            style={{ backgroundColor: '#E6ECF1', width: '150px' }}
-                                            type='date'
-                                            placeholder=''
-                                            id='fechatratamiento'
-                                            name='fechatratamiento'
-                                            value={formik.values.fechatratamiento}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            helperText={
-                                                formik.touched.fechatratamiento &&
-                                                formik.errors.fechatratamiento && (
-                                                    <span className='text-red-600 flex flex-col'>
-                                                        {formik.errors.fechatratamiento}
-                                                    </span>
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
 
 
 
                         <div className='flex justify-end space-x-4 mt-6'>
-
 
                             <Link to={'/pacientes'} > <Button color="failure" style={{ outline: 'none', boxShadow: 'none' }}>Cancelar</Button> </Link>
 
@@ -535,7 +494,7 @@ const EditPerson = () => {
                                 style={{ backgroundColor: '#03257A', color: '#fff' }}
                                 className=''
                                 type='submit'
-                                form='userForm'
+                                form='editPatient'
                                 disabled={formik.isSubmitting || !formik.isValid}
                                 color='succes'>
                                 Guardar

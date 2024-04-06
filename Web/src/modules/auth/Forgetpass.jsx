@@ -26,25 +26,25 @@ const Forgetpass = () => {
     validationSchema: yup.object().shape({
       email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 10 caracteres').max(45, 'Máximo 45 caracteres'),
     }),
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values) => {
       try {
         const response = await AxiosClient({
-          url: '/auth/signIn',
+          url: '/auth/recover/send-mail',
           method: 'POST',
           data: {
-            emailOrUsername: values.username,
+            toEmail: values.email,
           },
 
         });
 
         console.log(response);
         if (!response.error) {
-          console.log("Supuesto token guardado");
+          customAlert(
+            'Hecho',
+            'La contraseña fue enviada al correo',
+            'info'
+          );
 
-          console.log(response.data);
-
-          dispatch({ type: 'SIGNIN', payload: response.data });
-          navigate('/', { replace: true });
         } else throw Error('Error');
       } catch (error) {
         customAlert(
@@ -79,11 +79,11 @@ const Forgetpass = () => {
 
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-xl font-bold text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                 Recuperar Contraseña               </h1>
+                  Recuperar Contraseña               </h1>
 
-                 <Alert color="info" icon={HiInformationCircle} className='p-5 flex flex-row' >
-                        <span className="font-medium flex flex-row">La contraseña será enviada al correo enlazado a la cuenta </span>
-                    </Alert>
+                <Alert color="info" icon={HiInformationCircle} className='p-5 flex flex-row' >
+                  <span className="font-medium flex flex-row">La contraseña será enviada al correo enlazado a la cuenta </span>
+                </Alert>
                 <form
                   className="space-y-4 md:space-y-6"
                   onSubmit={formik.handleSubmit}
@@ -115,37 +115,38 @@ const Forgetpass = () => {
                   </div>
 
                   <div className="flex justify-end">
-
+                    <Button
+                      type="submit"
+                      color="light"
+                      className="w-full"
+                      disabled={formik.isSubmitting || !formik.isValid}
+                    >
+                      {formik.isSubmitting ? (
+                        <Spinner />
+                      ) : (
+                        <>
+                          <svg
+                            className="w-6 h-6 text-gray-800 dark:text-white"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"
+                            />
+                          </svg>
+                          Enviar
+                        </>
+                      )}
+                    </Button>
                   </div>
-                  <Button
-                    type="submit"
-                    color="light"
-                    className="w-full"
-                    disabled={formik.isSubmitting || !formik.isValid}
-                  >
-                    {formik.isSubmitting ? (
-                      <Spinner />
-                    ) : (
-                      <>
-                        <svg
-                          className="w-6 h-6 text-gray-800 dark:text-white"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"
-                          />
-                        </svg>
-                        Enviar                      </>
-                    )}
-                  </Button>
                 </form>
+
               </div>
             </div>
           </div>

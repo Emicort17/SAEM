@@ -24,7 +24,6 @@ const RegisterPerson = () => {
             email: "",
             password: "",
             confirmPassword: "",
-            roles: '',
             name: "",
             surname: "",
             lastname: "",
@@ -38,15 +37,13 @@ const RegisterPerson = () => {
             calle: "",
             calle2: "",
             calle3: "",
-            fechapadecimiento: "",
-            resultado: "",
-            fechatratamiento: "",
+          
             birthplace: "",
             interiorNumber: "",
             exteriorNumber: "",
 
         },
-        validationSchema: yup.object().shape({
+            validationSchema: yup.object().shape({
             email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 10 caracteres').max(45, 'Máximo 45 caracteres'),
             password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres'),
             confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
@@ -64,9 +61,7 @@ const RegisterPerson = () => {
             cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres'),
             sexo: yup.string().required('Campo obligatorio'),
             calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
-            fechapadecimiento: yup.string().required('Campo obligatorio'),
-            resultado: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
-            fechatratamiento: yup.string().required('Campo obligatorio'),
+        
         }),
 
         onSubmit: async () => {
@@ -482,108 +477,7 @@ const RegisterPerson = () => {
 
                         </div>
 
-                        <div className='w-full grid flex-col justify-center items-center'>
-
-                            <h4 className='text-center mb-5'>¿Lleva algún seguimiento de estas enfermedades?</h4>
-
-                            <div className='w-full flex flex-row justify-center items-center '>
-
-                                <div className='w-full flex-col gap-3 justify-center items-center'>
-                                    <div className='mb-6'>
-                                        <Label
-                                            style={{ color: '#03104A', textAlign: 'center', }}
-                                            htmlFor='fechapadecimiento'
-                                            className='font-bold'
-                                            value='Fecha de padecimiento'
-                                        />
-                                    </div>
-                                    <div className=' mb-6'>
-                                        <Label
-                                            style={{ color: '#03104A' }}
-                                            htmlFor='resultado'
-                                            className='font-bold'
-                                            value='Resultado'
-                                        />
-                                    </div>
-
-                                    <div className=''>
-                                        <Label
-                                            style={{ color: '#03104A' }}
-                                            htmlFor='fechatratamiento'
-                                            className='font-bold'
-                                            value='Fecha inicial de tratamiento'
-                                        />
-                                    </div>
-
-                                </div>
-
-                                <div className='w-full flex-col'>
-                                    <div className='mb-2'>
-                                        <TextInput
-                                            style={{ backgroundColor: '#E6ECF1', width: '150px' }}
-                                            type='date'
-                                            placeholder=''
-                                            id='fechapadecimiento'
-                                            name='fechapadecimiento'
-                                            value={formik.values.fechapadecimiento}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            helperText={
-                                                formik.touched.fechapadecimiento &&
-                                                formik.errors.fechapadecimiento && (
-                                                    <span className='text-red-600 flex flex-col'>
-                                                        {formik.errors.fechapadecimiento}
-                                                    </span>
-                                                )
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className='mb-2'>
-                                        <TextInput
-                                            style={{ backgroundColor: '#E6ECF1', width: '150px' }}
-                                            type='text'
-                                            placeholder=''
-                                            id='resultado'
-                                            name='resultado'
-                                            value={formik.values.resultado}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            helperText={
-                                                formik.touched.resultado &&
-                                                formik.errors.resultado && (
-                                                    <span className='text-red-600 flex flex-col'>
-                                                        {formik.errors.resultado}
-                                                    </span>
-                                                )
-                                            }
-                                        />
-                                    </div>
-
-                                    <div className='mb-2'>
-                                        <TextInput
-                                            style={{ backgroundColor: '#E6ECF1', width: '150px' }}
-                                            type='date'
-                                            placeholder=''
-                                            id='fechatratamiento'
-                                            name='fechatratamiento'
-                                            value={formik.values.fechatratamiento}
-                                            onChange={formik.handleChange}
-                                            onBlur={formik.handleBlur}
-                                            helperText={
-                                                formik.touched.fechatratamiento &&
-                                                formik.errors.fechatratamiento && (
-                                                    <span className='text-red-600 flex flex-col'>
-                                                        {formik.errors.fechatratamiento}
-                                                    </span>
-                                                )
-                                            }
-                                        />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
+                       
 
                         <div className='flex justify-end space-x-4 mt-6'>
 

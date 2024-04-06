@@ -20,7 +20,7 @@ const SignInPage = () => {
 
   const forgetpass=()=> {
 
-    navigate('/forgetpass',{ replace: true });
+    navigate('/forgetpass',{ replace: false });
 
 } 
 
@@ -70,7 +70,7 @@ const SignInPage = () => {
   return (
     <>
       <header>
-        <Navbar style={{ backgroundColor: "#03104A" }} fluid className="navbar flex justify-center">
+        <Navbar style={{ backgroundColor: "#03104A" }} fluid className="navbar flex justify-center ">
           <Navbar.Brand as={Link} href="">
 
             <span className="title self-center whitespace-nowrap text-xl font-semibold dark:text-white ml-1">SAEM</span>
@@ -145,7 +145,7 @@ const SignInPage = () => {
                   </div>
                   <div className="flex justify-end">
                     
-                  <Button onClick={forgetpass}>¿Olvidaste tu contraseña?</Button>
+                  <button style={{color:'#57595D'}} onClick={forgetpass}>¿Olvidaste tu contraseña?</button>
                       
                   </div>
                   <Button
@@ -158,8 +158,11 @@ const SignInPage = () => {
                       <Spinner />
                     ) : (
                       <>
+                    
+                        Iniciar sesión 
+
                         <svg
-                          className="w-6 h-6 text-gray-800 dark:text-white"
+                          className="w-6 h-6 text-gray-800 dark:text-white flex justify-end"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
@@ -173,7 +176,6 @@ const SignInPage = () => {
                             d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"
                           />
                         </svg>
-                        Iniciar sesión
                       </>
                     )}
                   </Button>

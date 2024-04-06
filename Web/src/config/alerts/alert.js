@@ -36,8 +36,8 @@ export const confimAlert= (preConfirm)=> SweetAlert.fire({
 })
 
 export const LogOutAlert= (preConfirm)=> SweetAlert.fire({
-    title:'Cerrar Session?',
-    text:'¿Seguro que desea cerrar session?',
+    title:'Cerrar sesión?',
+    text:'¿Seguro que desea cerrar sesión?',
     icon:'info',
     confirmButtonColor:"#0e7490",
     confirmButtonText:'Aceptar',

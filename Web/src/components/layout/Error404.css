@@ -1,0 +1,50 @@
+.error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.error-message {
+    text-align: center;
+    color: #fff;
+}
+
+.error-message h1 {
+    font-size: 4rem;
+    color: #f0ad4e; /* Amarillo */
+    margin-bottom: 0;
+}
+
+.error-message h2 {
+    font-size: 2rem;
+    color: #f0ad4e; /* Amarillo */
+}
+
+.error-message p {
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.error-message ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.error-message ul li {
+    margin-bottom: 10px;
+}
+
+.error-message ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.error-message ul li a:hover {
+    text-decoration: underline;
+}
+
+.error-image img {
+    max-width: 400px;
+}

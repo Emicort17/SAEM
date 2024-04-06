@@ -1,4 +1,3 @@
-import RegisterUserForm from '../admin/user/components/RegisterUserForm';
 import CustomDataTable from '../../components/CustomDatatable'
 import AxiosClient from '../../config/http-client/axios-client';
 import { Table } from 'flowbite-react';
@@ -45,7 +44,7 @@ const Medicos = () => {
     const columns = useMemo(() => [
         {
             name: '#',
-            selector: (row, i) => i,
+            selector: (row, i) => i+1,
             sortable: false,
         },
         {

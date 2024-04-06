@@ -7,7 +7,7 @@ import { FaUserDoctor } from "react-icons/fa6";
 import { Avatar, Dropdown } from 'flowbite-react';
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
-import { PiUserListLight, PiUserCircleGearLight } from "react-icons/pi";
+import { PiUserListLight } from "react-icons/pi";
 import { GoUpload } from "react-icons/go";
 import { LogOutAlert } from '../../config/alerts/alert';
 
@@ -17,7 +17,7 @@ import '../../assets/adminlayout.css';
 
 
 
-const AdminLayout = () => {
+const AdminLayoutMedical = () => {
   const [selectedSection, setSelectedSection] = useState('');
   const [userName, setUserName] = useState('');
 
@@ -91,7 +91,7 @@ const AdminLayout = () => {
                 arrowIcon={false}
                 inline
                 label={
-                  <PiUserCircleGearLight size={50} />
+                  <Avatar alt="User settings" img="https://flowbite.com/docs/images/people/profile-picture-5.jpg" rounded />
                 }
 
                 className="bg-neutral-800 rounded-xl  menuconfg" >
@@ -146,8 +146,6 @@ const AdminLayout = () => {
             <Sidebar.Items  >
               <Sidebar.ItemGroup className='flex flex-col space-y-4'>
                 <li >
-
-
                   <Link
                     style={{ backgroundColor: "#1C3344", color: "#ffff" }}
                     to={'medicos'}
@@ -165,7 +163,6 @@ const AdminLayout = () => {
 
                 </li>
                 <li >
-
 
 
                   <Link style={{ backgroundColor: "#1C3344", color: "#ffff" }}
@@ -218,4 +215,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default AdminLayoutMedical;
