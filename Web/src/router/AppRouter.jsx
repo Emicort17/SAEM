@@ -52,7 +52,7 @@ const AppRouter = () => {
       case 'DOCTOR_ROLE':
         return (
           <>
-            <Route path="/" element={<AdminLayoutMedical user={user} />} />
+            <Route path="/" element={<AdminLayout user={user} />} />
           </>
         );
     }
