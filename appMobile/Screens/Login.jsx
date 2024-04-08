@@ -7,45 +7,41 @@ import AxiosClient from '../config/http/AxiosClient'; // Importa tu objeto Axios
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../config/context/AuthContext';
 
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [showErrorMessage, setShowErrorMessage] = useState("");
-  const { userType, onLoginSuccess } = useAuth();
+  const { userData, onLoginSuccess } = useAuth(); // Cambio de userType a userData
+
   const navigation = useNavigation();
 
-  const login = async () => {
-
-    if (!isEmpty(email) && !isEmpty(password)) {
+  const handleLogin = async () => {
       try {
-        const response = await AxiosClient.post('api/auth/signin', {
-          username: email,
+        const response = await AxiosClient.post('/auth/signIn', {
+          emailOrUsername: username,
           password: password
         });
 
-        if (response.data.user.status === true) {
-
-          await AsyncStorage.setItem('session', JSON.stringify(response.data));
-          onLoginSuccess(response.data); // Aqui setenamos el objeto completo al metodo de onLoginSuccess por que en el auth context ya contiene el setUserData
+        if (response.status === true) {
+          await AsyncStorage.setItem('user', JSON.stringify(response.data));
+          onLoginSuccess(response.data);
         }
       } catch (error) {
-        Alert.alert("Usuario inactivo", "El usuario se encuentra inactivo, por favor contacte al administrador");
+        Alert.alert("Usuario o contraseña incorrectos");
         onLoginSuccess(null);
-
       }
-    } else {
-      setShowErrorMessage("Campos obligatorios");
-    }
 
-
-
+      useEffect(() => {
+        if (userData) {
+          onLoginSuccess(userData);
+        }
+      }, [userData, onLoginSuccess]);
+    
+    
   };
 
-  useEffect(() => {
-    if (userType) {
-      onLoginSuccess(userType);
-    }
-  }, [userType, onLoginSuccess]);
+
+
 
   const goToForgetPasswordScreen = () => {
     // Navega a la pantalla 'ForgetPass' para recuperar la contraseña

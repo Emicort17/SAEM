@@ -17,7 +17,7 @@ const Error404 = () => {
         <div className="error-container">
             <div className="error-message">
                 <h1>¡Oh no!</h1>
-                <h2>Parece que se daño el Harwere...</h2>
+                <h2>Parece que se daño el Harswere...</h2>
                 <p style={{color:'#f0ad4e'}}>No pudimos encontrar la página que buscas.</p>
                
             </div>
