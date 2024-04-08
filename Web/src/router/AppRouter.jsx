@@ -6,9 +6,13 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
+<<<<<<< HEAD
 }
 from 'react-router-dom';
 import DashboardPage from '../modules/admin/DashboardPage';
+=======
+} from 'react-router-dom';
+>>>>>>> 8f7a9ed854ff46110a8e4427a4c4696ee8cb78a7
 import SignInPage from '../modules/auth/SignInPage';
 import Forgetpass from '../modules/auth/Forgetpass';
 
@@ -76,8 +80,27 @@ const AppRouter = () => {
       <>
         {user.signed ? (
           <>
+<<<<<<< HEAD
             {routesFromRole(user?.authorities[0]?.authority) }
             
+=======
+            <Route path="/" element={<AdminLayout />}>
+              {   
+                // routesFromRole(user?.roles[0]?.name)
+              }
+              <Route path="medicos" element={<><Medicos/></>} />
+              <Route path="Subirdatos" element={<><Subirdatos/></>} />
+              <Route path="pacientes" element={<UserPage />} />
+              <Route path="registerperson" element={ <RegisterPerson />} />
+              <Route path="editperson" element={ <EditPerson />} />
+              <Route path="registermedico" element={ <RegisterMedical />} />
+              <Route path="editmedico" element={ <EditMedical />} />
+              <Route path="gestionarCuenta" element={ <GetionarCuenta />} />
+              <Route path="forgetpass" element={ <Forgetpass />} />
+
+
+            </Route>
+>>>>>>> 8f7a9ed854ff46110a8e4427a4c4696ee8cb78a7
           </>
         ) : (
 

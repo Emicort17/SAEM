@@ -14,11 +14,7 @@ function App() {
     if (!user) return;
     localStorage.setItem('user', JSON.stringify(user));
   }, [user]);
-  /*useEffect -> (callback, dependencies)
-    dependencies -> [user]
-    Si hay un cambio en user -> callback Se ejecuta nuevamente
-    
-  */
+
 
   //React.Fragment
   return (
