@@ -78,7 +78,7 @@ public class PatientService {
 
         char inicialNombre = savedPatient.getUserBean().getPersonBean().getName().charAt(0);
         char inicialApellido = savedPatient.getUserBean().getPersonBean().getMiddleName().charAt(0);
-        char inicialApellido2 = savedPatient.getUserBean().getPersonBean().getLastName().charAt(0);
+        char inicialApellido2 = savedPatient.getUserBean().getPersonBean().getLastName().isEmpty() ? 'X' : savedPatient.getUserBean().getPersonBean().getLastName().charAt(0);
 
         String numExp = inicialNombre + "" + inicialApellido + "" + inicialApellido2 + formatnumber;
 
@@ -152,16 +152,58 @@ public class PatientService {
         return new ResponseEntity<>(new ApiResponse(HttpStatus.NOT_FOUND, true, "Paciente no encontrado"), HttpStatus.NOT_FOUND);
     }
 
-    @Transactional
-    public void savePatientsWithExcel(MultipartFile file){
-        if(ExcelUploadService.isValidExcelFile(file)){
-            try{
-                List<PatientBean> patients = ExcelUploadService.getPatientsDataFromExcel(file.getInputStream());
-                this.repository.saveAll(patients);
-            }catch (IOException e){
-                throw new IllegalArgumentException("El archivo no valido");
-            }
+    @Transactional(rollbackFor = {SQLException.class})
+    public ResponseEntity<ApiResponse> savePatientsWithExcel(MultipartFile file) {
+        if (!ExcelUploadService.isValidExcelFile(file)) {
+            return ResponseEntity.badRequest().body(new ApiResponse("El archivo no es un Excel válido", HttpStatus.BAD_REQUEST, "Error"));
         }
+
+        try {
+            List<PatientBean> patients = ExcelUploadService.getPatientsDataFromExcel(file.getInputStream());
+
+            if (patients.isEmpty()) {
+                return ResponseEntity.badRequest().body(new ApiResponse("El archivo Excel está vacío.", HttpStatus.BAD_REQUEST, "Error"));
+            }
+
+            boolean atLeastOnePatientAdded = false;
+
+            for (PatientBean patient : patients) {
+                String curp = patient.getUserBean().getPersonBean().getCurp();
+                if (repository.findByUserBeanPersonBeanCurp(curp).isPresent()) {
+                    continue;
+                }
+
+                PatientBean savedPatient = savePatientAndAssignRecordNumber(patient);
+                atLeastOnePatientAdded = true; // Marca que al menos un paciente fue agregado
+            }
+
+            if (!atLeastOnePatientAdded) {
+                return ResponseEntity.ok(new ApiResponse("Ningún paciente nuevo fue agregado. Todos los CURP ya existen en el sistema.", HttpStatus.OK, "Éxito pero sin cambios"));
+            }
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Error al leer el archivo Excel", HttpStatus.INTERNAL_SERVER_ERROR, "Error"));
+        }
+
+        return ResponseEntity.ok(new ApiResponse("Todos los pacientes nuevos han sido agregados exitosamente", HttpStatus.OK, "Éxito"));
+    }
+
+    private PatientBean savePatientAndAssignRecordNumber(PatientBean patient) {
+        PatientBean savedPatient = repository.saveAndFlush(patient);
+
+        String formatNumber = String.format("%04d", savedPatient.getId());
+        char inicialNombre = savedPatient.getUserBean().getPersonBean().getName().charAt(0);
+        char inicialApellido = savedPatient.getUserBean().getPersonBean().getMiddleName().charAt(0);
+        char inicialApellido2 = savedPatient.getUserBean().getPersonBean().getLastName().isEmpty() ? 'X' : savedPatient.getUserBean().getPersonBean().getLastName().charAt(0);
+        String numExp = inicialNombre + "" + inicialApellido + "" + inicialApellido2 + formatNumber;
+
+        MedicalRecordBean medicalRecordBean = new MedicalRecordBean();
+        medicalRecordBean.setNumber(numExp);
+        medicalRecordBean.setPatientBean(savedPatient);
+        medicalRecordRepository.save(medicalRecordBean);
+
+        savedPatient.setMedicalRecordBean(medicalRecordBean);
+        return repository.save(savedPatient); // Devuelve el paciente guardado con el expediente médico asociado.
     }
 
     @Transactional(rollbackFor = {SQLException.class})

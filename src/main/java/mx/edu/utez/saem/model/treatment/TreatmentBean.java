@@ -29,7 +29,7 @@ public class TreatmentBean {
     private Long id;
     @Column(columnDefinition = "DATE", nullable = false)
     private LocalDate treatDate;
-    @Column(length = 30, nullable = false)
+    @Column(length = 254, nullable = false)
     private String indications;
 
     @ManyToOne(optional = false)
