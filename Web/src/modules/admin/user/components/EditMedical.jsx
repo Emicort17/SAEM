@@ -20,29 +20,27 @@ const EditMedical = () => {
     const formik = useFormik({
         initialValues: {
             cedula: datos.card,
-            email: (datos.userBean && datos.userBean.email) || "",
-            password: datos.userBean.password,
-            confirmPassword: "" || datos.userBean.password,
-
-            name: "" || datos.userBean.personBean.name,
-            surname: "" || datos.userBean.personBean.middleName,
-            lastname: "" || datos.userBean.personBean.lastName,
-            curp: "" || datos.userBean.personBean.curp,
-            sexo: "" || datos.userBean.personBean.sex,
-            birthdate: "" || datos.userBean.personBean.birthdate,
-            birthplace: "" || datos.userBean.personBean.birthplace,
-            phoneNumber: "" || datos.userBean.personBean.phoneNumber,
-
-            state: "" || datos.userBean.personBean.addressBean.state,
-            municipio: "" || datos.userBean.personBean.addressBean.town,
-            cp: "" || datos.userBean.personBean.addressBean.zip,
-            calle: "" || datos.userBean.personBean.addressBean.street1,
-            calle2: "" || datos.userBean.personBean.addressBean.street2,
-            calle3: "" || datos.userBean.personBean.addressBean.street3,
-            interiorNumber: "" || datos.userBean.personBean.addressBean.interiorNumber,
-            exteriorNumber: "" || datos.userBean.personBean.addressBean.exteriorNumber,
-
-
+            email: datos.userBean ? datos.userBean.email : '',
+            password: datos.userBean ? datos.userBean.password : '',
+            confirmPassword: datos.userBean ? datos.userBean.password : '',
+    
+            name: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.name : '',
+            surname: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.middleName : '',
+            lastname: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.lastName : '',
+            curp: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.curp : '',
+            sexo: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.sex : '',
+            birthdate: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.birthdate : '',
+            birthplace: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.birthplace : '',
+            phoneNumber: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.phoneNumber : '',
+    
+            state: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.state : '',
+            municipio: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.town : '',
+            cp: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.zip : '',
+            calle: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.street1 : '',
+            calle2: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.street2 : '',
+            calle3: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.street3 : '',
+            interiorNumber: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.interiorNumber : '',
+            exteriorNumber: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.exteriorNumber : '',
         },
         validationSchema: yup.object().shape({
             email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(10, 'Mínimo 10 caracteres').max(60, 'Máximo 60 caracteres'),

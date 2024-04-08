@@ -4,10 +4,10 @@ import { FiMenu } from "react-icons/fi";
 import { Outlet, Link } from 'react-router-dom';
 import { Navbar, Sidebar } from 'flowbite-react';
 import { FaUserDoctor } from "react-icons/fa6";
-import { Avatar, Dropdown } from 'flowbite-react';
+import {  Dropdown } from 'flowbite-react';
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
-import { PiUserListLight, PiUserCircleGearLight } from "react-icons/pi";
+import { PiUserListLight, PiUserCircleLight  } from "react-icons/pi";
 import { GoUpload } from "react-icons/go";
 import { LogOutAlert } from '../../config/alerts/alert';
 
@@ -20,6 +20,7 @@ import '../../assets/adminlayout.css';
 const AdminLayout = () => {
   const [selectedSection, setSelectedSection] = useState('');
   const [userName, setUserName] = useState('');
+  const [lateruser, setlateruser] = useState('');
 
   const handleSectionChange = (section) => {
     setSelectedSection(section);
@@ -44,6 +45,15 @@ const AdminLayout = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  function obtenerPrimerCaracter(cadena) {
+    // Verifica si la cadena no está vacía
+    if (cadena.length > 0) {
+      setlateruser(cadena.charAt(0));
+    } else {
+      return null; // Devuelve null si la cadena está vacía
+    }
+  }
+
   useEffect(() => {
     const loadUserName = async () => {
       try {
@@ -57,6 +67,7 @@ const AdminLayout = () => {
           if (user && user.user) {
             if (user.user.user != null) {
               setUserName(user.user.user);
+              obtenerPrimerCaracter(user.user.user)
             } else {
               setUserName(user.user.personBean.name);
             }
@@ -91,14 +102,14 @@ const AdminLayout = () => {
                 arrowIcon={false}
                 inline
                 label={
-                  <PiUserCircleGearLight size={50} />
+                  <PiUserCircleLight size={50} />
                 }
 
                 className="bg-neutral-800 rounded-xl  menuconfg" >
 
                 <div className="contimg">
 
-                  <img className="imgmenuconfig" alt="User settings" src="src/assets/Images/Login.png" />
+                  <div style={{width:'100px',height:'100px', borderRadius:'50%',background:'#45484B'}} className='flex justify-center items-center'  alt="User settings" >  <p style={{fontSize:'50px', color:'#fff'}}>{lateruser}</p></div>
 
                 </div>
 

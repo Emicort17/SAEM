@@ -1,6 +1,6 @@
 import AxiosClient from '../../../../config/http-client/axios-client';
 import { Button, Card, Modal } from 'flowbite-react';
-import {  useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { HiInformationCircle } from "react-icons/hi";
 import { Alert } from "flowbite-react";
@@ -37,10 +37,6 @@ const Citas = () => {
         getDiagnostics();
     }, []);
 
-    const deleteDiagnostic = async (id) => {
-        // Función para eliminar un diagnóstico
-    };
-
     const openModalWithDiagnostic = (diagnostic) => {
         setSelectedDiagnostic(diagnostic);
     };
@@ -52,7 +48,7 @@ const Citas = () => {
     return (
         <>
             <section className='w-full px-4 pt-5 flex flex-col gap-4'>
-                <h1 className='text-2xl'>Diagnósticos</h1>
+                <h1 className='text-2xl mb-6'>Diagnósticos</h1>
 
                 {diagnostics.length === 0 ? (
                     <div className="flex justify-center items-center text-center">
@@ -61,7 +57,7 @@ const Citas = () => {
                         </Alert>
                     </div>
                 ) : (
-                    <div className='flex flex-wrap justify-center gap-2 cursor-pointer'>
+                    <div className='flex flex-wrap justify-center gap-4 cursor-pointer'>
                         {diagnostics.map((diagnostic, index) => (
                             <Card key={index} className="max-w-sm" onClick={() => openModalWithDiagnostic(diagnostic)}>
                                 <h5 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Diagnóstico {diagnostic.id}</h5>
@@ -71,7 +67,7 @@ const Citas = () => {
                                     Enfermedad: {diagnostic.disease}
                                 </p>
                                 <div className="items-center justify-center space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
-                                    <Button color="dark" onClick={() => pasardatos(diagnostic)}>Mas </Button>
+                                    <Button className='w-full h-7 text-xl' color="dark" onClick={() => pasardatos(diagnostic)}>Mas </Button>
                                 </div>
                             </Card>
                         ))}
@@ -87,7 +83,7 @@ const Citas = () => {
                             <p>Resultado:{selectedDiagnostic.result}</p>
                             <p>Enfermedad: {selectedDiagnostic.disease}</p>
                             <h1> <strong>Tratamiento: </strong> </h1>
-                          
+
                             {selectedDiagnostic.treatmentBeans && selectedDiagnostic.treatmentBeans.map((treatment, index) => (
                                 <div key={index}>
                                     <div className='flex justify-between'> Fecha de tratamiento: <b className='flex justify-end'>   {treatment.treatDate}</b> </div>
@@ -95,7 +91,7 @@ const Citas = () => {
                                     {/* Puedes agregar más información sobre los tratamientos aquí según tus necesidades */}
                                 </div>
                             ))}
-                            <h1> <strong>Result Beans: </strong> </h1>
+                            <h1> <strong>Resultados del laboratorio: </strong> </h1>
                             {selectedDiagnostic.resultBeans && selectedDiagnostic.resultBeans.map((resultBean, index) => (
                                 <div key={index}>
                                     <div className='flex justify-between'> Fecha de resultado: <b className='flex justify-end'> {resultBean.resultDate}</b></div>
@@ -105,12 +101,12 @@ const Citas = () => {
                                     <p>AST:{resultBean.labDataBean.ast}</p>
                                     <p>Creatinina:{resultBean.labDataBean.creatinine}</p>
                                     <p>Plaquetas:{resultBean.labDataBean.platelets}</p>
-                                    <hr className='mt-4 mb-5' style={{backgroundColor:'#03104A'}}></hr>
+                                    <hr className='mt-4 mb-5' style={{ backgroundColor: '#03104A' }}></hr>
                                 </div>
                             ))}
                         </Modal.Body>
 
-                      
+
                     </Modal>
                 )}
             </section>

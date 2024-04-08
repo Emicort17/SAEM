@@ -110,7 +110,7 @@ const Forgetpass = () => {
                         ) : null
                       }
                       id="email"
-                      placeholder="erielit"
+                      placeholder="Correo"
                     />
                   </div>
 

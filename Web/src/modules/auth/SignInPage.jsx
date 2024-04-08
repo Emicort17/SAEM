@@ -115,7 +115,7 @@ const SignInPage = () => {
                         ) : null
                       }
                       id="username"
-                      placeholder="erielit"
+                      placeholder="Usuario o Correo"
                     />
                   </div>
                   <div>
