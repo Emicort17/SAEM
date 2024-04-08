@@ -3,36 +3,55 @@ import { View, Text, TextInput, Alert, Image, StyleSheet } from 'react-native';
 import { Button } from '@rneui/themed';
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from '@react-navigation/native';
+import AxiosClient from '../config/http/AxiosClient'; // Importa tu objeto AxiosClient
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../config/context/AuthContext';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [tries, setTries] = useState(0);
+  const [showErrorMessage, setShowErrorMessage] = useState("");
+  const { userType, onLoginSuccess } = useAuth();
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    
-    fetch('http://localhost:8080/api/saem/auth/signIn', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        emailOrUsername: username,
-        password: password
-      }),
-    }).then(response => response.json())
-      .then(data => {
-          navigation.replace('TabNav');
-      })
-      .catch(error => {
-        console.error('Error al realizar la solicitud POST:', error);
-      });
+  const login = async () => {
+
+    if (!isEmpty(email) && !isEmpty(password)) {
+      try {
+        const response = await AxiosClient.post('api/auth/signin', {
+          username: email,
+          password: password
+        });
+
+        if (response.data.user.status === true) {
+
+          await AsyncStorage.setItem('session', JSON.stringify(response.data));
+          onLoginSuccess(response.data); // Aqui setenamos el objeto completo al metodo de onLoginSuccess por que en el auth context ya contiene el setUserData
+        }
+      } catch (error) {
+        Alert.alert("Usuario inactivo", "El usuario se encuentra inactivo, por favor contacte al administrador");
+        onLoginSuccess(null);
+
+      }
+    } else {
+      setShowErrorMessage("Campos obligatorios");
+    }
+
+
+
   };
 
+  useEffect(() => {
+    if (userType) {
+      onLoginSuccess(userType);
+    }
+  }, [userType, onLoginSuccess]);
+
   const goToForgetPasswordScreen = () => {
-    navigation.replace('ForgetPass');
+    // Navega a la pantalla 'ForgetPass' para recuperar la contraseña
+    navigation.navigate('ForgetPass');
   };
+
 
   return (
     <View style={styles.allScreen}>

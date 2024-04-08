@@ -76,24 +76,27 @@ const Medicos = () => {
                 </button>
          
 
-                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.userBean.personBean.curp)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
+                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.card)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
             </>,
             sortable: false,
         },
 
     ]);
 
-    const deleteUser = async (curp) => {
+    const deleteUser = async (card) => {
         try {
             const result = await deletePatient(); // Mostrar la alerta
             if (result.isConfirmed) { // Si el usuario confirmó la acción
                 try {
                     const response = AxiosClient({
-                        url: `/patient/delete${curp}`,
+                        url: `/doctor/delete/${card}`,
                         method: 'DELETE',
                     });
                     console.log(response);
-                    if (!response.error) setUsers(response.data);
+
+                    if (!response.error) 
+                    await getUsers()
+
                 } catch (error) {
                     console.log(error);
                 } finally {

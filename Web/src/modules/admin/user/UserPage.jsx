@@ -139,14 +139,14 @@ const UserPage = () => {
             const result = await deletePatient(); 
             if (result.isConfirmed) {
                 try {
-                    const response = AxiosClient({
+                    const response = await AxiosClient({
                         url: `/patient/delete/${curp}`,
                         method: 'DELETE',
                     });
                     console.log(response);
-                    if (!response.error) getUsers();
-                
-                
+                    if (!response.error) {
+                        await getUsers(); // Esperar a que getUsers se complete antes de continuar
+                    }
                 } catch (error) {
                     console.log(error);
                 } finally {
@@ -157,7 +157,7 @@ const UserPage = () => {
             console.error(error);
         }
     };
-
+    
     return (
         <section className='w-full px-4 pt-4 flex flex-col gap-4'>
 

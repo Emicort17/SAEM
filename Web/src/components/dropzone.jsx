@@ -15,28 +15,54 @@ const Dropzone = () => {
     if (selectedFile) {
       confimAlert(async () => {
         try {
-          const file = new FormData();
-          file.append('file', selectedFile);
-
-          const response = await AxiosMultipartClient.post('/patient/import', file);
-
+          const formData = new FormData();
+          formData.append('file', selectedFile);
+  
+          // Envía la solicitud al servidor
+          const response = await AxiosMultipartClient.post('/patient/import', formData);
+  
+          // Evalúa la respuesta basándote en la propiedad 'error' de la respuesta del servidor
           if (!response.error) {
             customAlert(
               'Registros exitosos',
-              'Los datos se guardaron correctamente',
+              response.message, // Utiliza el mensaje de la respuesta del servidor
               'success'
             );
+          } else {
+            customAlert(
+              'Error en la carga',
+              response.message || 'Ocurrió un error desconocido al cargar los datos.',
+              'error'
+            );
           }
-
-          
         } catch (error) {
-          console.log(error);
-          customAlert(
-            'Ocurrió un error',
-            'Error al cargar los datos',
-            'error'
-          );
-          console.log(error);
+          console.error("Error completo:", error);
+          if (error.response) {
+            // El servidor respondió con un estado fuera del rango 2xx
+            console.error("Datos de la respuesta del error:", error.response.data);
+            console.error("Estado de la respuesta del error:", error.response.status);
+            console.error("Encabezados de la respuesta del error:", error.response.headers);
+            // Utiliza la respuesta del servidor si está disponible
+            customAlert(
+              'Ocurrió un error',
+              error.response.data.message || 'Error al cargar los datos',
+              'error'
+            );
+          } else if (error.request) {
+            console.error("La solicitud fue hecha pero no se recibió respuesta", error.request);
+            customAlert(
+              'Ocurrió un error',
+              'No se recibió respuesta del servidor',
+              'error'
+            );
+          } else {
+            console.error("Error", error.message);
+            customAlert(
+              'Ocurrió un error',
+              error.message,
+              'error'
+            );
+          }
         }
       });
     } else {
@@ -47,6 +73,7 @@ const Dropzone = () => {
       );
     }
   };
+
 
   return (
     <>

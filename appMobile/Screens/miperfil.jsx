@@ -83,6 +83,59 @@ Perfil = () => {
     }
   ]
 
+  
+  const getPerson = async () => {
+    try {
+      // Realiza la solicitud POST al servidor de autenticación
+      const response = await AxiosClient.get(`/patient/findOne${bbf}`, {
+        emailOrUsername: username,
+        password: password
+      });
+
+      // Verifica si la solicitud fue exitosa (status 200)
+      if (!response.error) {
+        console.log("Inicio de sesión exitoso");
+
+        // Navega a la pantalla 'TabNav' después del inicio de sesión exitoso
+        navigation.replace('TabNav');
+      } else {
+        // Si la solicitud no fue exitosa, muestra un mensaje de error
+        throw new Error('Error en inicio de sesión');
+      }
+    } catch (error) {
+      // Maneja cualquier error durante el inicio de sesión
+      console.error('Error al iniciar sesión:', error);
+      Alert.alert('Error', 'Usuario y/o contraseña incorrectos');
+    }
+  };
+
+
+  const getcitas = async () => {
+    try {
+      // Realiza la solicitud POST al servidor de autenticación
+      const response = await AxiosClient.get(`/diagnostic/findbyNumber/${bbf}`, {
+        emailOrUsername: username,
+        password: password
+      });
+
+      // Verifica si la solicitud fue exitosa (status 200)
+      if (!response.error) {
+        console.log("Inicio de sesión exitoso");
+
+        // Navega a la pantalla 'TabNav' después del inicio de sesión exitoso
+        navigation.replace('TabNav');
+      } else {
+        // Si la solicitud no fue exitosa, muestra un mensaje de error
+        throw new Error('Error en inicio de sesión');
+      }
+    } catch (error) {
+      // Maneja cualquier error durante el inicio de sesión
+      console.error('Error al iniciar sesión:', error);
+      Alert.alert('Error', 'Usuario y/o contraseña incorrectos');
+    }
+  };
+
+
   return (
     
     <View style={styles.allScreen}>

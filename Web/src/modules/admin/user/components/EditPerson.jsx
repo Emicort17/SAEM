@@ -452,7 +452,7 @@ const EditPerson = () => {
                             </div>
 
 
-                            <div className=''>
+                            <div className='hidden' >
                                 <div className='grid-col-6 pb-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='password' className='font-bold' value='Contraseña' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }} type='password' placeholder="************" id="password" name="password"
