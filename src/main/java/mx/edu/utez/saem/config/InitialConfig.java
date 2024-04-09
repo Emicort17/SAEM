@@ -6,6 +6,8 @@ import mx.edu.utez.saem.model.administrator.AdministratorBean;
 import mx.edu.utez.saem.model.administrator.AdministratorRepository;
 import mx.edu.utez.saem.model.doctor.DoctorBean;
 import mx.edu.utez.saem.model.doctor.DoctorRepository;
+import mx.edu.utez.saem.model.medicalRecord.MedicalRecordBean;
+import mx.edu.utez.saem.model.medicalRecord.MedicalRecordRepository;
 import mx.edu.utez.saem.model.patient.PatientBean;
 import mx.edu.utez.saem.model.patient.PatientRepository;
 import mx.edu.utez.saem.model.person.PersonBean;
@@ -29,15 +31,17 @@ public class InitialConfig implements CommandLineRunner {
     private final AdministratorRepository administratorRepository;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
+    private final MedicalRecordRepository medicalRecordRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public InitialConfig(PersonRepository personRepository, UserRepository userRepository, AdministratorRepository administratorRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AddressRepository addressRepository, PasswordEncoder passwordEncoder) {
+    public InitialConfig(PersonRepository personRepository, UserRepository userRepository, AdministratorRepository administratorRepository, DoctorRepository doctorRepository, PatientRepository patientRepository, AddressRepository addressRepository, MedicalRecordRepository medicalRecordRepository, PasswordEncoder passwordEncoder) {
         this.personRepository = personRepository;
         this.userRepository = userRepository;
         this.administratorRepository = administratorRepository;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
         this.addressRepository = addressRepository;
+        this.medicalRecordRepository = medicalRecordRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -85,6 +89,8 @@ public class InitialConfig implements CommandLineRunner {
                 addressPerson
         ));
 
+
+
         //Persona paciente
         PersonBean patientPerson = getOrSavePerson(new PersonBean(
                 "María",
@@ -98,11 +104,19 @@ public class InitialConfig implements CommandLineRunner {
                 addressPerson2
         ));
 
+
+
         UserBean doctorUser = getOrSaveUser(new UserBean("isai331417@gmail.com", passwordEncoder.encode("123"), true, doctorPerson));
         UserBean patientUser = getOrSaveUser(new UserBean("patient@gmail.com", passwordEncoder.encode("1234"), true, patientPerson));
 
         DoctorBean doctor = getOrSaveDoctor(new DoctorBean("12344264123", doctorUser));
         PatientBean patient = getOrSavePatient(new PatientBean(false, patientUser));
+
+        MedicalRecordBean medicalRecordBean = getOrSaveMedicalRecord(new MedicalRecordBean(
+                        "1234565",
+                        patient
+                )
+        );
     }
     @Transactional
     public void saveAdmin(AdministratorBean admin){
@@ -135,5 +149,11 @@ public class InitialConfig implements CommandLineRunner {
     public PatientBean getOrSavePatient(PatientBean patient){
         Optional<PatientBean> foundPatient = patientRepository.findByUserBeanEmail(patient.getUserBean().getEmail());
         return foundPatient.orElseGet(()-> patientRepository.saveAndFlush(patient));
+    }
+
+    @Transactional
+    public MedicalRecordBean getOrSaveMedicalRecord(MedicalRecordBean medicalRecord){
+        Optional<MedicalRecordBean> foundMR = medicalRecordRepository.findByNumber(medicalRecord.getNumber());
+        return foundMR.orElseGet(()-> medicalRecordRepository.saveAndFlush(medicalRecord));
     }
 }
