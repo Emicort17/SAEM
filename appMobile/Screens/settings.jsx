@@ -1,57 +1,103 @@
-import { StyleSheet, Text, View, TextInput, Alert, Image, ScrollView } from 'react-native';
-
+import { StyleSheet, Text, View, TextInput, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { useAuth } from '../config/context/AuthContext';
+import { useEffect, useState } from 'react';
+import AxiosClient from '../config/http/AxiosClient';
 
 const Configuracion = () => {
+    const { userData, onLoginSuccess } = useAuth('');
+    const [datos, setPersonResponse] = useState();
+    const [telefono, setTelefono] = useState('');
+    const [estado, setEstado] = useState('');
+    const [municipio, setMunicipio] = useState('');
+    const [cp, setCP] = useState('');
+    const [calle2, setCalle2] = useState('');
+    const [calle, setCalle] = useState('');
+
+    useEffect(() => {
+        const getPerson = async () => {
+            const curp = userData.user.personBean.curp;
+            try {
+                const response = await AxiosClient.get(`patient/findOne/${curp}`);
+                if (response.data) {
+                    setPersonResponse(response.data);
+                    // Actualiza los estados con los datos recibidos
+                    setTelefono(response.data.userBean.personBean.phoneNumber);
+                    setEstado(response.data.userBean.personBean.addressBean.state);
+                    setMunicipio(response.data.userBean.personBean.addressBean.town);
+                    setCP(response.data.userBean.personBean.addressBean.zip);
+                    setCalle2(response.data.userBean.personBean.addressBean.street2); // Asumiendo que 'colonia' se refiere a 'estado' por el ejemplo
+                    setCalle(response.data.userBean.personBean.addressBean.street1);
+                }
+            } catch (error) {
+                console.error('Error al encontrar el paciente:', error);
+            }
+        };
+        getPerson();
+    }, [userData.user.personBean.curp]); 
+
+    const actualizarDatos = async () => {
+        const datosActualizados = {
+            ...datos,
+            userBean: {
+                ...datos.userBean,
+                personBean: {
+                    ...datos.userBean.personBean,
+                    phoneNumber: telefono,
+                    addressBean: {
+                        ...datos.userBean.personBean.addressBean,
+                        state: estado,
+                        town: municipio,
+                        zip: cp,
+                        street1: calle,
+                        // Asume que colonia debe ser actualizada aquí
+                    }
+                }
+            }
+        };
+
+        try {
+            const response = await AxiosClient.post('localhost:8080/api/saem/patient/update', datosActualizados);
+            if (response.data) {
+                Alert.alert("Éxito", "Datos actualizados correctamente");
+            }
+        } catch (error) {
+            Alert.alert("Error", "No se pudieron actualizar los datos");
+        }
+    };
 
     return (
-
         <ScrollView>
-        <View style={styles.allScreen}>
-
-
+            <View style={styles.allScreen}>
                 <View style={styles.container}>
-
-                    <Text style={styles.title} >Perfil</Text>
+                    <Text style={styles.title}>Perfil</Text>
                     <View style={styles.contImputs}>
+                        <Text style={styles.comp}>Telefono</Text>
+                        <TextInput style={styles.input} value={telefono} onChangeText={setTelefono}/>
 
-               
+                        <Text style={styles.comp}>Estado</Text>
+                        <TextInput style={styles.input} value={estado} onChangeText={setTelefono}/>
 
-                        <Text style={styles.comp} >Telefono</Text>
-                        <TextInput style={styles.input} />
-                        <Text style={styles.comp} >Estado</Text>
-                        <TextInput style={styles.input} />
-                        <Text style={styles.comp} >Municipio</Text>
-                        <TextInput style={styles.input} />
-                        <Text style={styles.comp} >CP</Text>
-                        <TextInput style={styles.input} />
-                        <Text style={styles.comp} >Colonia</Text>
-                        <TextInput style={styles.input} />
-                        <Text style={styles.comp} >Calle</Text>
-                        <TextInput style={styles.input} />
+                        <Text style={styles.comp}>Municipio</Text>
+                        <TextInput style={styles.input} value={municipio} onChangeText={setTelefono}/>
+
+                        <Text style={styles.comp}>Código Postal</Text>
+                        <TextInput style={styles.input} value={cp} onChangeText={setTelefono}/>
+
+                        <Text style={styles.comp}>Calle 1</Text>
+                        <TextInput style={styles.input} value={calle} onChangeText={setTelefono}/>
+
+                        <Text style={styles.comp}>Calle 2</Text>
+                        <TextInput style={styles.input} value={calle2} onChangeText={setTelefono}/>
+
                        
-
-                        
                     </View>
                 </View>
-                <View style={styles.container}>
-
-<Text style={styles.title} >Cuenta</Text>
-<View style={styles.contImputs}>
-
-<ScrollView>
-
-    <Text style={styles.comp} >Usuario</Text>
-    <TextInput style={styles.input} />
-    <Text style={styles.comp} >Contraseña</Text>
-    <TextInput style={styles.input} />
-  
-
-    </ScrollView>
-</View>
-</View>
-
-        </View>        
+                <TouchableOpacity style={styles.btnActualizar} onPress={actualizarDatos}>
+                    <Text style={styles.titlebtn}>Actualizar</Text>
+                </TouchableOpacity>
+            </View>        
         </ScrollView>
+
          
     );
 }

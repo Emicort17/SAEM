@@ -11,8 +11,11 @@ Expediente = () => {
     const { userData, onLoginSuccess } = useAuth('');
     const [datos, setPersonResponse] = useState();
     const curp = userData.user.personBean.curp;
+    const name = userData.user.personBean.name[0];
+
     console.log(curp)
-  
+    console.log(name)
+
     const getPerson = async () => {
       try {
         const response = await AxiosClient.get(`patient/findOne/${curp}`);
@@ -39,23 +42,26 @@ Expediente = () => {
       
         <View style={styles.allScreen}>
         <View style={styles.container}>
-          <Image style={styles.img} source={require('../assets/Images/Login.png')} />
+        <View style={styles.img}>
+                    {/* Asegurarse de que el texto esté dentro de un componente Text */}
+                    <Text style={styles.compimg}>{name}</Text>
+                </View>
           <View style={styles.contImputs}>
             {datos && (
-              <>
-                <Text style={styles.comp} >Nombre: <Text style={styles.compdatos}>{datos?.userBean.personBean.name ?? 'Sin datos'}</Text></Text>
-                <Text style={styles.comp} >Medico tratante:<Text style={styles.compdatos}> {datos?.userBean.personBean.name ?? 'Sin datos'}</Text></Text>
+              <>  
+                <Text style={styles.comp} >Nombre: <Text style={styles.compdatos}> {datos?.userBean.personBean.name ?? 'Sin datos'}</Text><Text style={styles.compdatos}> {datos?.userBean.personBean.middleName ?? 'Sin datos'}</Text> <Text style={styles.compdatos}>{datos?.userBean.personBean.lastName ?? 'Sin datos'}</Text></Text>
                 <Text style={styles.comp} >Telefono:<Text style={styles.compdatos}> {datos?.userBean.personBean.phoneNumber ?? 'Sin datos'}</Text></Text>
                 <Text style={styles.comp} >Pais:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.state ?? 'Sin datos'}</Text></Text>
-                <Text style={styles.comp} >Municipio:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.town ?? 'Sin datos'}</Text></Text>
                 <Text style={styles.comp} >Estado:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.state ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Municipio:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.town ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >CP:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.zip ?? 'Sin datos'}</Text></Text>
+
                 <Text style={styles.comp} >Estado de nacimiento:<Text style={styles.compdatos}> {datos?.userBean.personBean.birthplace ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Fecha de nacimiento:<Text style={styles.compdatos}> {datos?.userBean.personBean.birthdate ?? 'Sin datos'}</Text></Text>
+
                 <Text style={styles.comp} >Sexo:<Text style={styles.compdatos}> {datos?.userBean.personBean.sex ?? 'Sin datos'}</Text></Text>
                 <Text style={styles.comp} >CURP:<Text style={styles.compdatos}> {datos?.userBean.personBean.curp?? 'Sin datos'}</Text></Text>
-                <Text style={styles.comp} >Enfermedad cronica:<Text style={styles.compdatos}>  {datos?.medicalRecordBean.diagnosticBeans[0].disease ?? 'Sin datos'}</Text></Text>
-                <Text style={styles.comp} >Fecha de padecimiento:<Text style={styles.compdatos}> {datos?.medicalRecordBean.diagnosticBeans[0].startDate?? 'Sin datos'}</Text></Text>
-                <Text style={styles.comp} >Resultado:<Text style={styles.compdatos}> {datos?.medicalRecordBean.diagnosticBeans[0].result ?? 'Sin datos'}</Text></Text>
-                <Text style={styles.comp} >Fecha de inicio de tratamiento:<Text style={styles.compdatos}> {datos?.medicalRecordBean.diagnosticBeans[0].startDate?? 'Sin datos'}</Text></Text>
+
               </>
             )}
           </View>
@@ -96,14 +102,20 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     img: {
-        width: 150,
-        height: 150,
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+        width: 140,
+        height: 140,
+        backgroundColor:'#5D5C5C',
+        borderRadius:100,
         marginBottom:50,
     },
     contImputs: {
 
         justifyContent: 'center',
         width: 300,
+        alignItems:'center'
     },
 
     comp: {
@@ -113,6 +125,13 @@ const styles = StyleSheet.create({
         marginBottom:5,
     },
 
+    
+    compimg: {
+      fontSize: 50,
+      color: '#ffff',
+      fontWeight: 'bold',
+      marginBottom:5,
+  },
     compdatos: {
         fontSize: 16,
         color: '#000',

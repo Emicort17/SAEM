@@ -18,7 +18,6 @@ Seguimineto = ({ route }) => {
 
                     </View>
                     <Text style={styles.comp} >Resultado:<Text style={styles.compdatos}> {seguimiento.result ?? 'Sin datos'}</Text></Text>
-                    <Text style={styles.comp} >Fecha de toma confirmatoria:<Text style={styles.compdatos}> {seguimiento.fechaToma ?? 'Sin datos'}</Text></Text>
                     <Text style={styles.comp} >Fecha de resultados:<Text style={styles.compdatos}>
                         {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].resultDate ? seguimiento.resultBeans[0].resultDate : 'Sin datos'}
                     </Text></Text>
@@ -31,9 +30,7 @@ Seguimineto = ({ route }) => {
                     <Text style={styles.comp} >Plaquetas:<Text style={styles.compdatos}>
                         {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.platelets ?? '0') : 'Sin datos'}
                     </Text> ml</Text>
-                    <Text style={styles.comp} >Antiretroviral:<Text style={styles.compdatos}>
-                        {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.antiretroviral ?? 'Sin datos') : 'Sin datos'}
-                    </Text></Text>
+                   
                     <Text style={styles.comp} >Antigenos:<Text style={styles.compdatos}>
                         {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.antigen ?? 'Sin datos') : 'Sin datos'}
                     </Text></Text>
