@@ -1,32 +1,56 @@
 import { StyleSheet, Text, View, TextInput, Alert, Image, ScrollView } from 'react-native';
 
-Seguimineto = ({route}) => {
+Seguimineto = ({ route }) => {
 
 
     const seguimiento = route.params.seguimiento;
 
     return (
         <View style={styles.allScreen}>
-            <Text style={styles.title} >Informe de Seguimineto</Text>
+            <Text style={styles.title} >Informe de visita</Text>
 
             <View style={styles.container}>
                 <View style={styles.contImputs}>
 
                     <View style={styles.flex}>
-                        <Text style={styles.comp} >Enfermedad: <Text style={styles.compdatos}>{seguimiento.enfermedad}</Text></Text>
-                        <Text style={styles.comp} >Fecha:<Text style={styles.compdatos}> {seguimiento.fecha}</Text></Text>
+                        <Text style={styles.comp} >Enfermedad: <Text style={styles.compdatos}>{seguimiento.disease ?? 'Sin datos'}</Text></Text>
+                        <Text style={styles.comp} >Fecha:<Text style={styles.compdatos}> {seguimiento.startDate ?? 'Sin datos'}</Text></Text>
 
                     </View>
-                    <Text style={styles.comp} >Resultado:<Text style={styles.compdatos}> {seguimiento.resultado}</Text></Text>
-                    <Text style={styles.comp} >Fecha de toma confirmatoria:<Text style={styles.compdatos}> {seguimiento.fechaToma}</Text></Text>
-                    <Text style={styles.comp} >Fecha de resultados:<Text style={styles.compdatos}> {seguimiento.fechaResult}</Text></Text>
-                    <Text style={styles.comp} >Carga viral:<Text style={styles.compdatos}> {seguimiento.cargaViral}</Text></Text>
-                    <Text style={styles.comp} >AST:<Text style={styles.compdatos}> {seguimiento.AST}</Text> U/L</Text>
-                    <Text style={styles.comp} >Plaquetas:<Text style={styles.compdatos}> {seguimiento.plaquetas}</Text> ml</Text>
-                    <Text style={styles.comp} >Antiretroviral:<Text style={styles.compdatos}> {seguimiento.antiretroviral}</Text></Text>
-                    <Text style={styles.comp} >2 Toma confirmatoria</Text>
-                    <Text style={styles.comp} >Fecha de resultado:<Text style={styles.compdatos}>  {seguimiento.fechaResult2}</Text></Text>
-                    <Text style={styles.comp} >Creatinina:<Text style={styles.compdatos}> {seguimiento.creatinina}</Text> mg/dl</Text>
+                    <Text style={styles.comp} >Resultado:<Text style={styles.compdatos}> {seguimiento.result ?? 'Sin datos'}</Text></Text>
+                    <Text style={styles.comp} >Fecha de toma confirmatoria:<Text style={styles.compdatos}> {seguimiento.fechaToma ?? 'Sin datos'}</Text></Text>
+                    <Text style={styles.comp} >Fecha de resultados:<Text style={styles.compdatos}>
+                        {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].resultDate ? seguimiento.resultBeans[0].resultDate : 'Sin datos'}
+                    </Text></Text>
+                    <Text style={styles.comp} >Carga viral:<Text style={styles.compdatos}>
+                        {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.viralLoad ?? '0') : 'Sin datos'}
+                    </Text></Text>
+                    <Text style={styles.comp} >AST:<Text style={styles.compdatos}>
+                        {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.ast ?? '0') : 'Sin datos'}
+                    </Text> U/L</Text>
+                    <Text style={styles.comp} >Plaquetas:<Text style={styles.compdatos}>
+                        {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.platelets ?? '0') : 'Sin datos'}
+                    </Text> ml</Text>
+                    <Text style={styles.comp} >Antiretroviral:<Text style={styles.compdatos}>
+                        {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.antiretroviral ?? 'Sin datos') : 'Sin datos'}
+                    </Text></Text>
+                    <Text style={styles.comp} >Antigenos:<Text style={styles.compdatos}>
+                        {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.antigen ?? 'Sin datos') : 'Sin datos'}
+                    </Text></Text>
+
+                    <Text style={styles.comp} >Creatinina:<Text style={styles.compdatos}>
+                        {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.creatinine ?? '0') : 'Sin datos'}
+                    </Text> mg/dl</Text>
+
+                    <Text style={styles.comp2} >Tratamiento </Text>
+
+
+                    <Text style={styles.comp} >Indicaciones:<Text style={styles.compdatos}>
+                    {' '+seguimiento.treatmentBeans && seguimiento.treatmentBeans[0] && seguimiento.treatmentBeans[0].medicineBeans[0] ? (seguimiento.treatmentBeans[0].medicineBeans[0].name)+' ' : 'Sin datos'} 
+                    {seguimiento.treatmentBeans && seguimiento.treatmentBeans[0]? (seguimiento.treatmentBeans[0].indications) : 'Sin datos'}
+
+                    </Text> </Text>
+
 
                 </View>
 
@@ -45,14 +69,14 @@ const styles = StyleSheet.create({
         width: '100%',
         fontSize: 28,
         textAlign: 'center',
-        marginBottom: 10,
+        marginBottom: 0,
         fontWeight: 'bold',
         color: '#092088'
     },
-    flex:{
-        flexDirection:'row',
-        justifyContent:'space-between',
-        marginBottom:5,
+    flex: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 5,
     },
 
     allScreen: {
@@ -90,6 +114,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
     },
+    comp2: {
+        width: '100%',
+        fontSize: 20,
+        textAlign: 'center',
+
+        color: '#092088',
+        fontWeight: 'bold',
+        marginBottom: 15 ,
+    },
+
 
     compdatos: {
         fontSize: 17,

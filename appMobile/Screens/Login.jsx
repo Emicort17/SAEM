@@ -6,42 +6,51 @@ import { useNavigation } from '@react-navigation/native';
 import AxiosClient from '../config/http/AxiosClient'; // Importa tu objeto AxiosClient
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../config/context/AuthContext';
+import { useEffect } from 'react';
 
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { userData, onLoginSuccess } = useAuth(); // Cambio de userType a userData
+
+  const handleUsernameChange = (text) => {
+    setUsername(text.trim());
+  };
+
+  const handlePasswordChange = (text) => {
+    setPassword(text.trim());
+  };
+  const { userData, onLoginSuccess } = useAuth(''); // Cambio de userType a userData
 
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-      try {
-        const response = await AxiosClient.post('/auth/signIn', {
-          emailOrUsername: username,
-          password: password
-        });
+    try {
+      const response = await AxiosClient.post('auth/signIn', {
+        emailOrUsername: username,
+        password: password
+      });
 
-        if (response.status === true) {
-          await AsyncStorage.setItem('user', JSON.stringify(response.data));
-          onLoginSuccess(response.data);
-        }
-      } catch (error) {
-        Alert.alert("Usuario o contraseña incorrectos");
-        onLoginSuccess(null);
-      }
+      console.log(response.data.authorities[0].authority);
 
-      useEffect(() => {
-        if (userData) {
-          onLoginSuccess(userData);
-        }
-      }, [userData, onLoginSuccess]);
-    
-    
+      if (response.data.authorities[0].authority === "PATIENT_ROLE") {
+        await AsyncStorage.setItem('user', JSON.stringify(response.data));
+        onLoginSuccess(response.data);
+        console.log('entramos');
+      } else (Alert.alert("El usuario no tiene acceso a esta app"))
+
+
+    } catch (error) {
+      Alert.alert("Usuario o contraseña incorrectos");
+      onLoginSuccess(null);
+    }
   };
 
-
-
+  useEffect(() => {
+    if (userData) {
+      onLoginSuccess(userData);
+    }
+  }, [userData, onLoginSuccess]);
 
   const goToForgetPasswordScreen = () => {
     // Navega a la pantalla 'ForgetPass' para recuperar la contraseña
@@ -63,15 +72,16 @@ const Login = () => {
           <View style={styles.contInputs}>
             <TextInput
               style={styles.input}
+
               placeholder='Usuario'
               value={username}
-              onChangeText={setUsername}
+              onChangeText={handleUsernameChange}
             />
             <TextInput
               style={styles.input}
               placeholder='Contraseña'
               value={password}
-              onChangeText={setPassword}
+              onChangeText={handlePasswordChange}
               secureTextEntry
             />
 

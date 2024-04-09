@@ -1,59 +1,66 @@
 import { StyleSheet, Text, View, TextInput, Alert, Image, ScrollView } from 'react-native';
+import { useAuth } from '../config/context/AuthContext';
+import { useEffect, useState } from 'react';
+import AxiosClient from '../config/http/AxiosClient';
 
 
-const datos = [
-    {
-        nombre:'Martin',
-        medico:'Lauro',
-        telefono:'774569797',
-        pais:'Mexico',
-        municipio:'Xochitepec',
-        estado:'Morelos',
-        nacimineto:'Morelos',
-        sexo:'Masculino',
-        curp:'OEMM938402HMEORNT6',
-        enfermedad:'Sida',
-        fechapade:'20/12/22',
-        resultado:'Posiivo',
-        fechainicio:'05/06/2004',
-    },
-  ];
 
 
 Expediente = () => {
 
-
+    const { userData, onLoginSuccess } = useAuth('');
+    const [datos, setPersonResponse] = useState();
+    const curp = userData.user.personBean.curp;
+    console.log(curp)
+  
+    const getPerson = async () => {
+      try {
+        const response = await AxiosClient.get(`patient/findOne/${curp}`);
+        console.log('hola person');
+        console.log('Datos de la respuesta:', JSON.stringify(response.data, null, 2));
+        if (response.data) {
+          setPersonResponse(response.data);
+        }
+      } catch (error) {
+        console.error('Error al encontrar el paciente:', error);
+      }
+    };
+  
+  
+  
+    useEffect(() => {
+      getPerson();
+    }, []); // Solo depende de datos
+  
+  
  
       return(
 
       
-    <View style={styles.allScreen}>
-
+        <View style={styles.allScreen}>
         <View style={styles.container}>
-
-        <Image style={styles.img} source={require('../assets/Images/Login.png')}></Image>
-
-        <View style={styles.contImputs}>
-
-            <Text style={styles.comp} >Nombre: <Text style={styles.compdatos}>{datos[0].nombre}</Text></Text>
-            <Text style={styles.comp} >Medico tratante:<Text style={styles.compdatos}> {datos[0].medico}</Text></Text>
-            <Text style={styles.comp} >Telefono:<Text style={styles.compdatos}> {datos[0].telefono}</Text></Text>
-            <Text style={styles.comp} >Pais:<Text style={styles.compdatos}> {datos[0].pais}</Text></Text>
-            <Text style={styles.comp} >Municipio:<Text style={styles.compdatos}> {datos[0].municipio}</Text></Text>
-            <Text style={styles.comp} >Estado:<Text style={styles.compdatos}> {datos[0].estado}</Text></Text>
-            <Text style={styles.comp} >Estado de nacimiento:<Text style={styles.compdatos}> {datos[0].nacimineto}</Text></Text>
-            <Text style={styles.comp} >Sexo:<Text style={styles.compdatos}> {datos[0].sexo}</Text></Text>
-            <Text style={styles.comp} >CURP:<Text style={styles.compdatos}> {datos[0].curp}</Text></Text>
-            <Text style={styles.comp} >Enfermedad cronica:<Text style={styles.compdatos}>  {datos[0].enfermedad}</Text></Text>
-            <Text style={styles.comp} >Fecha de padecimiento:<Text style={styles.compdatos}> {datos[0].fechapade}</Text></Text>
-            <Text style={styles.comp} >Resultado:<Text style={styles.compdatos}> {datos[0].resultado}</Text></Text>
-            <Text style={styles.comp} >Fecha de inicio de tratamiento:<Text style={styles.compdatos}> {datos[0].fechainicio}</Text></Text>
-
+          <Image style={styles.img} source={require('../assets/Images/Login.png')} />
+          <View style={styles.contImputs}>
+            {datos && (
+              <>
+                <Text style={styles.comp} >Nombre: <Text style={styles.compdatos}>{datos?.userBean.personBean.name ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Medico tratante:<Text style={styles.compdatos}> {datos?.userBean.personBean.name ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Telefono:<Text style={styles.compdatos}> {datos?.userBean.personBean.phoneNumber ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Pais:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.state ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Municipio:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.town ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Estado:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.state ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Estado de nacimiento:<Text style={styles.compdatos}> {datos?.userBean.personBean.birthplace ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Sexo:<Text style={styles.compdatos}> {datos?.userBean.personBean.sex ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >CURP:<Text style={styles.compdatos}> {datos?.userBean.personBean.curp?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Enfermedad cronica:<Text style={styles.compdatos}>  {datos?.medicalRecordBean.diagnosticBeans[0].disease ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Fecha de padecimiento:<Text style={styles.compdatos}> {datos?.medicalRecordBean.diagnosticBeans[0].startDate?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Resultado:<Text style={styles.compdatos}> {datos?.medicalRecordBean.diagnosticBeans[0].result ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Fecha de inicio de tratamiento:<Text style={styles.compdatos}> {datos?.medicalRecordBean.diagnosticBeans[0].startDate?? 'Sin datos'}</Text></Text>
+              </>
+            )}
+          </View>
         </View>
-
-        </View>
-
-    </View>
+      </View>
 
 )
 }

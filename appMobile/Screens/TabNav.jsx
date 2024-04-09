@@ -3,21 +3,43 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Perfil from './miperfil';
 import Configuracion from './settings';
 import Expediente from './expediente';
-import Seguimineto from './seguimineto';
-import { View, StyleSheet } from 'react-native'; // Añadido StyleSheet y View
+import { View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
-
+import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+
+import { useAuth } from '../config/context/AuthContext';
 
 const Tab = createBottomTabNavigator();
 
 const TabNav = () => {
+  const { userData, onLoginSuccess } = useAuth(''); // Cambio de userType a userData
+
+
+  const handleButtonPress = () => {
+    Alert.alert(
+      "Seguro que deseas cerrar sesión?",
+      "",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel"
+        },
+        {
+          text: "Aceptar",
+          onPress: () => {
+            onLoginSuccess(null);
+          }
+        }
+      ]
+    );
+  };
 
   return (
     <Tab.Navigator >
       <Tab.Screen
-        name="Perfil"
+        name="Diagnósticos"
         component={Perfil}
         options={{
           tabBarShowLabel: false,
@@ -25,7 +47,7 @@ const TabNav = () => {
           tabBarActiveTintColor: "black",
           tabBarInactiveTintColor: "black",
           headerStyle: { backgroundColor: '#092088' },
-          headerTitleStyle: { color: '#fff' }, // Cambia el color del texto del encabezado
+          headerTitleStyle: { color: '#fff' },
           tabBarLabelStyle: { fontSize: 25 },
           tabBarIcon: ({ color, size, focused }) => (
             <View style={[styles.iconContainer, focused && styles.iconContainerActive]}>
@@ -63,6 +85,11 @@ const TabNav = () => {
           tabBarInactiveTintColor: "black",
           headerStyle: { backgroundColor: '#092088' },
           tabBarLabelStyle: { fontSize: 25, },
+          headerRight: () => (
+            <TouchableOpacity onPress={handleButtonPress} style={styles.headerButton}>
+              <Feather name="power" size={24} color="#fff" />
+            </TouchableOpacity>
+          ),
           tabBarIcon: ({ color, size, focused }) => (
             <View style={[styles.iconContainer, focused && styles.iconContainerActive]}>
               <MaterialIcons name="settings" color={'#1C3344'} size={30} />
@@ -70,11 +97,6 @@ const TabNav = () => {
           ),
         }}
       />
-
-     
-
-
-
     </Tab.Navigator>
   );
 }
@@ -85,10 +107,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconContainerActive: {
-    backgroundColor: '#E5E5E5', // Color del indicador cuando la pestaña está activa
-    borderRadius: 50, // Ajusta según el tamaño del indicador deseado
-    width: 40, // Ajusta según el tamaño del indicador deseado
-    height: 40, // Ajusta según el tamaño del indicador deseado
+    backgroundColor: '#E5E5E5',
+    borderRadius: 50,
+    width: 40,
+    height: 40,
+  },
+  headerButton: {
+    marginRight: 15,
   },
 });
 

@@ -3,141 +3,39 @@ import * as React from "react";
 import { Button } from "@rneui/base";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FlatListPerfil from './FlatListPerfil';
+import { useAuth } from '../config/context/AuthContext';
+import { useEffect, useState } from 'react';
+import AxiosClient from '../config/http/AxiosClient';
 
 Perfil = () => {
+  const { userData, onLoginSuccess } = useAuth('');
+  const [datos, setPersonResponse] = useState();
+  const curp = userData.user.personBean.curp;
+  console.log(curp)
 
-  const datos = [
-    {
-      uid: 1,
-      fecha: "01/12/23",
-      medico: "Juan",
-       seguimiento: {
-            enfermedad: 'Sida',
-            fecha: '20/12/22',
-            resultado: 'positivo',
-            fechaToma: '20/12/22',
-            fechaResult: '20/12/22',
-            cargaViral: '32,786',
-            AST: '27',
-            plaquetas: '250,000',
-            antiretroviral: 'Atazanavir',
-            fechaResult2: '30/12/22',
-            creatinina: '1.3',
-        },
-
-    
-    },
-    {
-      uid: 2,
-      fecha: "02/12/23",
-      medico: "Jose",
-      seguimiento: {
-        enfermedad: 'Sifilis',
-        fecha: '20/12/22',
-        resultado: 'positivo',
-        fechaToma: '20/12/22',
-        fechaResult: '20/12/22',
-        cargaViral: '32,786',
-        AST: '27',
-        plaquetas: '250,000',
-        antiretroviral: 'Atazanavir',
-        fechaResult2: '30/12/22',
-        creatinina: '1.3',
-    },
-    },
-    {
-      uid: 3,
-      fecha: "03/12/23",
-      medico: "Pepe",
-      seguimiento: {
-        enfermedad: 'Gonorrea',
-        fecha: '20/12/22',
-        resultado: 'positivo',
-        fechaToma: '20/12/22',
-        fechaResult: '20/12/22',
-        cargaViral: '32,786',
-        AST: '27',
-        plaquetas: '250,000',
-        antiretroviral: 'Atazanavir',
-        fechaResult2: '30/12/22',
-        creatinina: '1.3',
-    },
-    },
-    {
-      uid: 4,
-      fecha: "04/12/23",
-      medico: "Alfonso",
-      seguimiento: {
-        enfermedad: 'Hepatitis',
-        fecha: '20/12/22',
-        resultado: 'positivo',
-        fechaToma: '20/12/22',
-        fechaResult: '20/12/22',
-        cargaViral: '32,786',
-        AST: '27',
-        plaquetas: '250,000',
-        antiretroviral: 'Atazanavir',
-        fechaResult2: '30/12/22',
-        creatinina: '1.3',
-    },
-    }
-  ]
-
-  
   const getPerson = async () => {
     try {
-      // Realiza la solicitud POST al servidor de autenticación
-      const response = await AxiosClient.get(`/patient/findOne${bbf}`, {
-        emailOrUsername: username,
-        password: password
-      });
-
-      // Verifica si la solicitud fue exitosa (status 200)
-      if (!response.error) {
-        console.log("Inicio de sesión exitoso");
-
-        // Navega a la pantalla 'TabNav' después del inicio de sesión exitoso
-        navigation.replace('TabNav');
-      } else {
-        // Si la solicitud no fue exitosa, muestra un mensaje de error
-        throw new Error('Error en inicio de sesión');
+      const response = await AxiosClient.get(`patient/findOne/${curp}`);
+      console.log('hola person');
+      console.log('Datos de la respuesta:', JSON.stringify(response.data, null, 2));
+      if (response.data) {
+        setPersonResponse(response.data);
       }
     } catch (error) {
-      // Maneja cualquier error durante el inicio de sesión
-      console.error('Error al iniciar sesión:', error);
-      Alert.alert('Error', 'Usuario y/o contraseña incorrectos');
+      console.error('Error al encontrar el paciente:', error);
     }
   };
 
 
-  const getcitas = async () => {
-    try {
-      // Realiza la solicitud POST al servidor de autenticación
-      const response = await AxiosClient.get(`/diagnostic/findbyNumber/${bbf}`, {
-        emailOrUsername: username,
-        password: password
-      });
 
-      // Verifica si la solicitud fue exitosa (status 200)
-      if (!response.error) {
-        console.log("Inicio de sesión exitoso");
+  useEffect(() => {
+    getPerson();
+  }, []); // Solo depende de datos
 
-        // Navega a la pantalla 'TabNav' después del inicio de sesión exitoso
-        navigation.replace('TabNav');
-      } else {
-        // Si la solicitud no fue exitosa, muestra un mensaje de error
-        throw new Error('Error en inicio de sesión');
-      }
-    } catch (error) {
-      // Maneja cualquier error durante el inicio de sesión
-      console.error('Error al iniciar sesión:', error);
-      Alert.alert('Error', 'Usuario y/o contraseña incorrectos');
-    }
-  };
 
 
   return (
-    
+
     <View style={styles.allScreen}>
       <View style={styles.contSearch}>
         <TextInput style={styles.search} placeholder='Buscar' />
@@ -157,15 +55,18 @@ Perfil = () => {
 
 
       <View style={styles.list}>
-        <FlatList data={datos} renderItem={({ item }) =>
-          <FlatListPerfil
-            fecha={item.fecha}
-            medico={item.medico}
-            seguimiento={item.seguimiento}
-          />
-        } keyExtractor={item => item.uid.toString()}>
+        <FlatList
+          data={datos?.medicalRecordBean?.diagnosticBeans || []}
+          renderItem={({ item }) => (
+            <FlatListPerfil
+              fecha={item.startDate}
+              medico={item.result}
+              seguimiento={item}
+            />
+          )}
+          keyExtractor={item => item.id?.toString()}
+        />
 
-        </FlatList>
       </View>
     </View>
 

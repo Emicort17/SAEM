@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const SERVER_URL = "http://192.168.100.154:8080/api/saem/";
+const SERVER_URL = "http://192.168.111.247:8080/api/saem/";
 const APP_JSON = "application/json";
 
 const AxiosClient = axios.create({
@@ -12,8 +12,7 @@ const requestHandler = async (request) => {
   request.headers["Accept"] = APP_JSON;
   request.headers["Content-Type"] = APP_JSON;
   const session = JSON.parse(await AsyncStorage.getItem("user"));
-  if (session?.token)
-    request.headers["Authorization"] = `Bearer ${session.token}`;
+  if (session?.token) request.headers["Authorization"] = `Bearer ${session.token}`;
   return request;
 };
 

@@ -11,8 +11,8 @@ Animatiion = () => {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            navigation.replace('Login');
-        }, 5000);
+            navigation.navigate('Login');
+        }, 2000);
         
         return () => {
             clearTimeout(timeout);
