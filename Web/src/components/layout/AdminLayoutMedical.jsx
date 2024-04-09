@@ -148,16 +148,16 @@ const AdminLayoutMedical = () => {
                 <li >
                   <Link
                     style={{ backgroundColor: "#1C3344", color: "#ffff" }}
-                    to={'medicos'}
-                    onClick={() => handleSectionChange('medicos')}
-                    className={` cursor-pointer flex items-center justify-center rounded-lg p-2 text-base font-normal opacity-10 ${selectedSection === 'medicos'
+                    to={'listPatient'}
+                    onClick={() => handleSectionChange('listPatient')}
+                    className={` cursor-pointer flex items-center justify-center rounded-lg p-2 text-base font-normal opacity-10 ${selectedSection === 'ListPatient'
                       ? 'text-zinc-950 bg-white font-bold'
                       : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
                       }`}
                   >
                     <FaUserDoctor className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     <span className="px-3 flex-1 whitespace-nowrap">
-                      Medicos
+                      Pacientes
                     </span>
                   </Link>
 
@@ -166,34 +166,19 @@ const AdminLayoutMedical = () => {
 
 
                   <Link style={{ backgroundColor: "#1C3344", color: "#ffff" }}
-                    to={'pacientes'}
-                    onClick={() => handleSectionChange('pacientes')}
-                    className={`flex items-center justify-center rounded-lg p-2 text-base font-normal ${selectedSection === 'pacientes'
+                    to={'inform'}
+                    onClick={() => handleSectionChange('inform')}
+                    className={`flex items-center justify-center rounded-lg p-2 text-base font-normal ${selectedSection === 'inform'
                       ? 'text-zinc-950 bg-white font-bold'
                       : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
                       }`}                  >
                     <PiUserListLight className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     <span className="px-3 flex-1 whitespace-nowrap">
-                      Pacientes
+                      Seguimiento
                     </span>
                   </Link>
 
 
-
-                </li>
-                <li >
-                  <Link style={{ backgroundColor: "#1C3344", color: "#ffff" }}
-                    to={'Subirdatos'}
-                    onClick={() => handleSectionChange('Subirdatos')}
-                    className={`flex items-center justify-center rounded-lg p-2 text-base font-normal ${selectedSection === 'Subirdatos'
-                      ? 'text-zinc-950 bg-white font-bold'
-                      : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
-                      }`}              >
-                    <GoUpload className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                    <span className="px-3 flex-1 whitespace-nowrap">
-                      Subir datos
-                    </span>
-                  </Link>
 
                 </li>
 
