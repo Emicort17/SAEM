@@ -124,6 +124,10 @@ public class PatientController {
     public ResponseEntity<ApiResponse> verUno(@PathVariable String curp){
         return service.getOne(curp);
     }
+    @GetMapping("/diagnostic/findAll/{id}")
+    public ResponseEntity<ApiResponse> patientDiagnostics(@PathVariable Long id){
+        return service.getAllDiagnostics(id);
+    }
 
     @PostMapping("/changePassword")
     public ResponseEntity<ApiResponse> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {

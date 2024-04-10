@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
 import mx.edu.utez.saem.model.address.AddressBean;
 import mx.edu.utez.saem.model.address.AddressRepository;
+import mx.edu.utez.saem.model.diagnostic.DiagnosticBean;
+import mx.edu.utez.saem.model.diagnostic.DiagnosticRepository;
 import mx.edu.utez.saem.model.medicalRecord.MedicalRecordBean;
 import mx.edu.utez.saem.model.medicalRecord.MedicalRecordRepository;
 import mx.edu.utez.saem.model.patient.PatientBean;
@@ -36,11 +38,17 @@ public class PatientService {
     private final PatientRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final MedicalRecordRepository medicalRecordRepository;
+    private final DiagnosticRepository diagnosticRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
         List<PatientBean> patients = repository.findAll();
         return new ResponseEntity<>(new ApiResponse(patients, HttpStatus.OK, "Ok"), HttpStatus.OK);
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getAllDiagnostics(Long id){
+        List<DiagnosticBean> foundDiagnostics = diagnosticRepository.findAllByMedicalRecordBean_PatientBean_UserBean_IdOrderByStartDateDesc(id);
+        return new ResponseEntity<>(new ApiResponse(foundDiagnostics, HttpStatus.OK, "Recuperado" ), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
