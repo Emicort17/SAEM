@@ -40,6 +40,10 @@ public class DoctorController {
         return service.getOne(card);
     }
 
+    @GetMapping("/findOneCard/{curp}")
+    public ResponseEntity<ApiResponse> verUnoCurp(@PathVariable String curp){
+        return service.getOneCurp(curp);
+    }
 
     @PostMapping("/changePassword")
     public ResponseEntity<ApiResponse> changePassword(@RequestBody ChangeDocPasswordDto changePasswordDto) {

@@ -43,6 +43,16 @@ public class DoctorService {
                 .orElseGet(() -> new ResponseEntity<>(new ApiResponse(null, HttpStatus.NOT_FOUND, "No encontrado"), HttpStatus.NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getOneCurp(String curp) {
+        Optional<DoctorBean> optionalDoctorBean = repository.findByUserBeanPersonBeanCurp(curp);
+        Optional<String> optionalDoctorCard = optionalDoctorBean
+                .map(doctor -> doctor.getCard());
+        return optionalDoctorCard
+                .map(card -> new ResponseEntity<>(new ApiResponse(card, HttpStatus.OK, "Recuperado"), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(new ApiResponse(null, HttpStatus.NOT_FOUND, "No encontrado"), HttpStatus.NOT_FOUND));
+    }
+
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> save(DoctorBean doctor){
         String card = doctor.getCard();

@@ -8,6 +8,7 @@ import java.util.Optional;
 @Repository
 public interface DoctorRepository extends JpaRepository<DoctorBean, Long>{
     Optional<DoctorBean> findByCard(String card);
+    Optional<DoctorBean> findByUserBeanPersonBeanCurp(String curp);
     Boolean existsByUserBeanEmail(String email);
 
     Optional<DoctorBean> findByUserBeanEmail(String email);
