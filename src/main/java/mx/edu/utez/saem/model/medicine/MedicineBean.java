@@ -1,6 +1,7 @@
 package mx.edu.utez.saem.model.medicine;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class MedicineBean {
     @JoinTable(name = "treatment_has_medicine",
                 joinColumns = @JoinColumn(name = "medicine_id"),
                 inverseJoinColumns = @JoinColumn(name = "treatment_id"))
+    @JsonIgnore
     Set<TreatmentBean> treatmentBeans = new HashSet<>();
 
     public MedicineBean(String name, String presentation, String manufacturer) {
