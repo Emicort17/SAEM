@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 
 
 
-Animatiion = () => {
+Animation = () => {
     const navigation = useNavigation();
 
 
@@ -40,7 +40,7 @@ Animatiion = () => {
         </View>
     )
 }
-export default Animatiion;
+export default Animation;
 
 const styles = StyleSheet.create({
     allScreen: {

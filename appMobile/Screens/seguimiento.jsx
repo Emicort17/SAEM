@@ -30,7 +30,7 @@ Seguimineto = ({ route }) => {
                     <Text style={styles.comp} >Plaquetas:<Text style={styles.compdatos}>
                         {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.platelets ?? '0') : 'Sin datos'}
                     </Text> ml</Text>
-                   
+
                     <Text style={styles.comp} >Antigenos:<Text style={styles.compdatos}>
                         {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.antigen ?? 'Sin datos') : 'Sin datos'}
                     </Text></Text>
@@ -78,8 +78,6 @@ const styles = StyleSheet.create({
 
     allScreen: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         backgroundColor: '#ffff',
     },
 

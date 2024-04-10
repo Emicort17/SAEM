@@ -25,7 +25,7 @@ const Configuracion = () => {
                     setEstado(response.data.userBean.personBean.addressBean.state);
                     setMunicipio(response.data.userBean.personBean.addressBean.town);
                     setCP(response.data.userBean.personBean.addressBean.zip);
-                    setCalle2(response.data.userBean.personBean.addressBean.street2); // Asumiendo que 'colonia' se refiere a 'estado' por el ejemplo
+                    setCalle2(response.data.userBean.personBean.addressBean.street2);
                     setCalle(response.data.userBean.personBean.addressBean.street1);
                 }
             } catch (error) {
@@ -49,7 +49,6 @@ const Configuracion = () => {
                         town: municipio,
                         zip: cp,
                         street1: calle,
-                        // Asume que colonia debe ser actualizada aquí
                     }
                 }
             }

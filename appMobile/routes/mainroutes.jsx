@@ -1,7 +1,7 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import Seguimiento from '../Screens/seguimineto';
+import Seguimiento from '../Screens/seguimiento';
 import TabNav from '../Screens/TabNav';
 import Login from '../Screens/Login';
 import { useAuth } from '../config/context/AuthContext';
