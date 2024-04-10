@@ -58,10 +58,9 @@ public class MainSecurity {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(WHITE_LIST).permitAll()
                         // Especifica accesos para ADMIN_ROLE y DOCTOR_ROLE
-                        .requestMatchers("/api/saem/administrator/**", "/api/saem/doctor/**", "/api/saem/result/**", "/api/saem/medicine/**","/api/saem/treatment/**").hasAnyAuthority("ADMIN_ROLE", "DOCTOR_ROLE")
+                        .requestMatchers("/api/saem/administrator/**", "/api/saem/doctor/**", "/api/saem/result/**","/api/saem/treatment/**").hasAnyAuthority("ADMIN_ROLE", "DOCTOR_ROLE")
                         // Permite a PATIENT_ROLE acceder solo a rutas específicas
-                        .requestMatchers("/api/saem/patient/**", "/api/saem/diagnostic/**").hasAnyAuthority("ADMIN_ROLE", "DOCTOR_ROLE","PATIENT_ROLE")
-                        // Configura los accesos restantes de manera adecuada
+                        .requestMatchers("/api/saem/patient/**", "/api/saem/diagnostic/**","/api/saem/medicine/**").hasAnyAuthority("ADMIN_ROLE", "DOCTOR_ROLE","PATIENT_ROLE")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .headers(header -> header.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))

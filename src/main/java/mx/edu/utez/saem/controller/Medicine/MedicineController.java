@@ -43,4 +43,10 @@ public class MedicineController {
         String name = requestParams.get("name");
         return service.getOne(manufacturer, name);
     }
+
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<ApiResponse> verUno(@PathVariable Long id){
+        return service.getOnebyId(id);
+    }
+
 }

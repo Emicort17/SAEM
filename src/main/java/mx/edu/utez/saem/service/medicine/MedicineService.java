@@ -2,6 +2,7 @@ package mx.edu.utez.saem.service.medicine;
 
 import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
+import mx.edu.utez.saem.model.medicalRecord.MedicalRecordBean;
 import mx.edu.utez.saem.model.medicine.MedicineBean;
 import mx.edu.utez.saem.model.medicine.MedicineRepository;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,19 @@ public class MedicineService {
         return new ResponseEntity<>(new ApiResponse(repository.findAll(), HttpStatus.OK, "Ok"), HttpStatus.OK);
     }
 
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getOnebyId(Long id) {
+        Optional<MedicineBean> optionalMedicineBean = repository.findById(id);
+        if (optionalMedicineBean.isPresent()) {
+            Long id2 = optionalMedicineBean.get().getId();
+            System.out.println(id);
+            MedicineBean medicineBean = repository.getOne(id2);
+            return new ResponseEntity<>(new ApiResponse(medicineBean, HttpStatus.OK, "Recuperado"), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new ApiResponse(null, HttpStatus.NOT_FOUND, "No encontrado"), HttpStatus.NOT_FOUND);
+        }
+    }
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getOne(String manufacturer, String name) {
         Optional<MedicineBean> optionalMedicineBean = repository.findByManufacturerAndName(manufacturer, name);
