@@ -25,6 +25,10 @@ import Citas from '../modules/admin/user/components/Citas';
 
 import GetionarCuenta from '../modules/admin/user/gesrionarCuenta';
 
+import Patients from '../modules/medical/Pacientes';
+import InformePrincipal from '../modules/medical/Informe';
+import FormularioSeguimiento from '../modules/medical/FormularioSeguimiento';
+
 const AppRouter = () => {
   const { user } = useContext(AuthContext);
 
@@ -50,12 +54,9 @@ const AppRouter = () => {
         return (
           <>
             <Route path="/" element={<AdminLayout user={user} />} >
-              <Route path="Subirdatos" element={<><Subirdatos /></>} />
-              <Route path="pacientes" element={<UserPage />} />
-              <Route path="registerperson" element={<RegisterPerson />} />
-              <Route path="editperson" element={<EditPerson />} />
-              <Route path="gestionarCuenta" element={<GetionarCuenta />} />
-              <Route path="citas" element={<Citas />} />
+              <Route path="pacientes" element={<><Patients /></>} />
+              <Route path="informe" element={<><InformePrincipal /></>} />
+              <Route path="formularioSeguimiento" element={<><FormularioSeguimiento /></>} />
             </Route>
           </>
         );

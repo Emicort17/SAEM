@@ -5,10 +5,10 @@ import { FiMenu } from "react-icons/fi";
 import { Outlet, Link } from 'react-router-dom';
 import { Avatar, Navbar, Sidebar } from 'flowbite-react';
 import { FaUserDoctor } from "react-icons/fa6";
-import {  Dropdown } from 'flowbite-react';
+import { Dropdown } from 'flowbite-react';
 import { IoSettingsOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
-import { PiUserListLight, PiUserCircleLight  } from "react-icons/pi";
+import { PiUserListLight, PiUserCircleLight } from "react-icons/pi";
 import { GoUpload } from "react-icons/go";
 import { LogOutAlert } from '../../config/alerts/alert';
 
@@ -22,7 +22,7 @@ const AdminLayout = () => {
   const [selectedSection, setSelectedSection] = useState('');
   const [userName, setUserName] = useState('');
   const [lastname, setLastname] = useState(``)
-  const  [middleName, setMiddleName] = useState('')
+  const [middleName, setMiddleName] = useState('')
   const [role, setRole] = useState('')
 
   const handleSectionChange = (section) => {
@@ -80,216 +80,236 @@ const AdminLayout = () => {
 
   const [menuOpen, setMenuOpen] = useState(true);
 
-  const handleClick =() =>{
+  const handleClick = () => {
     setMenuOpen(!menuOpen)
   }
   return (
-      <>
-        <header>
-          <Navbar style={{backgroundColor: "#03104A", color: "#ffffff"}} fluid
-                  className="fixed w-full z-20 top-0 start-0">
-            <div className='ml-2'>
-               <FiMenu onClick={handleClick} className="showSelection" name="menu" size={34}
-                                style={{cursor: 'pointer'}}/>
+    <>
+      <header>
+        <Navbar style={{ backgroundColor: "#03104A", color: "#ffffff" }} fluid
+          className="fixed w-full z-20 top-0 start-0">
+          <div className='ml-2'>
+            <FiMenu onClick={handleClick} className="showSelection" name="menu" size={34}
+              style={{ cursor: 'pointer' }} />
+          </div>
+          <Navbar.Brand as={Link} className='showSelection'>
+            <span
+              className="self-center whitespace-nowrap text-xl font-semibold dark:text-white ml-1">SAEM</span>
+          </Navbar.Brand>
+
+          <Navbar.Collapse>
+
+            <div className="flex md:order-2 ">
+              <Dropdown
+
+                arrowIcon={false}
+                inline
+                label={
+                  <Avatar
+                    className='showSelection'
+                    placeholderInitials={userName.charAt(0) + middleName?.charAt(0)}
+                    rounded bordered color='gray' />
+                }
+
+                className="bg-neutral-800 rounded-xl  menuconfg">
+
+                <div className="contimg">
+
+                  <Avatar
+                    size='lg'
+                    style={{ fontSize: '40px' }}
+                    placeholderInitials={userName.charAt(0) + middleName?.charAt(0)}
+                    rounded bordered color='gray' />
+
+                </div>
+
+                <div className="saludo">
+
+                  {userName ? (
+                    <p>¡Hola, {userName}!</p>
+                  ) : (
+                    <p>Cargando...</p>
+                  )}
+
+                </div>
+
+                <div className="centrar">
+                  <Link to={'/gestionarCuenta'}>
+                    <button className="menuconfgitem"><IoSettingsOutline size={25}
+                      className="iconoseparacion" />
+                      <p>Gestionar tu cuenta</p></button>
+                  </Link>
+                  <Link>
+                    <button className="menuconfgitem" onClick={Logout}><IoIosLogOut size={30}
+                      className="iconoseparacion" />
+                      <p>Cerrar sesión</p></button>
+                  </Link>
+
+                </div>
+
+
+              </Dropdown>
+              <Navbar.Toggle />
             </div>
-            <Navbar.Brand as={Link} className='showSelection'>
-                        <span
-                            className="self-center whitespace-nowrap text-xl font-semibold dark:text-white ml-1">SAEM</span>
-            </Navbar.Brand>
-
-            <Navbar.Collapse>
-
-              <div className="flex md:order-2 ">
-                <Dropdown
-
-                    arrowIcon={false}
-                    inline
-                    label={
-                      <Avatar
-                          className='showSelection'
-                          placeholderInitials={userName.charAt(0)+middleName?.charAt(0)}
-                          rounded bordered color='gray'/>
-                    }
-
-                    className="bg-neutral-800 rounded-xl  menuconfg">
-
-                  <div className="contimg">
-
-                    <Avatar
-                        size='lg'
-                        style={{fontSize: '40px'}}
-                        placeholderInitials={userName.charAt(0)+middleName?.charAt(0)}
-                        rounded bordered color='gray'/>
-
-                  </div>
-
-                  <div className="saludo">
-
-                    {userName ? (
-                        <p>¡Hola, {userName}!</p>
-                    ) : (
-                        <p>Cargando...</p>
-                    )}
-
-                  </div>
-
-                  <div className="centrar">
-                    <Link to={'/gestionarCuenta'}>
-                      <button className="menuconfgitem"><IoSettingsOutline size={25}
-                                                                           className="iconoseparacion"/>
-                        <p>Gestionar tu cuenta</p></button>
-                    </Link>
-                    <Link>
-                      <button className="menuconfgitem" onClick={Logout}><IoIosLogOut size={30}
-                                                                                      className="iconoseparacion"/>
-                        <p>Cerrar sesión</p></button>
-                    </Link>
-
-                  </div>
-
-
-                </Dropdown>
-                <Navbar.Toggle/>
-              </div>
-            </Navbar.Collapse>
-          </Navbar>
-        </header>
-        {
-          /*
-            Person, Role, User
-            Operations -> CRUD
-            GET /api/user/ -> findAll
-            GET /api/user/:id -> findById
-            POST /api/user/ -> create
-            PUT /api/user/ -> update
-            PATCH /api/user/ -> changeStatus
-          */
-        }
-        <main>
-          <aside>
-            <Menu styles={styles}
-                  noOverlay isOpen={menuOpen} disableCloseOnEsc>
-              <Sidebar style={{height: "100vh"}} className="grid gap-y-7">
-                <Sidebar.Items>
-                  <Sidebar.ItemGroup className='flex flex-col space-y-4'>
-                    { role === 'ADMIN_ROLE' ?
-                        (<li className='showSelection'>
+          </Navbar.Collapse>
+        </Navbar>
+      </header>
+      {
+        /*
+          Person, Role, User
+          Operations -> CRUD
+          GET /api/user/ -> findAll
+          GET /api/user/:id -> findById
+          POST /api/user/ -> create
+          PUT /api/user/ -> update
+          PATCH /api/user/ -> changeStatus
+        */
+      }
+      <main>
+        <aside>
+          <Menu styles={styles}
+            noOverlay isOpen={menuOpen} disableCloseOnEsc>
+            <Sidebar style={{ height: "100vh" }} className="grid gap-y-7">
+              <Sidebar.Items>
+                <Sidebar.ItemGroup className='flex flex-col space-y-4'>
+                  {role === 'ADMIN_ROLE' ?
+                    (<><li className='showSelection'>
                       <Link
-                          style={{backgroundColor: "#1C3344", color: "#ffff"}}
-                          to={'medicos'}
-                          onClick={() => handleSectionChange('medicos')}
-                          className={` cursor-pointer flex items-center justify-center rounded-lg p-2 text-base font-normal opacity-10 ${selectedSection === 'medicos'
-                              ? 'text-zinc-950 bg-white font-bold'
-                              : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+                        style={{ backgroundColor: "#1C3344", color: "#ffff" }}
+                        to={'medicos'}
+                        onClick={() => handleSectionChange('medicos')}
+                        className={` cursor-pointer flex items-center justify-center rounded-lg p-2 text-base font-normal opacity-10 ${selectedSection === 'medicos'
+                          ? 'text-zinc-950 bg-white font-bold'
+                          : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
                           }`}
                       >
                         <FaUserDoctor
-                            className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"/>
+                          className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                         <span className="px-3 flex-1 whitespace-nowrap">
-                                        Medicos
-                                         </span>
-                      </Link>
-
-                    </li>) : null}
-                    <li className='showSelection'>
-
-
-                      <Link style={{backgroundColor: "#1C3344", color: "#ffff"}}
-                            to={'pacientes'}
-                            onClick={() => handleSectionChange('pacientes')}
-                            className={`flex items-center justify-center rounded-lg p-2 text-base font-normal ${selectedSection === 'pacientes'
-                                ? 'text-zinc-950 bg-white font-bold'
-                                : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
-                            }`}>
-                        <PiUserListLight
-                            className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"/>
-                        <span className="px-3 flex-1 whitespace-nowrap">
-                      Pacientes
-                    </span>
-                      </Link>
-
-
-                    </li>
-                    <li className='showSelection'>
-                      <Link style={{backgroundColor: "#1C3344", color: "#ffff"}}
-                            to={'Subirdatos'}
-                            onClick={() => handleSectionChange('Subirdatos')}
-                            className={`flex items-center justify-center rounded-lg p-2 text-base font-normal ${selectedSection === 'Subirdatos'
-                                ? 'text-zinc-950 bg-white font-bold'
-                                : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
-                            }`}>
-                        <GoUpload
-                            className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"/>
-                        <span className="px-3 flex-1 whitespace-nowrap">
-                                                Subir datos
-                                            </span>
+                          Medicos
+                        </span>
                       </Link>
 
                     </li>
-                    <li className='md:hidden lg:hidden'>
-                      <Dropdown
+                    
+                  
+                  <li className='showSelection'>
+                    <Link style={{ backgroundColor: "#1C3344", color: "#ffff" }}
+                      to={'Subirdatos'}
+                      onClick={() => handleSectionChange('Subirdatos')}
+                      className={`flex items-center justify-center rounded-lg p-2 text-base font-normal ${selectedSection === 'Subirdatos'
+                        ? 'text-zinc-950 bg-white font-bold'
+                        : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+                        }`}>
+                      <GoUpload
+                        className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                      <span className="px-3 flex-1 whitespace-nowrap">
+                        Subir datos
+                      </span>
+                    </Link>
 
-                          arrowIcon={false}
-                          inline
-                          label={
-                            <Avatar
-                                className='showSelection'
-                                placeholderInitials={userName.charAt(0) + lastname?.charAt(0)}
-                                rounded bordered>
-                              <div className="space-y-1 font-medium dark:text-white">
-                                <div>{`${userName} ${middleName} ${lastname}`}</div>
-                                <div className="text-sm text-gray-500 dark:text-gray-400">Cuenta
-                                </div>
-                              </div>
-                            </Avatar>
-                          }
+                  </li>
 
-                          className="bg-neutral-800 rounded-xl  menuconfg">
+                  </>) : <li className='showSelection'>
+                    <Link style={{ backgroundColor: "#1C3344", color: "#ffff" }}
+                      to={''}
+                      onClick={() => handleSectionChange('')}
+                      className={`flex items-center justify-center rounded-lg p-2 text-base font-normal ${selectedSection === ''
+                        ? 'text-zinc-950 bg-white font-bold'
+                        : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+                        }`}>
+                      <GoUpload
+                        className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                      <span className="px-3 flex-1 whitespace-nowrap">
+                        Seguimiento
+                      </span>
+                    </Link>
 
-                        <div className="contimg">
-
-                          <img className="imgmenuconfig" alt="User settings"
-                               src="src/assets/Images/Login.png"/>
-
-                        </div>
-
-                        <div className="saludo">
-
-                          {userName ? (
-                              <p>¡Hola, {userName}!</p>
-                          ) : (
-                              <p>Cargando...</p>
-                          )}
-
-                        </div>
-
-                        <div className="centrar">
-                          <Link to={'/gestionarCuenta'}>
-                            <button className="menuconfgitem showSelection"><IoSettingsOutline size={25}
-                                                                                 className="iconoseparacion"/>
-                              <p>Gestionar tu cuenta</p></button>
-                          </Link>
-                          <Link>
-                            <button className="menuconfgitem" onClick={Logout}><IoIosLogOut size={30}
-                                                                                            className="iconoseparacion"/>
-                              <p>Cerrar sesión</p></button>
-                          </Link>
-
-                        </div>
+                  </li>}
+                  <li className='showSelection'>
 
 
-                      </Dropdown>
-                    </li>
-                  </Sidebar.ItemGroup>
-                </Sidebar.Items>
-              </Sidebar>
-            </Menu>
-          </aside>
-          <section style={{marginTop: '50px', marginLeft: menuOpen? '250px':'0'}}>
-            <Outlet/>
-          </section>
-        </main>
-      </>
+                    <Link style={{ backgroundColor: "#1C3344", color: "#ffff" }}
+                      to={'pacientes'}
+                      onClick={() => handleSectionChange('pacientes')}
+                      className={`flex items-center justify-center rounded-lg p-2 text-base font-normal ${selectedSection === 'pacientes'
+                        ? 'text-zinc-950 bg-white font-bold'
+                        : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+                        }`}>
+                      <PiUserListLight
+                        className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                      <span className="px-3 flex-1 whitespace-nowrap">
+                        Pacientes
+                      </span>
+                    </Link>
+
+
+                  </li>
+                  
+                  <li className='md:hidden lg:hidden'>
+                    <Dropdown
+
+                      arrowIcon={false}
+                      inline
+                      label={
+                        <Avatar
+                          className='showSelection'
+                          placeholderInitials={userName.charAt(0) + lastname?.charAt(0)}
+                          rounded bordered>
+                          <div className="space-y-1 font-medium dark:text-white">
+                            <div>{`${userName} ${middleName} ${lastname}`}</div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">Cuenta
+                            </div>
+                          </div>
+                        </Avatar>
+                      }
+
+                      className="bg-neutral-800 rounded-xl  menuconfg">
+
+                      <div className="contimg">
+
+                        <img className="imgmenuconfig" alt="User settings"
+                          src="src/assets/Images/Login.png" />
+
+                      </div>
+
+                      <div className="saludo">
+
+                        {userName ? (
+                          <p>¡Hola, {userName}!</p>
+                        ) : (
+                          <p>Cargando...</p>
+                        )}
+
+                      </div>
+
+                      <div className="centrar">
+                        <Link to={'/gestionarCuenta'}>
+                          <button className="menuconfgitem showSelection"><IoSettingsOutline size={25}
+                            className="iconoseparacion" />
+                            <p>Gestionar tu cuenta</p></button>
+                        </Link>
+                        <Link>
+                          <button className="menuconfgitem" onClick={Logout}><IoIosLogOut size={30}
+                            className="iconoseparacion" />
+                            <p>Cerrar sesión</p></button>
+                        </Link>
+
+                      </div>
+
+
+                    </Dropdown>
+                  </li>
+                </Sidebar.ItemGroup>
+              </Sidebar.Items>
+            </Sidebar>
+          </Menu>
+        </aside>
+        <section style={{ marginTop: '50px', marginLeft: menuOpen ? '250px' : '0' }}>
+          <Outlet />
+        </section>
+      </main>
+    </>
   );
 };
 
