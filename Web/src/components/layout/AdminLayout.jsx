@@ -11,7 +11,6 @@ import { IoIosLogOut } from "react-icons/io";
 import { PiUserListLight, PiUserCircleLight  } from "react-icons/pi";
 import { GoUpload } from "react-icons/go";
 import { LogOutAlert } from '../../config/alerts/alert';
-import { RxCross1 } from "react-icons/rx";
 
 import AuthContext from '../../config/context/auth-context';
 
@@ -24,6 +23,7 @@ const AdminLayout = () => {
   const [userName, setUserName] = useState('');
   const [lastname, setLastname] = useState(``)
   const  [middleName, setMiddleName] = useState('')
+  const [role, setRole] = useState('')
 
   const handleSectionChange = (section) => {
     setSelectedSection(section);
@@ -45,44 +45,42 @@ const AdminLayout = () => {
   };
 
 
+  const loadUserName = async () => {
+    try {
+      // Simulando la carga de datos de sesión
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      const userData = localStorage.getItem('user');
 
-  useEffect(() => {
-    const loadUserName = async () => {
-      try {
-        // Simulando la carga de datos de sesión
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        const userData = localStorage.getItem('user');
-
-        if (userData) {
-          const user = JSON.parse(userData);
-          if (user && user.user) {
-            if (user.user.user != null) {
-              setUserName(user.user.user);
-            } else {
-              setUserName(user.user.personBean.name);
-              setMiddleName(user.user.personBean.middleName)
-              setLastname(user.user.personBean?.lastName)
-            }
+      if (userData) {
+        const user = JSON.parse(userData);
+        if (user && user.user) {
+          if (user.user.user != null) {
+            setUserName(user.user.user);
+            setRole(user?.authorities[0]?.authority)
+          } else {
+            setRole(user?.authorities[0]?.authority)
+            setUserName(user.user.personBean.name);
+            setMiddleName(user.user.personBean.middleName)
+            setLastname(user.user.personBean?.lastName)
           }
         }
-      } catch (error) {
-        console.error('Error loading user name:', error);
       }
-    };
+    } catch (error) {
+      console.error('Error loading user name:', error);
+    }
+  };
+
+  useEffect(() => {
+
+
 
     loadUserName();
   }, []);
 
-  console.log('User name:', userName); // Debug statement
-
   const [menuOpen, setMenuOpen] = useState(true);
 
-  const [click, setClick] = useState (false)
-
   const handleClick =() =>{
-    setClick (!click)
     setMenuOpen(!menuOpen)
   }
   return (
@@ -91,11 +89,10 @@ const AdminLayout = () => {
           <Navbar style={{backgroundColor: "#03104A", color: "#ffffff"}} fluid
                   className="fixed w-full z-20 top-0 start-0">
             <div className='ml-2'>
-              {click ? <FiMenu onClick={handleClick} className="iconmenuNav" name="menu" size={34}
-                               color="white" style={{cursor: 'pointer'}}/> :
-                  <RxCross1 onClick={handleClick} className="iconmenuNav" name="menu" size={34} color="white" style={{cursor: 'pointer'}}/>}
+               <FiMenu onClick={handleClick} className="showSelection" name="menu" size={34}
+                                style={{cursor: 'pointer'}}/>
             </div>
-            <Navbar.Brand as={Link}>
+            <Navbar.Brand as={Link} className='showSelection'>
                         <span
                             className="self-center whitespace-nowrap text-xl font-semibold dark:text-white ml-1">SAEM</span>
             </Navbar.Brand>
@@ -109,6 +106,7 @@ const AdminLayout = () => {
                     inline
                     label={
                       <Avatar
+                          className='showSelection'
                           placeholderInitials={userName.charAt(0)+middleName?.charAt(0)}
                           rounded bordered color='gray'/>
                     }
@@ -169,12 +167,13 @@ const AdminLayout = () => {
         }
         <main>
           <aside>
-            <Menu className='iconmenuNav' styles={styles}
+            <Menu styles={styles}
                   noOverlay isOpen={menuOpen} disableCloseOnEsc>
               <Sidebar style={{height: "100vh"}} className="grid gap-y-7">
                 <Sidebar.Items>
                   <Sidebar.ItemGroup className='flex flex-col space-y-4'>
-                    <li>
+                    { role === 'ADMIN_ROLE' ?
+                        (<li className='showSelection'>
                       <Link
                           style={{backgroundColor: "#1C3344", color: "#ffff"}}
                           to={'medicos'}
@@ -191,8 +190,8 @@ const AdminLayout = () => {
                                          </span>
                       </Link>
 
-                    </li>
-                    <li>
+                    </li>) : null}
+                    <li className='showSelection'>
 
 
                       <Link style={{backgroundColor: "#1C3344", color: "#ffff"}}
@@ -211,7 +210,7 @@ const AdminLayout = () => {
 
 
                     </li>
-                    <li>
+                    <li className='showSelection'>
                       <Link style={{backgroundColor: "#1C3344", color: "#ffff"}}
                             to={'Subirdatos'}
                             onClick={() => handleSectionChange('Subirdatos')}
@@ -234,6 +233,7 @@ const AdminLayout = () => {
                           inline
                           label={
                             <Avatar
+                                className='showSelection'
                                 placeholderInitials={userName.charAt(0) + lastname?.charAt(0)}
                                 rounded bordered>
                               <div className="space-y-1 font-medium dark:text-white">
@@ -265,7 +265,7 @@ const AdminLayout = () => {
 
                         <div className="centrar">
                           <Link to={'/gestionarCuenta'}>
-                            <button className="menuconfgitem"><IoSettingsOutline size={25}
+                            <button className="menuconfgitem showSelection"><IoSettingsOutline size={25}
                                                                                  className="iconoseparacion"/>
                               <p>Gestionar tu cuenta</p></button>
                           </Link>

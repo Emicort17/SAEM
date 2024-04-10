@@ -9,6 +9,7 @@ import { LuPlus } from "react-icons/lu";
 import { CiEdit } from "react-icons/ci";
 import { AiOutlineDelete } from "react-icons/ai";
 import { LiaFileDownloadSolid } from "react-icons/lia";
+import {IoSearchOutline} from "react-icons/io5";
 
 
 const UserPage = () => {
@@ -17,7 +18,32 @@ const UserPage = () => {
 
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
-  
+    const [filterData, setFilterData] = useState([])
+    const [query, setQuery] = useState('')
+
+    const handleSearch = (event) =>{
+        const getSearch = event.target.value
+
+        if(getSearch.length > 0){
+            const searchData = filterData.filter((item) => search(item, getSearch))
+
+            setUsers(searchData)
+
+            console.log(searchData)
+        }else{
+            setUsers(filterData)
+        }
+        setQuery(getSearch)
+    }
+
+    const search = (item, search) =>{
+        const {name, middleName, lastName} = item.userBean.personBean
+        const {number} = item.medicalRecordBean
+
+        const fullName = `${name} ${middleName} ${lastName}`
+
+        return  fullName.toLowerCase().includes(search.toLowerCase()) || number.includes(search)
+    }
 
     const pasardatos = (row) => {
         navigate('/editperson', { state: row });
@@ -40,7 +66,7 @@ const UserPage = () => {
         },
         {
             name: 'Nombre',
-            cell: (row) => <>{`${row.userBean.personBean.name} ${row.userBean.personBean.middleName} ${row.userBean.personBean.lastname ?? ''} `}</>,
+            cell: (row) => <>{`${row.userBean.personBean.name} ${row.userBean.personBean.middleName} ${row.userBean.personBean.lastName ?? ''} `}</>,
 
             sortable: false,
         },
@@ -62,11 +88,11 @@ const UserPage = () => {
         },
         {
             name: '',
-            cell: (row) => <><button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => pasardatos(row)}>
+            cell: (row) => <><button className='showSelection' style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => pasardatos(row)}>
                 <CiEdit style={{ cursor: 'pointer' }} size={24} color={'#000'} />
             </button>
-                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.userBean.personBean.curp)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
-                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => citas(row.medicalRecordBean.number)} > <BsFileEarmarkText style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
+                <button className='showSelection' style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.userBean.personBean.curp)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
+                <button className='showSelection' style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => citas(row.medicalRecordBean.number)} > <BsFileEarmarkText style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
 
 
             </>,
@@ -118,7 +144,10 @@ const UserPage = () => {
 
             });
             console.log(response);
-            if (!response.error) setUsers(response.data);
+            if (!response.error) {
+                setUsers(response.data);
+                setFilterData(response.data)
+            }
         } catch (error) {
             console.log(error);
         } finally {
@@ -165,11 +194,10 @@ const UserPage = () => {
 
             <div className='max-w-screen-md flex justify-between  items-center'>
                 <div className='max-w-64'>
-                    <Label htmlFor='' />
-                    <TextInput type='text' id='filter' placeholder='Buscar...' />
+                    <TextInput rightIcon={IoSearchOutline} value={query} onChange={(e) => handleSearch(e)} type='text' id='filter' placeholder='Buscar...'/>
                 </div>
                 <div>
-                    <Button style={{ cursor: 'pointer' }} onClick={() => download()} color="success">
+                    <Button className='showSelection' style={{ cursor: 'pointer' }} onClick={() => download()} color="success">
                         <LiaFileDownloadSolid style={{ cursor: 'pointer' }} size={25} />
                     </Button>
                 </div>
@@ -188,7 +216,7 @@ const UserPage = () => {
             <div className='flex justify-end'>
 
 
-                <Link to={'/registerperson'} > <Button style={{ background: '#03104A', borderRadius: '100%', width: '48px', outline: 'none' }} pill> <LuPlus size={24} /></Button> </Link>
+                <Link to={'/registerperson'} > <Button className='showSelection' style={{ background: '#03104A', borderRadius: '100%', width: '48px', outline: 'none' }} pill> <LuPlus size={24} /></Button> </Link>
 
             </div>
             <div style={{}} className=''>

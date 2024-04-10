@@ -13,9 +13,6 @@ import Forgetpass from '../modules/auth/Forgetpass';
 import AuthContext from '../config/context/auth-context';
 import AdminLayout from '../components/layout/AdminLayout';
 import Error404 from '../components/layout/Error404';
-
-import AdminLayoutMedical from '../components/layout/AdminLayoutMedical';
-
 import Medicos from '../modules/admin/Medicos';
 import UserPage from '../modules/admin/user/UserPage';
 import Subirdatos from '../modules/admin/cargardatos';
@@ -52,7 +49,14 @@ const AppRouter = () => {
       case 'DOCTOR_ROLE':
         return (
           <>
-            <Route path="/" element={<AdminLayout user={user} />} />
+            <Route path="/" element={<AdminLayout user={user} />} >
+              <Route path="Subirdatos" element={<><Subirdatos /></>} />
+              <Route path="pacientes" element={<UserPage />} />
+              <Route path="registerperson" element={<RegisterPerson />} />
+              <Route path="editperson" element={<EditPerson />} />
+              <Route path="gestionarCuenta" element={<GetionarCuenta />} />
+              <Route path="citas" element={<Citas />} />
+            </Route>
           </>
         );
     }

@@ -1,12 +1,12 @@
 import CustomDataTable from '../../components/CustomDatatable'
 import AxiosClient from '../../config/http-client/axios-client';
-import { Table } from 'flowbite-react';
-import { TextInput, Label, Button, Card, Tooltip } from 'flowbite-react'
+import { Label, Button, Card, Tooltip, TextInput } from 'flowbite-react'
 import { Link,useNavigate } from 'react-router-dom';
 import { deletePatient } from '../../config/alerts/alert';
+import { IoSearchOutline } from "react-icons/io5";
 
 
-import React, { useMemo, useState, useEffect } from 'react'
+import React, {useMemo, useState, useEffect } from 'react'
 
 import { LuPlus } from "react-icons/lu";
 import { CiEdit } from "react-icons/ci";
@@ -16,9 +16,34 @@ const Medicos = () => {
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
     const navigate= useNavigate();
+    const [filterData, setFilterData] = useState([])
+    const [query, setQuery] = useState('')
 
 
     const [editingUser, setEditingUser] = useState(null);
+    const handleSearch = (event) =>{
+        const getSearch = event.target.value
+
+        if(getSearch.length > 0){
+            const searchData = filterData.filter((item) => search(item, getSearch))
+
+            setUsers(searchData)
+
+            console.log(searchData)
+        }else{
+            setUsers(filterData)
+        }
+        setQuery(getSearch)
+    }
+
+    const search = (item, search) =>{
+        const {name, middleName, lastName} = item.userBean.personBean
+        const {card} = item
+
+        const fullName = `${name} ${middleName} ${lastName}`
+
+        return  fullName.toLowerCase().includes(search.toLowerCase()) || card.includes(search)
+    }
 
     const estado = (estado) => {
         if (estado === true) {
@@ -49,7 +74,7 @@ const Medicos = () => {
         },
         {
             name: 'Nombre',
-            cell: (row) => <>{`${row.userBean.personBean.name} ${row.userBean.personBean.middleName} ${row.userBean.personBean.lastname ?? ''} `}</>,
+            cell: (row) => <>{`${row.userBean.personBean.name} ${row.userBean.personBean.middleName} ${row.userBean.personBean.lastName ?? ''} `}</>,
 
             sortable: false,
         },
@@ -71,12 +96,12 @@ const Medicos = () => {
         {
             name: '',
             cell: (row) => <> 
-                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() =>  pasardatos(row) }>
+                <button  className='showSelection' style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() =>  pasardatos(row) }>
                     <CiEdit style={{ cursor: 'pointer' }} size={24} color={'#000'} />
                 </button>
          
 
-                <button style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.card)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
+                <button  className='showSelection' style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.card)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
             </>,
             sortable: false,
         },
@@ -117,7 +142,10 @@ const Medicos = () => {
 
             });
             console.log(response);
-            if (!response.error) setUsers(response.data);
+            if (!response.error){
+                setUsers(response.data);
+                setFilterData(response.data)
+            }
         } catch (error) {
             console.log(error);
         } finally {
@@ -135,13 +163,11 @@ const Medicos = () => {
 
     return (
         <section className='w-full px-4 pt-4 flex flex-col gap-4'>
-
             <h1 className='text-2xl'>Medicos</h1>
 
             <div className='flex justify-between'>
                 <div className='max-w-64'>
-                    <Label htmlFor='' />
-                    <TextInput type='text' id='filter' placeholder='Buscar...' />
+                    <TextInput  rightIcon={IoSearchOutline} value={query} onChange={(e) => handleSearch(e)} type='text' id='filter' placeholder='Buscar...'/>
                 </div>
             </div>
 
@@ -154,7 +180,7 @@ const Medicos = () => {
 
             <div className='flex justify-end'>
 
-                <Link to={'/registermedico'}> <Button style={{ background: '#03104A', borderRadius: '100%', width: '48px', outline: 'none' }} pill> <LuPlus size={24} /></Button></Link>
+                <Link to={'/registermedico'}> <Button  className='showSelection' style={{ background: '#03104A', borderRadius: '100%', width: '48px', outline: 'none' }} pill> <LuPlus size={24} /></Button></Link>
 
             </div>
             <div style={{}} className=''>

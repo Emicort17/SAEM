@@ -91,3 +91,7 @@
 .spaciado {
     margin-bottom: 20px;
 }
+
+.showSelection:hover{
+    transform: scale(1.05);
+}
