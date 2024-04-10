@@ -29,7 +29,7 @@ public class DiagnosticService {
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
-        List<DiagnosticBean> diagnostics = repository.findAll();
+        List<DiagnosticBean> diagnostics = repository.findAllByOrderByStartDateDesc();
         return new ResponseEntity<>(new ApiResponse(diagnostics, HttpStatus.OK, "Ok"), HttpStatus.OK);
     }
 
