@@ -15,6 +15,9 @@ import AdminLayout from '../components/layout/AdminLayout';
 import Error404 from '../components/layout/Error404';
 
 import AdminLayoutMedical from '../components/layout/AdminLayoutMedical';
+import ListPatient from '../modules/medical/listPatient';
+import Inform from '../modules/medical/inform';
+import DiagnosticForm from '../modules/medical/diagnosticForm';
 
 import Medicos from '../modules/admin/Medicos';
 import UserPage from '../modules/admin/user/UserPage';
@@ -53,9 +56,9 @@ const AppRouter = () => {
         return (
           <>
             <Route path="/" element={<AdminLayoutMedical user={user} />} >
-              <Route path="listPatient" element={<listPatient />} />
+              <Route path="listPatient" element={<ListPatient />} />
               <Route path="inform" element={<Inform />} />
-              <Route path="diagnosticForm" element={<diagnosticForm/>} />
+              <Route path="diagnosticForm" element={<DiagnosticForm/>} />
             </Route>
           </>
         );
