@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 const OtherRoutes = () => {
  
 
-  console.log('entro  mainroutes');
+  console.log('entro  otheroutes');
   return (
 
     <Stack.Navigator>

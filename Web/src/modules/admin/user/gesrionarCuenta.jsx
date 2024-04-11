@@ -10,72 +10,32 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import *  as yup from "yup"
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const GetionarCuenta = () => {
 
-    const datos = localStorage.getItem('user');
-
-    const [file, setFile] = useState(null);
-
-    const handleFileChange = (event) => {
-        const selectedFile = event.target.files[0];
-        setFile(selectedFile);
-    };
-
+    const location = useLocation();
+    const datos = location.state || {};
+  
     const formik = useFormik({
         initialValues: {
-            email: "",
-            password:"",
-            confirmPassword: "",
-            roles: '',
-            name: "",
-            surname: "",
-            lastname: "",
-            curp: "",
-            birthdate: "",
-            phoneNumber: "",
-            state: "",
-            municipio: "",
-            cp: "",
-            sexo: "",
-            colonia: '',
-            calle: "",
-            calle2: "",
-            calle3: "",
-            fechapadecimiento: "",
-            resultado: "",
-            fechatratamiento: "",
-
+    
         },
         validationSchema: yup.object().shape({
             email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres'),
             confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
-            name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres'),
-            surname: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres'),
-            lastname: yup.string().min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres'),
-            curp: yup.string().required('Campo obligatorio').min(3, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres'),
             phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos'),
-            birthdate: yup.string().required('Campo obligatorio'),
             state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres'),
-            sexo: yup.string().required('Campo obligatorio'),
-            colonia: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
-            fechapadecimiento: yup.string().required('Campo obligatorio'),
-            resultado: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
-            fechatratamiento: yup.string().required('Campo obligatorio'),
         }),
-        onSubmit: async (values, { setSubmitting }) => {
+        onSubmit: async () => {
             confimAlert(async () => {
                 try {
                     const payload = {
-                        ...values,
-
-                        birthDate: values.birthdate,
-
-                        personBean: {
+           
                             name: values.name,
                             middleName: values.middleName,
                             lastName: values.lastname,
@@ -84,9 +44,7 @@ const GetionarCuenta = () => {
                             curp: values.curp,
                             phoneNumber: values.phoneNumber,
                             sex: values.sex,
-                        }
-
-
+                        
                     };
                     const response = await AxiosClient({
                         method: 'POST',
@@ -130,14 +88,7 @@ const GetionarCuenta = () => {
                                     </div>
 
                                 </div>
-                                <Avatar img="/src/assets/Images/Login.png" size="xl" className='rounded-full mt-4' htmlFor="file-upload" value="Upload file"  />
-
-                                <label htmlFor="file-upload" className='flex flex-col justify-end  bottom-0' style={{ position:'relative', cursor: 'pointer'} }>
-                                <GrUpdate />
-
-                                </label>
-                                <input id="file-upload" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
-                                {file && <div>Archivo seleccionado: {file.name}</div>}
+                               
                             </div>
 
                             <Label style={{ color: '#03104A' }} htmlFor='email' className='font-bold' value='Correo' />
@@ -152,13 +103,6 @@ const GetionarCuenta = () => {
                                     )
                                 } />
 
-
-                            <div className=' pb-2' hidden>
-                                <Label style={{ color: '#03104A' }} htmlFor='roles' className='font-bold' value='roles' />
-                                <Select id="role" name="roles" >
-                                    <option selected value='Paciente'>Paciente</option>
-                                </Select>
-                            </div>
 
                         </div>
 
@@ -265,23 +209,7 @@ const GetionarCuenta = () => {
                                         )
                                     } />
                             </div>
-                            <div className='grid-col-6 pb-2'>
-                                <Label style={{ color: '#03104A' }} htmlFor='colonia' className='font-bold' value='Colonia' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                    type='colonia'
-                                    title="colonia"
-                                    id='colonia'
-                                    name='colonia'
-                                    value={formik.values.colonia}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    helperText={
-                                        formik.touched.colonia &&
-                                        formik.errors.colonia && (
-                                            <span className='text-red-600'>{formik.errors.colonia}</span>
-                                        )
-                                    } />
-                            </div>
+
 
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle' className='font-bold' value='Calle' />

@@ -17,7 +17,6 @@ const FormularioSeguimiento = () => {
 
     const [medicamento, setMedicamento] = useState([]);
 
-    const [selectedMedicine, setSelectedMedicine] = useState(null); // Estado para almacenar el medicamento seleccionado
 
     const [selectedMedicamentos, setSelectedMedicamentos] = useState([]);
 
@@ -43,6 +42,7 @@ const FormularioSeguimiento = () => {
             return null; // O maneja este caso como consideres apropiado
         } else {
             return {
+
                 name: med.name,
                 manufacturer: med.manufacturer,
 
@@ -68,7 +68,7 @@ const FormularioSeguimiento = () => {
             fecharesultado: "",
             creatinina: "",
             alt: "",
-            antigenosuperfoicievhb: "",
+            antigen: "",
             indicaciones: "",
 
 
@@ -76,16 +76,16 @@ const FormularioSeguimiento = () => {
         validationSchema: yup.object().shape({
             enfermedad: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
             fecha: yup.string().required('Campo obligatorio'),
-            resultado: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(10, 'Máximo 10 caracteres').matches(/^[\w\s/]+$/, 'No se permiten caracteres especiales'),
+            resultado: yup.string().required('Campo obligatorio'),
             cargaviral: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
             ast: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
             plaquetas: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
             fecharesultado: yup.string().required('Campo obligatorio'),
             creatinina: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
             alt: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            antigenosuperfoicievhb: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            indicaciones: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales')
-
+            antigen: yup.string().required('Campo obligatorio'),
+            indicaciones: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(255, 'Máximo 255 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            medicina: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').min(1, 'Seleccionar al menos un medicamento es obligatorio'),
 
         }),
         onSubmit: async () => {
@@ -111,7 +111,7 @@ const FormularioSeguimiento = () => {
                         url: '/diagnostic/save',
                         data: diagnostico
                     });
-                
+
                     console.log(JSON.stringify(response));
                     if (!response.error) {
                         try {
@@ -124,7 +124,7 @@ const FormularioSeguimiento = () => {
                                 diagnosticBean: {
                                     id: response.data.id,
                                 },
-                                medicineBeanSet: JSON.stringify(medicineBeanSet)
+                                medicineBeanSet: medicineBeanSet
 
                             };
 
@@ -136,6 +136,7 @@ const FormularioSeguimiento = () => {
 
                             if (!responseTratment.error) {
                                 try {
+                                    console.log('se guardo el tratamiento')
 
                                     const results = {
                                         resultDate: formik.values.fecha,
@@ -290,17 +291,28 @@ const FormularioSeguimiento = () => {
 
                                 <div className='w-full md:w-1/2 ml-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='resultado' className='font-bold' value='Resultado' />
-                                    <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="" id="resultado" name="resultado"
-                                        value={formik.values.resultado}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        helperText={
-                                            formik.touched.resultado &&
-                                            formik.errors.resultado && (
-                                                <span className='text-red-600'>{formik.errors.resultado}</span>
-                                            )
-                                        }
-                                    />
+                                    <div className='grid-col-7'>
+                                        <Select
+                                            style={{ backgroundColor: '#E6ECF1' }}
+                                            id="resultado"
+                                            name="resultado"
+                                            value={formik.values.resultado}
+                                            onChange={e => {
+                                                formik.handleChange(e);
+                                                formik.setFieldTouched('resultado', true, false); // Marca el campo como tocado
+                                            }}
+                                        >
+                                            <option value='' disabled>Seleccionar</option>
+                                            <option value='Reactivo'>Reactivo</option>
+                                            <option value='No reactivo'>No reactivo</option>
+                                        </Select>
+
+                                        {formik.touched.resultado && formik.errors.resultado && (
+                                            <div className='text-red-600 flex flex-col'>
+                                                {formik.errors.resultado}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <div className='w-full md:w-1/2 ml-2'>
@@ -342,7 +354,7 @@ const FormularioSeguimiento = () => {
 
                                 <div className='grid-col-6 pb-2 mr-2  w-full md:w-1/4'>
                                     <Label style={{ color: '#03104A' }} htmlFor='cargaviral' className='font-bold' value='Carga viral' />
-                                    <TextInput style={{ backgroundColor: '#E6ECF1' }} type='text' placeholder="" id="cargaviral" name="cargaviral"
+                                    <TextInput style={{ backgroundColor: '#E6ECF1' }} type='number' placeholder="" id="cargaviral" name="cargaviral"
                                         value={formik.values.cargaviral}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
@@ -357,7 +369,7 @@ const FormularioSeguimiento = () => {
                                 <div className='grid-col-6 pb-2 mr-2 ml-2  w-full md:w-1/4'>
                                     <Label style={{ color: '#03104A' }} htmlFor='ast' className='font-bold' value='AST' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                        type='text'
+                                        type='number'
                                         title="ast"
                                         id='ast'
                                         name='ast'
@@ -376,7 +388,7 @@ const FormularioSeguimiento = () => {
                                 <div className=' grid-col-6 pb-2 ml-2 mr-2  w-full md:w-1/4'>
                                     <Label style={{ color: '#03104A' }} htmlFor='plaquetas' className='font-bold' value='Plaquetas' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                        type='text'
+                                        type='number'
                                         title=""
                                         id='plaquetas'
                                         name='plaquetas'
@@ -405,7 +417,7 @@ const FormularioSeguimiento = () => {
                                 <div className='grid-col-6 pb-2 w-full md:w-1/3 mr-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='creatinina' className='font-bold' value='Creatinina' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                        type='text'
+                                        type='number'
                                         title="creatinina"
                                         id='creatinina'
                                         name='creatinina'
@@ -422,7 +434,7 @@ const FormularioSeguimiento = () => {
                                 <div className='grid-col-6 pb-2 w-full md:w-1/3 ml-2 mr-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='alt' className='font-bold' value='ALT' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                        type='text'
+                                        type='number'
                                         title="alt"
                                         id='alt'
                                         name='alt'
@@ -438,21 +450,22 @@ const FormularioSeguimiento = () => {
                                 </div>
 
                                 <div className='grid-col-6 pb-2 w-full md:w-1/3 ml-2 mr-2'>
-                                    <Label style={{ color: '#03104A' }} htmlFor='antigenosuperfoicievhb' className='font-bold' value='Antigeno' />
-                                    <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                        type='text'
-                                        title=""
-                                        id='antigenosuperfoicievhb'
-                                        name='antigenosuperfoicievhb'
-                                        value={formik.values.antigenosuperfoicievhb}
-                                        onChange={formik.handleChange}
-                                        onBlur={formik.handleBlur}
-                                        helperText={
-                                            formik.touched.antigenosuperfoicievhb &&
-                                            formik.errors.antigenosuperfoicievhb && (
-                                                <span className='text-red-600'>{formik.errors.antigenosuperfoicievhb}</span>
-                                            )
-                                        } />
+                                    <Label style={{ color: '#03104A' }} htmlFor='antigen' className='font-bold' value='Antigeno' />
+                                    <div className='grid-col-7'>
+                                        <Select style={{ backgroundColor: '#E6ECF1' }} id="antigen" name="antigen" value={formik.values.antigen} onChange={e => {
+                                            formik.handleChange(e);
+                                            formik.setFieldTouched('resultado', true, false); // Marca el campo como tocado
+                                        }} >
+                                            <option value='' disabled >Seleccionar</option>
+                                            <option value='Positivo'>Positivo</option>
+                                            <option value='Negativo'>Negativo</option>
+                                        </Select>
+                                        {formik.touched.resultado && formik.errors.resultado && (
+                                            <div className='text-red-600 flex flex-col'>
+                                                {formik.errors.resultado}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 
@@ -466,8 +479,14 @@ const FormularioSeguimiento = () => {
                                         id="medicina"
                                         name="medicina"
                                         value={formik.values.medicina}
-                                        onChange={(event) => handleChangeMedicine(event)}
-
+                                        onChange={(event) => {
+                                            // Llama primero a tu manejador personalizado
+                                            handleChangeMedicine(event);
+                                            // Luego asegúrate de que Formik también maneje el cambio
+                                            formik.handleChange(event);
+                                            // Opcionalmente, marca el campo como tocado si necesitas validación en tiempo real
+                                            formik.setFieldTouched('medicina', true, false);
+                                        }}
                                     >
                                         <option value=''>Seleccionar</option>
                                         {medicamento.map((med) => (
@@ -476,6 +495,12 @@ const FormularioSeguimiento = () => {
                                             </option>
                                         ))}
                                     </Select>
+                                    {/* Muestra el mensaje de error para medicina aquí, si es necesario */}
+                                    {formik.touched.medicina && formik.errors.medicina && (
+                                        <div className='text-red-600'>
+                                            {formik.errors.medicina}
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Mostrar medicamentos seleccionados */}

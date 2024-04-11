@@ -11,7 +11,7 @@ import { IoIosLogOut } from "react-icons/io";
 import { PiUserListLight, PiUserCircleLight } from "react-icons/pi";
 import { GoUpload } from "react-icons/go";
 import { LogOutAlert } from '../../config/alerts/alert';
-
+import AxiosClient from '../../config/http-client/axios-client';
 import AuthContext from '../../config/context/auth-context';
 
 import '../../assets/adminlayout.css';
@@ -24,6 +24,8 @@ const AdminLayout = () => {
   const [lastname, setLastname] = useState(``)
   const [middleName, setMiddleName] = useState('')
   const [role, setRole] = useState('')
+  const [curp, setCurp] = useState('')
+
 
   const handleSectionChange = (section) => {
     setSelectedSection(section);
@@ -44,6 +46,23 @@ const AdminLayout = () => {
     }
   };
 
+  const getUsers = async (curpdata) => {
+    try {
+        const response = await AxiosClient({
+            url: `/patient/findOne/${curpdata}` ,
+            method: 'GET',
+
+        });
+        console.log(response);
+        if (!response.error) {
+        
+      console.log(response);
+
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
   const loadUserName = async () => {
     try {
@@ -56,6 +75,8 @@ const AdminLayout = () => {
         const user = JSON.parse(userData);
         if (user && user.user) {
           if (user.user.user != null) {
+            await getUsers(user.user.personBean.addressBean.zip)
+            setCurp(user.user.personBean.addressBean.zip)
             setUserName(user.user.user);
             setRole(user?.authorities[0]?.authority)
           } else {
@@ -71,8 +92,8 @@ const AdminLayout = () => {
     }
   };
 
-  useEffect(() => {
-    loadUserName();
+  useEffect( async() => {
+   await loadUserName();
   }, []);
 
   const [menuOpen, setMenuOpen] = useState(true);
