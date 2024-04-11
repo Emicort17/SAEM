@@ -92,8 +92,6 @@ const styles = StyleSheet.create({
     },
     spaceB: {
         marginBottom: 50
-    }, status:{
-        color:'#000000'
     }
 
 

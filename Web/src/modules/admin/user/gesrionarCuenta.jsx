@@ -19,6 +19,7 @@ const GetionarCuenta = () => {
   
     const formik = useFormik({
         initialValues: {
+<<<<<<< HEAD
     
         },
         validationSchema: yup.object().shape({
@@ -30,6 +31,51 @@ const GetionarCuenta = () => {
             municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
             cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres'),
             calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
+=======
+            email: "",
+            password: "",
+            confirmPassword: "",
+            roles: '',
+            name: "",
+            surname: "",
+            lastname: "",
+            curp: "",
+            birthdate: "",
+            phoneNumber: "",
+            state: "",
+            municipio: "",
+            cp: "",
+            sexo: "",
+            colonia: '',
+            calle: "",
+            calle2: "",
+            calle3: "",
+            fechapadecimiento: "",
+            resultado: "",
+            fechatratamiento: "",
+
+        },
+        validationSchema: yup.object().shape({
+            email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s@.]+$/, 'No se permiten caracteres especiales'),
+            password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
+            name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            surname: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            lastname: yup.string().min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            curp: yup.string().required('Campo obligatorio').min(18, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos'),
+            birthdate: yup.string().required('Campo obligatorio'),
+            state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            sexo: yup.string().required('Campo obligatorio'),
+            colonia: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            fechapadecimiento: yup.string().required('Campo obligatorio'),
+            resultado: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            fechatratamiento: yup.string().required('Campo obligatorio')
+
+>>>>>>> 5bfd9d66435e41448e25aa5a455af4497ad5cce4
         }),
         onSubmit: async () => {
             confimAlert(async () => {
@@ -88,7 +134,18 @@ const GetionarCuenta = () => {
                                     </div>
 
                                 </div>
+<<<<<<< HEAD
                                
+=======
+                                <Avatar img="/src/assets/Images/Login.png" size="xl" className='rounded-full mt-4' htmlFor="file-upload" value="Upload file" />
+
+                                <label htmlFor="file-upload" className='flex flex-col justify-end  bottom-0' style={{ position: 'relative', cursor: 'pointer' }}>
+                                    <GrUpdate />
+
+                                </label>
+                                <input id="file-upload" type="file" style={{ display: 'none' }} onChange={handleFileChange} />
+                                {file && <div>Archivo seleccionado: {file.name}</div>}
+>>>>>>> 5bfd9d66435e41448e25aa5a455af4497ad5cce4
                             </div>
 
                             <Label style={{ color: '#03104A' }} htmlFor='email' className='font-bold' value='Correo' />

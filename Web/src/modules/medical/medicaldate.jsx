@@ -59,15 +59,15 @@ const MedicalDate = () => {
                 ) : (
                     <div className='flex flex-wrap justify-center gap-4 cursor-pointer'>
                         {diagnostics.map((diagnostic, index) => (
-                            <Card key={index} className="max-w-sm" onClick={() => openModalWithDiagnostic(diagnostic)}>
-                                <h5 className="mb-2 text-3xl font-bold text-gray-900 dark:text-white">Diagnóstico {diagnostic.id}</h5>
-                                <p className="mb-5 text-base text-gray-500 dark:text-gray-400 sm:text-lg">
-                                    Fecha de inicio: {diagnostic.startDate}<br />
-                                    Resultado: {diagnostic.result}<br />
-                                    Enfermedad: {diagnostic.disease}
+                            <Card key={index} className="w-xl p-2">
+                                <h5 className="mb-2 text-3xl font-bold " style={{ color: '#03104A' }}>Diagnóstico {diagnostic.id}</h5>
+                                <p className="tracking-wide text-gray-500 md:text-lg dark:text-gray-400">
+                                    Fecha de inicio: &nbsp;{diagnostic.startDate}<br />
+                                    Resultado: &nbsp;{diagnostic.result}<br />
+                                    Enfermedad: &nbsp;{diagnostic.disease}
                                 </p>
                                 <div className="items-center justify-center space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
-                                    <Button className='w-full h-7 text-xl' color="dark" onClick={() => pasardatos(diagnostic)}>Mas </Button>
+                                    <Button className='text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 h-11 mt-2 mb-1 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800' color="dark" onClick={() => openModalWithDiagnostic(diagnostic)}>Más </Button>
                                 </div>
                             </Card>
                         ))}
@@ -76,37 +76,36 @@ const MedicalDate = () => {
 
                 {selectedDiagnostic && (
                     <Modal show={true} onClose={closeModal} size="xl">
-                        <Modal.Header className=' text-center'> <b>Detalles del diagnóstico</b></Modal.Header>
-
+                        <Modal.Header><p className="text-2xl font-semibold" style={{ color: '#03104A' }}>Detalles del diagnóstico</p></Modal.Header>
                         <Modal.Body style={{ overflowY: 'auto' }}>
-                            <div className='flex justify-between'>Fecha de inicio: <b > {selectedDiagnostic.startDate}</b> </div>
-                            <p>Resultado:{selectedDiagnostic.result}</p>
-                            <p>Enfermedad: {selectedDiagnostic.disease}</p>
-                            <h1> <strong>Tratamiento: </strong> </h1>
 
-                            {selectedDiagnostic.treatmentBeans && selectedDiagnostic.treatmentBeans.map((treatment, index) => (
-                                <div key={index}>
-                                    <div className='flex justify-between'> Fecha de tratamiento: <b className='flex justify-end'>   {treatment.treatDate}</b> </div>
-                                    <p>Indicaciones: {treatment.indications}</p>
+                           <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Fecha de inicio: &nbsp;{selectedDiagnostic.startDate}</p>
+                            <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Resultado: &nbsp;{selectedDiagnostic.result}</p>
+                            <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Enfermedad: &nbsp;{selectedDiagnostic.disease}</p>
+
+                            <h1 className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400"> <strong>Tratamiento: </strong> </h1>
+
+                            {selectedDiagnostic.treatmentBean && selectedDiagnostic.treatmentBean.map((treatment, index) => (
+                                <div key={index} className='ml-2'>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Fecha de tratamiento:&nbsp; {treatment.treatDate}</p>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Indicaciones:&nbsp; {treatment.indications}</p>
                                     {/* Puedes agregar más información sobre los tratamientos aquí según tus necesidades */}
                                 </div>
                             ))}
-                            <h1> <strong>Resultados del laboratorio: </strong> </h1>
+                            <h1 className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400"> <strong>Resultados del laboratorio: </strong> </h1>
                             {selectedDiagnostic.resultBeans && selectedDiagnostic.resultBeans.map((resultBean, index) => (
-                                <div key={index}>
-                                    <div className='flex justify-between'> Fecha de resultado: <b className='flex justify-end'> {resultBean.resultDate}</b></div>
-                                    <p>Retroviral:{resultBean.labDataBean.viralLoad}</p>
-                                    <p>ALT:{resultBean.labDataBean.alt}</p>
-                                    <p>Antigenos:{resultBean.labDataBean.antigen}</p>
-                                    <p>AST:{resultBean.labDataBean.ast}</p>
-                                    <p>Creatinina:{resultBean.labDataBean.creatinine}</p>
-                                    <p>Plaquetas:{resultBean.labDataBean.platelets}</p>
+                                <div key={index}  className='ml-2'>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Fecha de resultado:&nbsp; {resultBean.resultDate}</p>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Retroviral:&nbsp; {resultBean.labDataBean.viralLoad}</p>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">ALT:&nbsp; {resultBean.labDataBean.alt}</p>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Antigenos:&nbsp; {resultBean.labDataBean.antigen}</p>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">AST:&nbsp; {resultBean.labDataBean.ast}</p>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Creatinina:&nbsp; {resultBean.labDataBean.creatinine}</p>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Plaquetas:&nbsp; {resultBean.labDataBean.platelets}</p>
                                     <hr className='mt-4 mb-5' style={{ backgroundColor: '#03104A' }}></hr>
                                 </div>
                             ))}
                         </Modal.Body>
-
-
                     </Modal>
                 )}
             </section>

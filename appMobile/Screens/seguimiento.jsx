@@ -83,7 +83,7 @@ const Seguimiento = ({ route }) => {
                         {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.platelets ?? '0') : 'Sin datos'}
                     </Text> ml</Text>
 
-                    <Text style={styles.comp} >Antigenos:<Text style={styles.compdatos}>
+                    <Text style={styles.comp} >Antígenos:<Text style={styles.compdatos}>
                         {seguimiento.resultBeans && seguimiento.resultBeans[0] && seguimiento.resultBeans[0].labDataBean ? (seguimiento.resultBeans[0].labDataBean.antigen ?? 'Sin datos') : 'Sin datos'}
                     </Text></Text>
 
