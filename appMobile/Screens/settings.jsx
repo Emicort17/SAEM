@@ -70,7 +70,7 @@ const Configuracion = () => {
                 <View style={styles.container}>
                     <Text style={styles.title}>Perfil</Text>
                     <View style={styles.contImputs}>
-                        <Text style={styles.comp}>Telefono</Text>
+                        <Text style={styles.comp}>Teléfono</Text>
                         <TextInput style={styles.input} value={telefono} onChangeText={setTelefono}/>
 
                         <Text style={styles.comp}>Estado</Text>

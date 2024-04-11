@@ -36,7 +36,7 @@ ForgetPass = () => {
             }
         } else if(userEmail === ''){
             Alert.alert(
-                'Por favor rellena el campo',
+                'Por favor rellena el campo solicitado',
             );
         }else{
             Alert.alert(
@@ -63,7 +63,7 @@ ForgetPass = () => {
                         <View style={styles.info}>
 
                         <Feather name="info" size={15} color="black" />
-                            <Text style={{marginLeft:5}}>Info La contraseña será enviada al correo</Text>
+                            <Text style={{marginLeft:5}}>La contraseña será enviada al correo</Text>
 
                         </View>
 

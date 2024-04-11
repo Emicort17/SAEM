@@ -50,8 +50,8 @@ Expediente = () => {
             {datos && (
               <>  
                 <Text style={styles.comp} >Nombre: <Text style={styles.compdatos}> {datos?.userBean.personBean.name ?? 'Sin datos'}</Text><Text style={styles.compdatos}> {datos?.userBean.personBean.middleName ?? 'Sin datos'}</Text> <Text style={styles.compdatos}>{datos?.userBean.personBean.lastName ?? 'Sin datos'}</Text></Text>
-                <Text style={styles.comp} >Telefono:<Text style={styles.compdatos}> {datos?.userBean.personBean.phoneNumber ?? 'Sin datos'}</Text></Text>
-                <Text style={styles.comp} >Pais:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.state ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >Teléfono:<Text style={styles.compdatos}> {datos?.userBean.personBean.phoneNumber ?? 'Sin datos'}</Text></Text>
+                <Text style={styles.comp} >País:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.state ?? 'Sin datos'}</Text></Text>
                 <Text style={styles.comp} >Estado:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.state ?? 'Sin datos'}</Text></Text>
                 <Text style={styles.comp} >Municipio:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.town ?? 'Sin datos'}</Text></Text>
                 <Text style={styles.comp} >CP:<Text style={styles.compdatos}> {datos?.userBean.personBean.addressBean.zip ?? 'Sin datos'}</Text></Text>

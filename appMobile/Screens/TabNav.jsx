@@ -19,7 +19,7 @@ const TabNav = () => {
 
   const handleButtonPress = () => {
     Alert.alert(
-      "Seguro que deseas cerrar sesión?",
+      "¿Estás seguro que deseas cerrar sesión?",
       "",
       [
         {
