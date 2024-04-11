@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import AxiosClient from '../config/http/AxiosClient';
 
 const Configuracion = () => {
-    const { userData, onLoginSuccess } = useAuth('');
+    const { userData } = useAuth('');
     const [datos, setPersonResponse] = useState();
     const [telefono, setTelefono] = useState('');
     const [estado, setEstado] = useState('');
@@ -12,6 +12,10 @@ const Configuracion = () => {
     const [cp, setCP] = useState('');
     const [calle2, setCalle2] = useState('');
     const [calle, setCalle] = useState('');
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [curp, setCurp] = useState('');
+    const [external, setExternal] = useState(false);
 
     useEffect(() => {
         const getPerson = async () => {
@@ -20,47 +24,86 @@ const Configuracion = () => {
                 const response = await AxiosClient.get(`patient/findOne/${curp}`);
                 if (response.data) {
                     setPersonResponse(response.data);
-                    // Actualiza los estados con los datos recibidos
                     setTelefono(response.data.userBean.personBean.phoneNumber);
                     setEstado(response.data.userBean.personBean.addressBean.state);
                     setMunicipio(response.data.userBean.personBean.addressBean.town);
                     setCP(response.data.userBean.personBean.addressBean.zip);
                     setCalle2(response.data.userBean.personBean.addressBean.street2);
                     setCalle(response.data.userBean.personBean.addressBean.street1);
+                    setCurp(userData.user.personBean.curp)
+                    setExternal(response.data.external)
                 }
             } catch (error) {
                 console.error('Error al encontrar el paciente:', error);
             }
         };
         getPerson();
-    }, [userData.user.personBean.curp]); 
+        console.log("Settings curp "+userData.user.personBean.curp);
+        console.log(userData.user.id)
+    }, [userData.user.personBean.curp]);
 
     const actualizarDatos = async () => {
         const datosActualizados = {
-            ...datos,
+            external: external,
             userBean: {
-                ...datos.userBean,
+                id: datos.userBean.id,
+                email: datos.userBean.email,
+                password: datos.userBean.password,
+                status: datos.userBean.status,
                 personBean: {
-                    ...datos.userBean.personBean,
+                    id: datos.userBean.personBean.id,
+                    name: datos.userBean.personBean.name,
+                    middleName: datos.userBean.personBean.middleName,
+                    lastName: datos.userBean.personBean.lastName,
+                    birthdate: datos.userBean.personBean.birthdate,
+                    birthplace: datos.userBean.personBean.birthplace,
+                    curp: datos.userBean.personBean.curp,
                     phoneNumber: telefono,
+                    sex: datos.userBean.personBean.sex,
                     addressBean: {
-                        ...datos.userBean.personBean.addressBean,
+                        id: datos.userBean.personBean.addressBean.id,
                         state: estado,
                         town: municipio,
                         zip: cp,
+                        interiorNumber: datos.userBean.personBean.addressBean.interiorNumber,
+                        exteriorNumber: datos.userBean.personBean.addressBean.exteriorNumber,
                         street1: calle,
+                        street2: calle2,
+                        street3: datos.userBean.personBean.addressBean.street3,
                     }
                 }
             }
         };
 
         try {
-            const response = await AxiosClient.post('localhost:8080/api/saem/patient/update', datosActualizados);
-            if (response.data) {
+            const response = await AxiosClient.put('patient/update', datosActualizados);
+            if (response.status == "OK") {
                 Alert.alert("Éxito", "Datos actualizados correctamente");
+            } else {
+                Alert.alert("Error", "La actualización no fue exitosa");
             }
         } catch (error) {
+            console.error("Error al actualizar datos:", error);
             Alert.alert("Error", "No se pudieron actualizar los datos");
+        }
+    };
+
+
+    const cambiarContraseña = async () => {
+        const datosParaCambiarContraseña = {
+            curp: curp,
+            oldPassword: oldPassword,
+            newPassword: newPassword
+        };
+
+        try {
+            const response = await AxiosClient.post('patient/changePassword', datosParaCambiarContraseña);
+            console.log(response);
+            if (response.status === "OK") {
+                Alert.alert("Éxito", "Contraseña actualizada correctamente");
+            }
+        } catch (error) {
+            Alert.alert("Error", "No se pudo cambiar la contraseña");
         }
     };
 
@@ -74,30 +117,43 @@ const Configuracion = () => {
                         <TextInput style={styles.input} value={telefono} onChangeText={setTelefono}/>
 
                         <Text style={styles.comp}>Estado</Text>
-                        <TextInput style={styles.input} value={estado} onChangeText={setTelefono}/>
+                        <TextInput style={styles.input} value={estado} onChangeText={setEstado}/>
 
                         <Text style={styles.comp}>Municipio</Text>
-                        <TextInput style={styles.input} value={municipio} onChangeText={setTelefono}/>
+                        <TextInput style={styles.input} value={municipio} onChangeText={setMunicipio}/>
 
                         <Text style={styles.comp}>Código Postal</Text>
-                        <TextInput style={styles.input} value={cp} onChangeText={setTelefono}/>
+                        <TextInput style={styles.input} value={cp} onChangeText={setCP}/>
 
                         <Text style={styles.comp}>Calle 1</Text>
-                        <TextInput style={styles.input} value={calle} onChangeText={setTelefono}/>
+                        <TextInput style={styles.input} value={calle} onChangeText={setCalle}/>
 
                         <Text style={styles.comp}>Calle 2</Text>
-                        <TextInput style={styles.input} value={calle2} onChangeText={setTelefono}/>
+                        <TextInput style={styles.input} value={calle2} onChangeText={setCalle2}/>
 
-                       
                     </View>
                 </View>
                 <TouchableOpacity style={styles.btnActualizar} onPress={actualizarDatos}>
                     <Text style={styles.titlebtn}>Actualizar</Text>
                 </TouchableOpacity>
-            </View>        
-        </ScrollView>
+            </View>
 
-         
+            <View style={styles.allScreen}>
+                <View style={styles.container}>
+                    <Text style={styles.title}>Cambiar Contraseña</Text>
+                    <View style={styles.contImputs}>
+                        <Text style={styles.comp}>Contraseña Actual</Text>
+                        <TextInput style={styles.input} value={oldPassword} secureTextEntry onChangeText={setOldPassword}/>
+
+                        <Text style={styles.comp}>Nueva Contraseña</Text>
+                        <TextInput style={styles.input} value={newPassword} secureTextEntry onChangeText={setNewPassword}/>
+                    </View>
+                </View>
+                <TouchableOpacity style={styles.btnActualizar} onPress={cambiarContraseña}>
+                    <Text style={styles.titlebtn}>Cambiar Contraseña</Text>
+                </TouchableOpacity>
+            </View>
+        </ScrollView>
     );
 }
 
