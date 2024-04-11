@@ -37,7 +37,7 @@ const Subirdatos = () => {
                         <span className="font-medium flex flex-row">Info alert! Los archivos a subir deben de contener el siguiente formato. <BsBoxArrowUpRight onClick={() => setOpenModal(true)} style={{ marginLeft: '5px', width: '14PX', marginTop: '2PX' }}> </BsBoxArrowUpRight> </span>
                     </Alert>
 
-                    <Modal show={openModal} onClose={() => setOpenModal(false)} size={'4xl'}>
+                    <Modal show={openModal} onClose={() => setOpenModal(false)} size={'5xl'}>
                         <Modal.Header>Formato</Modal.Header>
                         <Modal.Body>
                             <div className="flex w-full items-center justify-center space-y-2">

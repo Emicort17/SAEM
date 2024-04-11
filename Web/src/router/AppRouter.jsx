@@ -28,6 +28,7 @@ import GetionarCuenta from '../modules/admin/user/gesrionarCuenta';
 import Patients from '../modules/medical/Pacientes';
 import InformePrincipal from '../modules/medical/Informe';
 import FormularioSeguimiento from '../modules/medical/FormularioSeguimiento';
+import MedicalDate from '../modules/medical/medicaldate';
 
 const AppRouter = () => {
   const { user } = useContext(AuthContext);
@@ -56,6 +57,8 @@ const AppRouter = () => {
             <Route path="/" element={<AdminLayout user={user} />} >
               <Route path="pacientes" element={<><Patients /></>} />
               <Route path="informe" element={<><InformePrincipal /></>} />
+              <Route path="diagnosticos" element={<><MedicalDate /></>} />
+
               <Route path="formularioSeguimiento" element={<><FormularioSeguimiento /></>} />
             </Route>
           </>
