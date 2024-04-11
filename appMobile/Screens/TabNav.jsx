@@ -39,7 +39,7 @@ const TabNav = () => {
   return (
     <Tab.Navigator >
       <Tab.Screen
-        name="Diagnósticos"
+        name="Diagnosticos"
         component={Perfil}
         options={{
           tabBarShowLabel: false,
@@ -51,7 +51,7 @@ const TabNav = () => {
           tabBarLabelStyle: { fontSize: 25 },
           tabBarIcon: ({ color, size, focused }) => (
             <View style={[styles.iconContainer, focused && styles.iconContainerActive]}>
-              <MaterialIcons name="person" color={'#1C3344'} size={30} />
+                <Entypo name="folder" size={24} color={'#1C3344'} />
             </View>
           ),
         }}
@@ -69,7 +69,7 @@ const TabNav = () => {
           tabBarLabelStyle: { fontSize: 25, },
           tabBarIcon: ({ color, size, focused }) => (
             <View style={[styles.iconContainer, focused && styles.iconContainerActive]}>
-              <Entypo name="folder" size={24} color={'#1C3344'} />
+                <MaterialIcons name="person" color={'#1C3344'} size={30} />
             </View>
           ),
         }}
