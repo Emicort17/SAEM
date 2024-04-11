@@ -58,7 +58,6 @@ Perfil = () => {
   const getPerson = async () => {
     try {
       const response = await AxiosClient.get(`patient/diagnostic/findAll/${id}`);
-      console.log('Datos de la respuesta:', JSON.stringify(response.data, null, 2));
       if (response.data) {
         setPersonResponse(response.data);
         setFilterData(response.data)
