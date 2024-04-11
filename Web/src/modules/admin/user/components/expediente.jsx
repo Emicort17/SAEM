@@ -37,11 +37,12 @@ const Expediente = () => {
         validationSchema: yup.object().shape({
 
             fechapadecimiento: yup.string().required('Campo obligatorio'),
-            resultado: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
+            resultado: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
             fechatratamiento: yup.string().required('Campo obligatorio'),
-            enfermedad: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres'),
-            medico: yup.string().required('Campo obligatorio'),
-            expediente: yup.string().required('Campo obligatorio'),
+            enfermedad: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            medico: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            expediente: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales')
+
 
         }),
         onSubmit: async (values, { setSubmitting }) => {

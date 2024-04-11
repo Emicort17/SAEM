@@ -9,7 +9,7 @@ const styles = {
 
   table: {
     style: {
-      backgroundColor: '#E6ECF1', // Cambia '#yourDesiredColor' al color deseado
+      backgroundColor: '#E6ECF1',
       border:'2px solid #03104A ',
       borderRadius:'20px',
       paddingBottom:'10px'

@@ -72,9 +72,6 @@ const AdminLayout = () => {
   };
 
   useEffect(() => {
-
-
-
     loadUserName();
   }, []);
 
@@ -154,17 +151,7 @@ const AdminLayout = () => {
           </Navbar.Collapse>
         </Navbar>
       </header>
-      {
-        /*
-          Person, Role, User
-          Operations -> CRUD
-          GET /api/user/ -> findAll
-          GET /api/user/:id -> findById
-          POST /api/user/ -> create
-          PUT /api/user/ -> update
-          PATCH /api/user/ -> changeStatus
-        */
-      }
+    
       <main>
         <aside>
           <Menu styles={styles}
