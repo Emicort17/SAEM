@@ -5,40 +5,44 @@ import { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Alert, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import AxiosClient from "../config/http/AxiosClient";
 ForgetPass = () => {
 
     let [userEmail, setUserEmail] = useState("");
 
     const navigation = useNavigation();
 
-    const user = { correo: "garciawalit@gmail.com" };
+    const sendEmail = async () => {
 
-    const sendEmail = () => {
-        console.log(user);
-        console.log(userEmail);
-
-        let correo = userEmail.trim().toLowerCase();
-
-        if (correo === user.correo) {
-
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(emailRegex.test(userEmail)){
+            const json = {
+                toEmail: userEmail
+            }
+            try {
+                console.log(userEmail);
+                const response = await AxiosClient.post("/auth/recover/send-mail", json);
+                console.log(response);
+                if (!response.error){
+                    navigation.navigate('Login');
+                    Alert.alert(
+                        'La contraseña se envió al correo',
+                    );
+                }
+            } catch (error) {
+                Alert.alert(
+                    'El correo ingresado no esta resgistrado',
+                );
+            }
+        } else if(userEmail === ''){
             Alert.alert(
-                'La contraseña se envió al correo',
+                'Por favor rellena el campo',
             );
-
-            navigation.navigate('Login');
-
-        } else if (correo === "") {
+        }else{
             Alert.alert(
-                'No puedes enviar un dato vacio',
-
-            );
-        } else {
-            Alert.alert(
-                'El correo no se encuentra enlasado a alguna cuenta',
-
+                'Ingresa un correo válido',
             );
         }
-
 
     };
 
@@ -63,8 +67,8 @@ ForgetPass = () => {
 
                         </View>
 
-                        <TextInput style={styles.input} placeholder='Correo'
-                            onChangeText={setUserEmail} />
+                        <TextInput style={styles.input} placeholder='Correo...'
+                           value={userEmail} onChangeText={setUserEmail} />
 
                         <Button
                             buttonStyle={styles.btnlogin}
@@ -76,7 +80,15 @@ ForgetPass = () => {
                     </View>
 
                 </View>
-
+                <View style={styles.goBackButton}>
+                    <Button
+                        onPress={() => navigation.navigate('Login')}
+                        type="clear"
+                        disabledStyle={{ borderWidth: 2 }}
+                        title="Regresar"
+                        titleStyle={{ color: '#7C7C7C' }}
+                    />
+                </View>
             </View>
 
         </View>
@@ -87,7 +99,10 @@ ForgetPass = () => {
 export default ForgetPass;
 
 const styles = StyleSheet.create({
-
+    goBackButton: {
+        position: 'absolute',
+        bottom: 120
+    },
     info: {
         position:'absolute',
         top:-20,
