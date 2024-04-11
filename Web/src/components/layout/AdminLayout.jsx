@@ -1,9 +1,9 @@
 
-import React, { useState, useContext, useEffect } from 'react';
+import React, {useState, useContext, useEffect, Suspense} from 'react';
 import { slide as Menu } from 'react-burger-menu'
 import { FiMenu } from "react-icons/fi";
 import { Outlet, Link } from 'react-router-dom';
-import { Avatar, Navbar, Sidebar } from 'flowbite-react';
+import {Avatar, Navbar, Sidebar, Spinner} from 'flowbite-react';
 import { FaUserDoctor } from "react-icons/fa6";
 import { Dropdown } from 'flowbite-react';
 import { IoSettingsOutline } from "react-icons/io5";
@@ -131,11 +131,15 @@ const AdminLayout = () => {
                 </div>
 
                 <div className="centrar">
-                  <Link to={'/gestionarCuenta'}>
-                    <button className="menuconfgitem"><IoSettingsOutline size={25}
-                      className="iconoseparacion" />
-                      <p>Gestionar tu cuenta</p></button>
-                  </Link>
+                  <Suspense fallback={<Loading/>}>
+                    {role !== 'ADMIN_ROLE' ? (
+                        <Link to={'/gestionarCuenta'}>
+                          <button className="menuconfgitem"><IoSettingsOutline size={25}
+                                                                               className="iconoseparacion" />
+                            <p>Gestionar tu cuenta</p></button>
+                        </Link>
+                    ) : null}
+                  </Suspense>
                   <Link>
                     <button className="menuconfgitem" onClick={Logout}><IoIosLogOut size={30}
                       className="iconoseparacion" />
@@ -160,7 +164,8 @@ const AdminLayout = () => {
               <Sidebar.Items>
                 <Sidebar.ItemGroup className='flex flex-col space-y-4'>
                   {role === 'ADMIN_ROLE' ?
-                    (<><li className='showSelection'>
+                      (<Suspense fallback={<Loading/>}>
+                      <li className='showSelection'>
                       <Link
                         style={{ backgroundColor: "#1C3344", color: "#ffff" }}
                         to={'medicos'}
@@ -196,8 +201,7 @@ const AdminLayout = () => {
                     </Link>
 
                   </li>
-
-                  </>) : <li className='showSelection'>
+                    </Suspense>) : (<li className='showSelection'>
                     <Link style={{ backgroundColor: "#1C3344", color: "#ffff" }}
                       to={''}
                       onClick={() => handleSectionChange('')}
@@ -212,10 +216,8 @@ const AdminLayout = () => {
                       </span>
                     </Link>
 
-                  </li>}
+                  </li>)}
                   <li className='showSelection'>
-
-
                     <Link style={{ backgroundColor: "#1C3344", color: "#ffff" }}
                       to={'pacientes'}
                       onClick={() => handleSectionChange('pacientes')}
@@ -229,8 +231,6 @@ const AdminLayout = () => {
                         Pacientes
                       </span>
                     </Link>
-
-
                   </li>
                   
                   <li className='md:hidden lg:hidden'>
@@ -271,11 +271,14 @@ const AdminLayout = () => {
                       </div>
 
                       <div className="centrar">
-                        <Link to={'/gestionarCuenta'}>
-                          <button className="menuconfgitem showSelection"><IoSettingsOutline size={25}
-                            className="iconoseparacion" />
-                            <p>Gestionar tu cuenta</p></button>
-                        </Link>
+                        <Suspense fallback={<Loading/>}>
+                          {role !== 'ADMIN_ROLE' ? (
+                              <Link to={'/gestionarCuenta'}>
+                                <button className="menuconfgitem"><IoSettingsOutline size={25} className="iconoseparacion" />
+                                  <p>Gestionar tu cuenta</p></button>
+                              </Link>
+                          ) : null}
+                        </Suspense>
                         <Link>
                           <button className="menuconfgitem" onClick={Logout}><IoIosLogOut size={30}
                             className="iconoseparacion" />
@@ -317,4 +320,7 @@ const styles = {
     top: '60px',
     left: '0'
   }
+}
+function Loading() {
+  return <h2>🌀 Loading...</h2>;
 }
