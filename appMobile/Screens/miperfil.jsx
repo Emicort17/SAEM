@@ -1,4 +1,14 @@
-import { StyleSheet, Text, View, Image, TextInput, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  FlatList,
+  SafeAreaView,
+  RefreshControl,
+  ScrollView
+} from 'react-native';
 import * as React from "react";
 import { Button } from "@rneui/base";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,14 +19,47 @@ import AxiosClient from '../config/http/AxiosClient';
 
 Perfil = () => {
   const { userData, onLoginSuccess } = useAuth('');
-  const [datos, setPersonResponse] = useState();
-  const curp = userData.user.personBean.curp;
-  console.log(curp)
+  const [datos, setPersonResponse] = useState([]);
+  const id = userData.user.id;
+  const [refreshing, setRefreshing] = useState(false);
+  const [query, setQuery] = useState('')
+  const [filterData, setFilterData] = useState([])
+  const handleSearch = () =>{
+   /* if(getSearch.length > 0){
+      const searchData = filterData.filter((item) => search(item, getSearch))
+
+      setUsers(searchData)
+
+      console.log(searchData)
+    }else{
+      setUsers(filterData)
+    }*/
+
+
+    console.log(query)
+  }
+
+  /*const search = (item, search) =>{
+    const {name, middleName, lastName} = item.userBean.personBean
+    const {card} = item
+
+    const fullName = `${name} ${middleName} ${lastName}`
+
+    return  fullName.toLowerCase().includes(search.toLowerCase()) || card.includes(search)
+  }*/
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await getPerson()
+    }finally {
+      setRefreshing(false)
+    }
+  }, []);
 
   const getPerson = async () => {
     try {
-      const response = await AxiosClient.get(`patient/findOne/${curp}`);
-      console.log('hola person');
+      const response = await AxiosClient.get(`patient/diagnostic/findAll/${id}`);
       console.log('Datos de la respuesta:', JSON.stringify(response.data, null, 2));
       if (response.data) {
         setPersonResponse(response.data);
@@ -38,36 +81,56 @@ Perfil = () => {
 
     <View style={styles.allScreen}>
       <View style={styles.contSearch}>
-        <TextInput style={styles.search} placeholder='Buscar' />
+        <TextInput style={styles.search} value={query} onChangeText={setQuery} placeholder='Buscar...' />
         <Button
-          buttonStyle={styles.btnSearch}
-          containerStyle={{}}
-          linearGradientProps={null}
-          icon={<Icon name="magnify" size={25} color="#ffffff" />}
-          iconContainerStyle={{ background: "#03104A" }}
-          loadingProps={{ animating: true }}
-          loadingStyle={{}}
-          onPress={() => alert("click")}
-          titleProps={{}}
-          titleStyle={{ marginHorizontal: 5 }}
+            buttonStyle={styles.btnSearch}
+            containerStyle={{}}
+            linearGradientProps={null}
+            icon={<Icon name="magnify" size={25} color="#ffffff" />}
+            iconContainerStyle={{ background: "#03104A" }}
+            loadingProps={{ animating: true }}
+            loadingStyle={{}}
+            onPress={() => alert("click")}
+            titleProps={{}}
+            titleStyle={{ marginHorizontal: 5 }}
         />
       </View>
 
-
-      <View style={styles.list}>
-        <FlatList
-          data={datos?.medicalRecordBean?.diagnosticBeans || []}
-          renderItem={({ item }) => (
-            <FlatListPerfil
-              fecha={item.startDate}
-              medico={item.result}
-              seguimiento={item}
+      <SafeAreaView style={styles.list}>
+        {datos.length > 0 ? (
+            <FlatList
+                data={datos}
+                renderItem={({ item }) => (
+                    <FlatListPerfil
+                        fecha={item.startDate}
+                        resultado={item.result}
+                        enfermedad={item.disease}
+                        seguimiento={item}
+                    />
+                )}
+                keyExtractor={(item) => item.id?.toString()}
+                refreshControl={
+                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+                ItemSeparatorComponent={() => (
+                    <View style={{ height: 20 }} />
+                )}
+                ListHeaderComponent={() => (
+                    <View style={styles.header}>
+                      <Text style={{marginBottom: 8}}>Arrastra la pantalla hacia abajo para actualizar</Text>
+                    </View>
+                )}
             />
-          )}
-          keyExtractor={item => item.id?.toString()}
-        />
-
-      </View>
+        ) : (
+            <ScrollView
+                style={{width: '100%'}}
+                refreshControl={
+              <RefreshControl style={{ alignSelf: 'center' }} refreshing={refreshing} onRefresh={onRefresh} />
+            }>
+              { refreshing? (<Text style={{color:'gray'}}>Cargando...</Text>): (<Text style={{color: 'gray', textAlign:'center'}}>No hay datos disponibles. Arrastre la pantlla hacia abajo para actualizarla</Text>)}
+            </ScrollView>
+        )}
+      </SafeAreaView>
     </View>
 
   );
@@ -129,7 +192,7 @@ const styles = StyleSheet.create({
 
   },
   list: {
-    position: 'absolute',
+    position: 'relative',
     top: 0,
     marginTop: 100
   }
