@@ -25,28 +25,26 @@ Perfil = () => {
   const [query, setQuery] = useState('')
   const [filterData, setFilterData] = useState([])
   const handleSearch = () =>{
-   /* if(getSearch.length > 0){
-      const searchData = filterData.filter((item) => search(item, getSearch))
 
-      setUsers(searchData)
+    if(query !== ''){
+      const searchData = filterData.filter((item) => search(item, query))
+
+      setPersonResponse(searchData)
 
       console.log(searchData)
+      console.log(query)
     }else{
-      setUsers(filterData)
-    }*/
+      //setUsers(filterData)
+      console.log('HOla '+query)
+    }
 
-
-    console.log(query)
   }
 
-  /*const search = (item, search) =>{
-    const {name, middleName, lastName} = item.userBean.personBean
-    const {card} = item
+  const search = (item, search) =>{
+    const {disease, startDate, result} = item
 
-    const fullName = `${name} ${middleName} ${lastName}`
-
-    return  fullName.toLowerCase().includes(search.toLowerCase()) || card.includes(search)
-  }*/
+    return  disease.toLowerCase().includes(search.toLowerCase()) || startDate.toLowerCase().includes(search.toLowerCase()) || result.toLowerCase().includes(search.toLowerCase())
+  }
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
@@ -63,6 +61,7 @@ Perfil = () => {
       console.log('Datos de la respuesta:', JSON.stringify(response.data, null, 2));
       if (response.data) {
         setPersonResponse(response.data);
+        setFilterData(response.data)
       }
     } catch (error) {
       console.error('Error al encontrar el paciente:', error);
@@ -90,7 +89,7 @@ Perfil = () => {
             iconContainerStyle={{ background: "#03104A" }}
             loadingProps={{ animating: true }}
             loadingStyle={{}}
-            onPress={() => alert("click")}
+            onPress={handleSearch}
             titleProps={{}}
             titleStyle={{ marginHorizontal: 5 }}
         />
@@ -117,7 +116,7 @@ Perfil = () => {
                 )}
                 ListHeaderComponent={() => (
                     <View style={styles.header}>
-                      <Text style={{marginBottom: 8}}>Arrastra la pantalla hacia abajo para actualizar</Text>
+                      <Text style={{marginBottom: 8}}>Arrastra la pantalla hacia abajo para restablecer</Text>
                     </View>
                 )}
             />
