@@ -15,7 +15,7 @@
     height: 250px; /* Ajusta el tamaño del área de la lupa */
     border: 2px solid #6a6a6a; /* Puedes personalizar el borde según tus preferencias */
     border-radius: 50%;
-    background-image: url('/src/assets/Images/formato.jpg'); /* Establece la misma imagen como fondo de la lupa */
+    background-image: url('/public/assets/formato.jpg'); /* Establece la misma imagen como fondo de la lupa */
     background-size: 900% 900%; /* Ajusta el valor de zoom según tus necesidades */
     display: none; /* Oculta la lupa inicialmente */
     right: 0;

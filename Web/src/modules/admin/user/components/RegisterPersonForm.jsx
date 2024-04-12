@@ -61,9 +61,6 @@ const RegisterPerson = () => {
                 cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
                 sexo: yup.string().required('Campo obligatorio'),
                 calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                cedula: yup.string().required('Campo obligatorio').min(7, 'Mínimo 7 caracteres').max(7, 'Máximo 7 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales')
-                
-        
         }),
 
         onSubmit: async () => {

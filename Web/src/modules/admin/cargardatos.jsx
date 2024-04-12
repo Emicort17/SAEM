@@ -3,7 +3,6 @@ import { BsBoxArrowUpRight } from "react-icons/bs";
 import Dropzone from '../../components/dropzone';
 import { HiInformationCircle } from 'react-icons/hi';
 import { Alert } from 'flowbite-react';
-import format from '/src/assets/Images/formato.jpg';
 
 import { Button, Modal } from 'flowbite-react';
 import { useState } from 'react';
@@ -43,7 +42,7 @@ const Subirdatos = () => {
                         <Modal.Body>
                             <div className="flex w-full items-center justify-center space-y-2">
                                 <div className="image-container" onMouseMove={handleMouseMove}>
-                                    <img src={format} alt="Formato" className="image" />
+                                    <img src='/src/assets/Images/formato.jpg' alt="Formato" className="image" />
                                     <div className="loupe"></div>
                                 </div>
                             </div>

@@ -22,7 +22,7 @@ const Error404 = () => {
                
             </div>
             <div className="error-image">
-                <img className=' cursor-pointer' src="/src/assets/Images/error.jpg" alt="Error 404" onClick={volver} />
+                <img className=' cursor-pointer' src="../../../public/assets/error.jpg" alt="Error 404" onClick={volver} />
             </div>
         </div>
     );

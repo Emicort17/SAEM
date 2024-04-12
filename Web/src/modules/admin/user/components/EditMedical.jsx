@@ -7,10 +7,13 @@ import React from 'react'
 import *  as yup from "yup"
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 
 const EditMedical = () => {
+    const navigate = useNavigate();
+
 
     const location = useLocation();
     const datos = location.state || {};
@@ -19,48 +22,46 @@ const EditMedical = () => {
 
     const formik = useFormik({
         initialValues: {
-            cedula: datos.card,
-            email: datos.userBean ? datos.userBean.email : '',
-            password: datos.userBean ? datos.userBean.password : '',
-            confirmPassword: datos.userBean ? datos.userBean.password : '',
-    
-            name: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.name : '',
-            surname: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.middleName : '',
-            lastname: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.lastName : '',
-            curp: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.curp : '',
-            sexo: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.sex : '',
-            birthdate: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.birthdate : '',
-            birthplace: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.birthplace : '',
-            phoneNumber: datos.userBean && datos.userBean.personBean ? datos.userBean.personBean.phoneNumber : '',
-    
-            state: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.state : '',
-            municipio: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.town : '',
-            cp: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.zip : '',
-            calle: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.street1 : '',
-            calle2: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.street2 : '',
-            calle3: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.street3 : '',
-            interiorNumber: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.interiorNumber : '',
-            exteriorNumber: datos.userBean && datos.userBean.personBean && datos.userBean.personBean.addressBean ? datos.userBean.personBean.addressBean.exteriorNumber : '',
+            cedula: datos.card || '',
+            email: datos.userBean?.email || '',
+            password: datos.userBean?.password || '',
+            confirmPassword: datos.userBean?.password || '',
+            name: datos.userBean?.personBean?.name || '',
+            surname: datos.userBean?.personBean?.middleName || '',
+            lastname: datos.userBean?.personBean?.lastName || '',
+            curp: datos.userBean?.personBean?.curp || '',
+            sexo: datos.userBean?.personBean?.sex || '',
+            birthdate: datos.userBean?.personBean?.birthdate || '',
+            birthplace: datos.userBean?.personBean?.birthplace || '',
+            phoneNumber: datos.userBean?.personBean?.phoneNumber || '',
+            state: datos.userBean?.personBean?.addressBean?.state || '',
+            municipio: datos.userBean?.personBean?.addressBean?.town || '',
+            cp: datos.userBean?.personBean?.addressBean?.zip || '',
+            calle: datos.userBean?.personBean?.addressBean?.street1 || '',
+            calle2: datos.userBean?.personBean?.addressBean?.street2 || '',
+            calle3: datos.userBean?.personBean?.addressBean?.street3 || '',
+            interiorNumber: datos.userBean?.personBean?.addressBean?.interiorNumber || '',
+            exteriorNumber: datos.userBean?.personBean?.addressBean?.exteriorNumber || '',
         },
         validationSchema: yup.object().shape({
             email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(10, 'Mínimo 10 caracteres').max(60, 'Máximo 60 caracteres'),
-            password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }).matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            surname: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            lastname: yup.string().min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            curp: yup.string().required('Campo obligatorio').min(18, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres'),
+            confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
+            name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            surname: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            lastname: yup.string().min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            curp: yup.string().required('Campo obligatorio').min(18, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
             birthdate: yup.string().required('Campo obligatorio'),
-            state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            birthplace: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            exteriorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            birthplace: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            exteriorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
             sexo: yup.string().required('Campo obligatorio'),
-            calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            cedula: yup.string().required('Campo obligatorio').min(7, 'Mínimo 7 caracteres').max(7, 'Máximo 7 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            cedula: yup.string().required('Campo obligatorio').min(7, 'Mínimo 7 caracteres').max(7, 'Máximo 7 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
 
         }),
 
@@ -98,7 +99,7 @@ const EditMedical = () => {
                     };
                     const response = await AxiosClient({
                         url: '/doctor/update',
-                        method: 'POST',
+                        method: 'PUT',
                         data: payload
                     });
                     if (!response.error) {
@@ -107,6 +108,8 @@ const EditMedical = () => {
                             'El usuario se ha registrado correctamente',
                             'success');
                     }
+                    navigate('/medicos');
+
                 } catch (error) {
                     customAlert(
                         'Ocurrio un error',
@@ -124,11 +127,13 @@ const EditMedical = () => {
         <>
             <div className='flex justify-center items-center w-full text-gray-800 p-5 ' >
 
-                <form id='doctorEdit' name='doctorEdit' className='w-1/2 md:w-3/4 lg:w-1/2 xl:w-1/3 bg-white shadow-md rounded-lg px-5 pt-5 pb-5 mb-4'>
+            <form id='doctorEdit' name='doctorEdit' style={{ width: '50%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px' }} noValidate onSubmit={formik.handleSubmit}>
 
-                    <h3 className='font-bold text-2xl text-center mb-4'>Medicos</h3>
+                <div className='flex flex-col gap-3' >
 
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                        <h3 className='font-bold text-2xl text-center'>Medico</h3>
+
+                        <div className='flex flex-col gap-2 pb-2'>
 
                         <div className='flex flex-col gap-2 pb-2'>
                             <div className='grid-col-4'>
@@ -467,6 +472,7 @@ const EditMedical = () => {
                             color='succes'>
                             Guardar
                         </Button>
+                    </div>
                     </div>
                 </form>
 
