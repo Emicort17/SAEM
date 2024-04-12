@@ -134,13 +134,18 @@ const Patients = () => {
 
     return (
         <section className='w-full px-4 pt-4 flex flex-col gap-4'>
-            <h1 className='text-2xl'>Pacientes</h1>
+                <h1 className=' text-3xl  mt-3 mx-4'>Pacientes</h1>
+
+            <div className='w-full flex justify-end p-5'>
+
             <div className='max-w-screen-md flex justify-between items-center'>
-                <div className='max-w-64'>
+            <div className='max-w-64  mx-4'>
                     <Label htmlFor='' />
                     <TextInput type='text' id='filter' placeholder='Buscar...' />
                 </div>
             </div>
+            </div>
+
             <CustomDataTable
                 columns={columns}
                 data={users}

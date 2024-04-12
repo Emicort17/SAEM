@@ -20,6 +20,9 @@ import RegisterPerson from '../modules/admin/user/components/RegisterPersonForm'
 import EditPerson from '../modules/admin/user/components/EditPerson';
 
 import RegisterMedical from '../modules/admin/user/components/RegisterMedical';
+import Medicina from '../modules/admin/user/components/medicina';
+import ListMedicina from '../modules/admin/user/components/listMedicine';
+import UpdateMedicina from '../modules/admin/user/components/updateMedicina';
 import EditMedical from '../modules/admin/user/components/EditMedical';
 import Citas from '../modules/admin/user/components/Citas';
 
@@ -46,7 +49,13 @@ const AppRouter = () => {
               <Route path="editperson" element={<EditPerson />} />
               <Route path="registermedico" element={<RegisterMedical />} />
               <Route path="editmedico" element={<EditMedical />} />
-              <Route path="citas" element={<Citas />} />
+              <Route path="citas" element={<Citas/>} />
+              <Route path="medicina" element={<ListMedicina/>} />
+              <Route path="editmedicina" element={<UpdateMedicina/>} />
+              <Route path="medicine" element={<Medicina/>} />
+
+
+
             </Route>
           </>
         );

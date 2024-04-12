@@ -13,6 +13,7 @@ import { GoUpload } from "react-icons/go";
 import { LogOutAlert } from '../../config/alerts/alert';
 import AxiosClient from '../../config/http-client/axios-client';
 import AuthContext from '../../config/context/auth-context';
+import { AiOutlineMedicineBox } from "react-icons/ai";
 
 
 import '../../assets/adminlayout.css';
@@ -196,17 +197,17 @@ const AdminLayout = () => {
                 </div>
 
                 <div className="centrar">
-               
-                        {role !== 'ADMIN_ROLE' ? (
-                         
-                            <button className="menuconfgitem" onClick={() => { loadCurp() }}><IoSettingsOutline size={25}
-                    className="iconoseparacion" />
-                    <p>Gestionar tu cuenta</p></button>
 
-                          
-                          ) : null}
+                  {role !== 'ADMIN_ROLE' ? (
 
-                  
+                    <button className="menuconfgitem" onClick={() => { loadCurp() }}><IoSettingsOutline size={25}
+                      className="iconoseparacion" />
+                      <p>Gestionar tu cuenta</p></button>
+
+
+                  ) : null}
+
+
                   <Link>
                     <button className="menuconfgitem" onClick={Logout}><IoIosLogOut size={30}
                       className="iconoseparacion" />
@@ -231,24 +232,26 @@ const AdminLayout = () => {
               <Sidebar.Items>
                 <Sidebar.ItemGroup className='flex flex-col space-y-4'>
                   {role === 'ADMIN_ROLE' ?
-                    (<><li className='showSelection'>
-                      <Link
-                        style={{ backgroundColor: "#1C3344", color: "#ffff" }}
-                        to={'medicos'}
-                        onClick={() => handleSectionChange('medicos')}
-                        className={` cursor-pointer flex items-center justify-center rounded-lg p-2 text-base font-normal opacity-10 ${selectedSection === 'medicos'
-                          ? 'text-zinc-950 bg-white font-bold'
-                          : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
-                          }`}
-                      >
-                        <FaUserDoctor
-                          className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                        <span className="px-3 flex-1 whitespace-nowrap">
-                          Medicos
-                        </span>
-                      </Link>
+                    (<>
+                      <li className='showSelection'>
+                        <Link
+                          style={{ backgroundColor: "#1C3344", color: "#ffff" }}
+                          to={'medicos'}
+                          onClick={() => handleSectionChange('medicos')}
+                          className={` cursor-pointer flex items-center justify-center rounded-lg p-2 text-base font-normal opacity-10 ${selectedSection === 'medicos'
+                            ? 'text-zinc-950 bg-white font-bold'
+                            : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+                            }`}
+                        >
+                          <FaUserDoctor
+                          
+                            className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                          <span className="px-3 flex-1 whitespace-nowrap">
+                            Medicos
+                          </span>
+                        </Link>
 
-                    </li>
+                      </li>
 
 
                       <li className='showSelection'>
@@ -264,6 +267,22 @@ const AdminLayout = () => {
                           <span className="px-3 flex-1 whitespace-nowrap">
                             Subir datos
                           </span>
+                        </Link>
+
+                      </li>
+
+                      <li className='showSelection'>
+                        <Link style={{ backgroundColor: "#1C3344", color: "#ffff" }}
+                          to={'medicina'}
+                          onClick={() => handleSectionChange('medicina')}
+                          className={`flex items-center justify-center rounded-lg p-2 text-base font-normal ${selectedSection === 'medicina'
+                            ? 'text-zinc-950 bg-white font-bold'
+                            : 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700'
+                            }`}>
+                          <AiOutlineMedicineBox
+                            className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                          <span className="px-3 flex-1 whitespace-nowrap">
+                            Medicina                          </span>
                         </Link>
 
                       </li>

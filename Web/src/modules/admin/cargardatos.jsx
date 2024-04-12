@@ -6,7 +6,6 @@ import { Alert } from 'flowbite-react';
 
 import { Button, Modal } from 'flowbite-react';
 import { useState } from 'react';
-import '../../modules/admin/user/components/Subirdatos.css'; // Importa el archivo CSS donde definiremos estilos adicionales
 
 const Subirdatos = () => {
     const [openModal, setOpenModal] = useState(false);

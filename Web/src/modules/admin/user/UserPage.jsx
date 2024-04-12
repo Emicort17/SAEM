@@ -9,7 +9,7 @@ import { LuPlus } from "react-icons/lu";
 import { CiEdit } from "react-icons/ci";
 import { AiOutlineDelete } from "react-icons/ai";
 import { LiaFileDownloadSolid } from "react-icons/lia";
-import {IoSearchOutline} from "react-icons/io5";
+import { IoSearchOutline } from "react-icons/io5";
 
 
 const UserPage = () => {
@@ -21,28 +21,28 @@ const UserPage = () => {
     const [filterData, setFilterData] = useState([])
     const [query, setQuery] = useState('')
 
-    const handleSearch = (event) =>{
+    const handleSearch = (event) => {
         const getSearch = event.target.value
 
-        if(getSearch.length > 0){
+        if (getSearch.length > 0) {
             const searchData = filterData.filter((item) => search(item, getSearch))
 
             setUsers(searchData)
 
             console.log(searchData)
-        }else{
+        } else {
             setUsers(filterData)
         }
         setQuery(getSearch)
     }
 
-    const search = (item, search) =>{
-        const {name, middleName, lastName} = item.userBean.personBean
-        const {number} = item.medicalRecordBean
+    const search = (item, search) => {
+        const { name, middleName, lastName } = item.userBean.personBean
+        const { number } = item.medicalRecordBean
 
         const fullName = `${name} ${middleName} ${lastName}`
 
-        return  fullName.toLowerCase().includes(search.toLowerCase()) || number.includes(search)
+        return fullName.toLowerCase().includes(search.toLowerCase()) || number.includes(search)
     }
 
     const pasardatos = (row) => {
@@ -61,7 +61,7 @@ const UserPage = () => {
     const columns = useMemo(() => [
         {
             name: '#',
-            selector: (row, i) => i+1,
+            selector: (row, i) => i + 1,
             sortable: false,
         },
         {
@@ -165,7 +165,7 @@ const UserPage = () => {
 
     const deleteUser = async (curp) => {
         try {
-            const result = await deletePatient(); 
+            const result = await deletePatient();
             if (result.isConfirmed) {
                 try {
                     const response = await AxiosClient({
@@ -186,23 +186,29 @@ const UserPage = () => {
             console.error(error);
         }
     };
-    
+
     return (
         <section className='w-full px-4 pt-4 flex flex-col gap-4'>
+                <div className='w-full flex'> 
+                <h1 className=' text-3xl  mt-3 mx-4'>Pacientes</h1>
 
-            <h1 className='text-2xl'>Pacientes</h1>
-
-            <div className='max-w-screen-md flex justify-between  items-center'>
-                <div className='max-w-64'>
-                    <TextInput rightIcon={IoSearchOutline} value={query} onChange={(e) => handleSearch(e)} type='text' id='filter' placeholder='Buscar...'/>
-                </div>
-                <div>
-                    <Button className='showSelection' style={{ cursor: 'pointer' }} onClick={() => download()} color="success">
-                        <LiaFileDownloadSolid style={{ cursor: 'pointer' }} size={25} />
-                    </Button>
                 </div>
 
+            <div className='w-full flex justify-end p-5'>
+
+                <div className='max-w-screen-md flex justify-between  items-center'>
+                    <div className='max-w-64  mx-4'>
+                        <TextInput rightIcon={IoSearchOutline} value={query} onChange={(e) => handleSearch(e)} type='text' id='filter' placeholder='Buscar...' />
+                    </div>
+                    <div>
+                        <Button className='showSelection' style={{ cursor: 'pointer' }} onClick={() => download()} color="success">
+                            <LiaFileDownloadSolid style={{ cursor: 'pointer' }} size={25} />
+                        </Button>
+                    </div>
+
+                </div>
             </div>
+
 
 
 

@@ -4,7 +4,7 @@ import AxiosClient from '../../../../config/http-client/axios-client';
 
 import { useFormik } from 'formik';
 import *  as yup from "yup"
-import { Link } from 'react-router-dom';
+import { Link ,useNavigate} from 'react-router-dom';
 import * as React from 'react';
 import Switch from '@mui/material/Switch';
 
@@ -12,6 +12,7 @@ import Switch from '@mui/material/Switch';
 
 const RegisterPerson = () => {
 
+    const navigate = useNavigate();
 
     const [checked, setChecked] = React.useState(false);
 
@@ -108,7 +109,9 @@ const RegisterPerson = () => {
                             'Registro exitoso',
                             'El usuario se ha registrado correctamente',
                             'success');
-                    }
+                        }
+                        navigate('/pacientes');
+                            
                 } catch (error) {
                     customAlert(
                         'Ocurrio un error',

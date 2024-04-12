@@ -2,7 +2,6 @@ import CustomDataTable from '../../components/CustomDatatable'
 import AxiosClient from '../../config/http-client/axios-client';
 import { Label, Button, Card, Tooltip, TextInput } from 'flowbite-react'
 import { Link,useNavigate } from 'react-router-dom';
-import { deletePatient } from '../../config/alerts/alert';
 import { IoSearchOutline } from "react-icons/io5";
 
 
@@ -10,7 +9,6 @@ import React, {useMemo, useState, useEffect } from 'react'
 
 import { LuPlus } from "react-icons/lu";
 import { CiEdit } from "react-icons/ci";
-import { AiOutlineDelete } from "react-icons/ai";
 
 const Medicos = () => {
     const [loading, setLoading] = useState(false);
@@ -20,7 +18,6 @@ const Medicos = () => {
     const [query, setQuery] = useState('')
 
 
-    const [editingUser, setEditingUser] = useState(null);
     const handleSearch = (event) =>{
         const getSearch = event.target.value
 
@@ -99,39 +96,13 @@ const Medicos = () => {
                 <button  className='showSelection' style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() =>  pasardatos(row) }>
                     <CiEdit style={{ cursor: 'pointer' }} size={24} color={'#000'} />
                 </button>
-         
-
-                <button  className='showSelection' style={{ background: '#ffff', width: '48px', outline: 'none', cursor: 'pointer' }} onClick={() => deleteUser(row.card)} > <AiOutlineDelete style={{ cursor: 'pointer' }} size={24} color={'#000'} /></button>
-            </>,
+                     </>,
             sortable: false,
         },
 
     ]);
 
-    const deleteUser = async (card) => {
-        try {
-            const result = await deletePatient(); // Mostrar la alerta
-            if (result.isConfirmed) { // Si el usuario confirmó la acción
-                try {
-                    const response = AxiosClient({
-                        url: `/doctor/delete/${card}`,
-                        method: 'DELETE',
-                    });
-                    console.log(response);
 
-                    if (!response.error) 
-                    await getUsers()
-
-                } catch (error) {
-                    console.log(error);
-                } finally {
-                    setLoading(false);
-                }
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
 
     const getUsers = async () => {
@@ -152,12 +123,11 @@ const Medicos = () => {
             setLoading(false);
         }
     }
-    //useEffect se puede usar para que se ejecute una vez que toda nuestra pantalla se haya renderizado
-    //Si no le mandamos nada al arreglo, solo se ejecutara una vez que todo se haya renderizado
+   
     useEffect(() => {
         setLoading(true);
         getUsers();
-    }, []); //Solo se ejecuta una vez al terminar de renderizar
+    }, []);
 
 
 

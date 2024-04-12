@@ -11,7 +11,7 @@ const Dropzone = () => {
     setSelectedFile(file);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (selectedFile) {
       confimAlert(async () => {
         try {
@@ -74,14 +74,25 @@ const Dropzone = () => {
     }
   };
 
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    setSelectedFile(file);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
 
   return (
     <>
-      <div className="flex w-full items-center justify-center ">
+      <div className="flex w-full items-center justify-center">
         <Label
           htmlFor="dropzone-file"
           style={{ border: '2px dotted #000', borderColor: '#BDBFC4' }}
           className="dark:hover:bg-bray-800 flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-dashed border-2 border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600 text-center"
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
         >
           <div className="flex flex-col items-center justify-center p-6">
             <svg
