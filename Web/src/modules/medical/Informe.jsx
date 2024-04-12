@@ -37,7 +37,7 @@ const InformePrincipal = () => {
                     <div style={{ display: "flex", justifyContent: 'flex-start', flexDirection: 'column', width: '100%', padding: '50px', paddingTop:'30px', color: '#03104A', }}>
                         <div style={{ margin: '10px' }}>
                             <label className="font-bold" style={{ marginRight: '10px' }}>Nombre</label>
-                            <label>{}</label>
+                            <label>Nombre</label>
                         </div>
 
                         <div style={{ margin: '10px' }}>

@@ -97,7 +97,7 @@ const Citas = () => {
                                     <div className='flex justify-between'> Fecha de resultado: <b className='flex justify-end'> {resultBean.resultDate}</b></div>
                                     <p>Retroviral:{resultBean.labDataBean.viralLoad}</p>
                                     <p>ALT:{resultBean.labDataBean.alt}</p>
-                                    <p>Antigenos:{resultBean.labDataBean.antigen}</p>
+                                    <p>Antígenos:{resultBean.labDataBean.antigen}</p>
                                     <p>AST:{resultBean.labDataBean.ast}</p>
                                     <p>Creatinina:{resultBean.labDataBean.creatinine}</p>
                                     <p>Plaquetas:{resultBean.labDataBean.platelets}</p>

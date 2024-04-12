@@ -96,7 +96,7 @@ const Expediente = () => {
 
                     <div className='flex flex-col gap-3' >
 
-                        <h3 className='font-bold text-2xl text-center'>Diagnostico</h3>
+                        <h3 className='font-bold text-2xl text-center'>Diagnóstico</h3>
 
                         <div className='flex flex-col gap-2 pb-2'>
 

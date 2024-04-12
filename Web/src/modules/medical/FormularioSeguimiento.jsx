@@ -193,7 +193,7 @@ const FormularioSeguimiento = () => {
                     } else {
                         customAlert(
                             'Ocurrio un error',
-                            'Error al registrar diagnostico',
+                            'Error al registrar diagnóstico',
                             'error')
                     }
                 } catch (error) {

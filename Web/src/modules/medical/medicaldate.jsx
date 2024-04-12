@@ -98,7 +98,7 @@ const MedicalDate = () => {
                                     <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Fecha de resultado:&nbsp; {resultBean.resultDate}</p>
                                     <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Retroviral:&nbsp; {resultBean.labDataBean.viralLoad}</p>
                                     <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">ALT:&nbsp; {resultBean.labDataBean.alt}</p>
-                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Antigenos:&nbsp; {resultBean.labDataBean.antigen}</p>
+                                    <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Antígenos:&nbsp; {resultBean.labDataBean.antigen}</p>
                                     <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">AST:&nbsp; {resultBean.labDataBean.ast}</p>
                                     <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Creatinina:&nbsp; {resultBean.labDataBean.creatinine}</p>
                                     <p className="tracking-normal text-gray-500 md:text-lg dark:text-gray-400">Plaquetas:&nbsp; {resultBean.labDataBean.platelets}</p>

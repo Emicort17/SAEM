@@ -208,7 +208,7 @@ const AdminLayout = () => {
                             <FaUserDoctor
                                 className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"/>
                             <span className="px-3 flex-1 whitespace-nowrap">
-                          Medicos
+                          Médicos
                         </span>
                           </Link>
 
