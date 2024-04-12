@@ -174,7 +174,7 @@ const AdminLayout = () => {
                     rounded bordered color='gray' />
                 }
 
-                className="bg-neutral-800 rounded-xl  menuconfg">
+                className=" bg-gray-400 rounded-xl  menuconfg">
 
                 <div className="contimg">
 
@@ -247,7 +247,7 @@ const AdminLayout = () => {
                           
                             className="h-6 w-6 flex-shrink-0 text-white transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                           <span className="px-3 flex-1 whitespace-nowrap">
-                            Medicos
+                            Médicos
                           </span>
                         </Link>
 
@@ -373,7 +373,7 @@ const AdminLayout = () => {
         </aside>
         <section style={{ marginTop: '50px', marginLeft: menuOpen ? '250px' : '0' }}>
           {isRoot ? (
-            <div className="w-full flex justify-center items-center text-center pt-60">
+            <div className="w-full flex justify-center items-center text-center  pt-52">
               <img
                 src={welcomeImage}
                 alt="Bienvenida"
@@ -381,7 +381,7 @@ const AdminLayout = () => {
                 onClick={handleWelcomeImageClick}
               />
               {showLemon && (
-                <img className="mt-3" src={limon} alt="Limon" style={{ maxWidth: '100%', height: '100%' }} />
+                <img src={limon} alt="Limon" style={{ maxWidth: '100%', height: '100%' }} />
               )}
             </div>
           ) : (

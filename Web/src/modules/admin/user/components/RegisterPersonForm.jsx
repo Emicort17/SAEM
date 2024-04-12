@@ -4,7 +4,7 @@ import AxiosClient from '../../../../config/http-client/axios-client';
 
 import { useFormik } from 'formik';
 import *  as yup from "yup"
-import { Link ,useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as React from 'react';
 import Switch from '@mui/material/Switch';
 
@@ -38,30 +38,30 @@ const RegisterPerson = () => {
             calle: "",
             calle2: "",
             calle3: "",
-          
+
             birthplace: "",
             interiorNumber: "",
             exteriorNumber: "",
 
         },
-            validationSchema: yup.object().shape({
-                email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 10 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s@.]+$/, 'No se permiten caracteres especiales'),
-                password: yup.string().required('Campo obligatorio').min(8, 'Mínimo 8 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Mínimo 8 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
-                name: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                surname: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                lastname: yup.string().min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                curp: yup.string().required('Campo obligatorio').min(18, 'Mínimo 18 caracteres').max(18, 'Máximo 18 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos'),
-                birthdate: yup.string().required('Campo obligatorio'),
-                state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                birthplace: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                exteriorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-                sexo: yup.string().required('Campo obligatorio'),
-                calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+        validationSchema: yup.object().shape({
+            email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 10 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s@.]+$/, 'No se permiten caracteres especiales'),
+            password: yup.string().required('Campo obligatorio').min(8, 'Mínimo 8 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Mínimo 8 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
+            name: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            surname: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            lastname: yup.string().min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            curp: yup.string().required('Campo obligatorio').min(18, 'Mínimo 18 caracteres').max(18, 'Máximo 18 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos'),
+            birthdate: yup.string().required('Campo obligatorio'),
+            state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            birthplace: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            exteriorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            sexo: yup.string().required('Campo obligatorio'),
+            calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
         }),
 
         onSubmit: async () => {
@@ -109,9 +109,9 @@ const RegisterPerson = () => {
                             'Registro exitoso',
                             'El usuario se ha registrado correctamente',
                             'success');
-                        }
-                        navigate('/pacientes');
-                            
+                    }
+                    navigate('/pacientes');
+
                 } catch (error) {
                     customAlert(
                         'Ocurrio un error',
@@ -127,17 +127,14 @@ const RegisterPerson = () => {
 
     return (
         <>
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', padding: '50px', color: '#03104A' }}>
+                {/* Primer recuadro */}
+                <form id='patientForm' name='patientForm' style={{ width: '100%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px', marginRight: '20px' }} noValidate onSubmit={formik.handleSubmit} className='p-5'>
 
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', padding: '50px', color: '#03104A', }}>
-
-                <form id='patientForm' name='patientForm' style={{ width: '50%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px' }} noValidate onSubmit={formik.handleSubmit}>
-
-                    <div className='flex flex-col gap-3' >
-
-                        <h3 className='font-bold text-2xl text-center'>Paciente</h3>
-
-                        <div className='flex flex-col gap-2 pb-2'>
-
+                    <div className='w-full flex flex-row  justify-between px-5 py-5'>
+                        <div className='flex flex-col gap-3' >
+                            <h3 className='font-bold text-2xl text-center'>Datos</h3>
+                            {/* Contenido del primer recuadro aquí */}
                             <div className='flex flex-row'>
                                 <div className='w-full'>
                                     <Label style={{ color: '#03104A' }} htmlFor='name' className='font-bold' value='Nombre' />
@@ -193,61 +190,74 @@ const RegisterPerson = () => {
                                         )
                                     } />
                             </div>
+                       
+
+                        <div className='grid-col-4 pb-2' >
+                            <Label style={{ color: '#03104A' }} htmlFor='curp' className='font-bold' value='CURP' />
+                            <TextInput style={{ backgroundColor: '#E6ECF1' }} type='curp' placeholder="CURP" id="curp" name="curp"
+                                value={formik.values.curp}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                helperText={
+                                    formik.touched.curp &&
+                                    formik.errors.curp && (
+                                        <span className='text-red-600'>{formik.errors.curp}</span>
+                                    )
+                                }
+                            />
+                        </div>
+                        <div className='grid-col-4 pb-2'>
+                            <Label style={{ color: '#03104A' }} htmlFor='phoneNumber' className='font-bold' value='Número de Teléfono' />
+                            <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                type='number'
+                                title="phoneNumber"
+                                id='phoneNumber'
+                                name='phoneNumber'
+                                value={formik.values.phoneNumber}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                helperText={
+                                    formik.touched.phoneNumber &&
+                                    formik.errors.phoneNumber && (
+                                        <span className='text-red-600'>{formik.errors.phoneNumber}</span>
+                                    )
+                                } />
                         </div>
 
-                        <div className=' gap-2 pb-2'>
-                            <div className='grid-col-6 pb-2' >
-                                <Label style={{ color: '#03104A' }} htmlFor='curp' className='font-bold' value='CURP' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type='curp' placeholder="CURP" id="curp" name="curp"
-                                    value={formik.values.curp}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    helperText={
-                                        formik.touched.curp &&
-                                        formik.errors.curp && (
-                                            <span className='text-red-600'>{formik.errors.curp}</span>
-                                        )
-                                    }
-                                />
-                            </div>
-                            <div className='grid-col-6 pb-2'>
-                                <Label style={{ color: '#03104A' }} htmlFor='phoneNumber' className='font-bold' value='Número de Teléfono' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                    type='number'
-                                    title="phoneNumber"
-                                    id='phoneNumber'
-                                    name='phoneNumber'
-                                    value={formik.values.phoneNumber}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    helperText={
-                                        formik.touched.phoneNumber &&
-                                        formik.errors.phoneNumber && (
-                                            <span className='text-red-600'>{formik.errors.phoneNumber}</span>
-                                        )
-                                    } />
-                            </div>
+
+                        <div className='grid-col-4 pb-2'>
+                            <Label style={{ color: '#03104A' }} htmlFor='birthdate' className='font-bold' value='Fecha de nacimiento' />
+                            <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                type='date'
+                                title="Fecha de nacimiento"
+                                id='birthdate'
+                                name='birthdate'
+                                value={formik.values.birthdate}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                helperText={
+                                    formik.touched.birthdate &&
+                                    formik.errors.birthdate && (
+                                        <span className='text-red-600'>{formik.errors.curp}</span>
+                                    )
+                                } />
+                        </div>
+
+                        <div className='grid-col-4'>
+                            <Label htmlFor='sex' className='font-bold' value='Sexo' />
+                            <Select style={{ backgroundColor: '#E6ECF1' }} id="sex" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
+                                <option value=''>Seleccionar</option>
+                                <option value='Hombre'>Hombre</option>
+                                <option value='Mujer'>Mujer</option>
+                            </Select>
+                        </div>
+                        </div>  
 
 
-                            <div className='grid-col-6 pb-2'>
-                                <Label style={{ color: '#03104A' }} htmlFor='birthdate' className='font-bold' value='Fecha de nacimiento' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                    type='date'
-                                    title="Fecha de nacimiento"
-                                    id='birthdate'
-                                    name='birthdate'
-                                    value={formik.values.birthdate}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    helperText={
-                                        formik.touched.birthdate &&
-                                        formik.errors.birthdate && (
-                                            <span className='text-red-600'>{formik.errors.curp}</span>
-                                        )
-                                    } />
-                            </div>
-
-                            <div className='grid-col-7'>
+                        <div className='flex flex-col gap-3' >
+                            <h3 className='font-bold text-2xl text-center'>Dirección</h3>
+                            {/* Contenido del segundo recuadro aquí */}
+                            <div className='flex-col-7'>
                                 <Label htmlFor='sex' className='font-bold' value='Sexo' />
                                 <Select style={{ backgroundColor: '#E6ECF1' }} id="sex" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
                                     <option value=''>Seleccionar</option>
@@ -256,7 +266,7 @@ const RegisterPerson = () => {
                                 </Select>
                             </div>
 
-                            <div className='grid-col-6 pb-2'>
+                            <div className='flex-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='birthplace' className='font-bold' value='Lugar de nacimiento' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                     type='text'
@@ -275,7 +285,7 @@ const RegisterPerson = () => {
                             </div>
 
 
-                            <div className='grid-col-6 pb-2'>
+                            <div className='flex-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='state' className='font-bold' value='Estado' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                     type='text'
@@ -294,7 +304,7 @@ const RegisterPerson = () => {
                             </div>
 
 
-                            <div className='grid-col-6 pb-2'>
+                            <div className='flex-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='municipio' className='font-bold' value='Municipio' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                     type='text'
@@ -312,7 +322,7 @@ const RegisterPerson = () => {
                                     } />
                             </div>
 
-                            <div className='grid-col-6 pb-2'>
+                            <div className='flex-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='cp' className='font-bold' value='CP' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                     type='number'
@@ -331,7 +341,7 @@ const RegisterPerson = () => {
                             </div>
 
 
-                            <div className='grid-col-6 pb-2'>
+                            <div className='flex-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle' className='font-bold' value='Calle' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                     type='calle'
@@ -349,8 +359,8 @@ const RegisterPerson = () => {
                                     } />
                             </div>
 
-                            <div className='flex flex-row justify-between'>
-                                <div className='grid-col-6 pb-2'>
+                            <div className='flex flex-row justify-between space-x-3'>
+                                <div className='flex-col-6 pb-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='interiorNumber' className='font-bold' value='Numero Interior' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                         type='interiorNumber'
@@ -367,7 +377,7 @@ const RegisterPerson = () => {
                                             )
                                         } />
                                 </div>
-                                <div className='grid-col-6 pb-2'>
+                                <div className='flex-col-6 pb-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='exteriorNumber' className='font-bold' value='Numero exterior' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                         type='exteriorNumber'
@@ -386,7 +396,7 @@ const RegisterPerson = () => {
                                 </div>
                             </div>
 
-                            <div className='grid-col-6 pb-2'>
+                            <div className='flex-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle2' className='font-bold' value='Calle 2' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                     type='calle2'
@@ -404,7 +414,7 @@ const RegisterPerson = () => {
                                     } />
                             </div>
 
-                            <div className='grid-col-6 pb-2'>
+                            <div className='flex-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='calle3' className='font-bold' value='Calle 3' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                     type='calle3'
@@ -421,7 +431,13 @@ const RegisterPerson = () => {
 
 
 
+                        </div>
+                        {/* Otros campos del segundo recuadro aquí */}
 
+                        {/* Tercer recuadro */}
+                        <div className='flex flex-col gap-3 w-72' >
+                            <h3 className='font-bold text-2xl text-center'>Cuenta</h3>
+                            {/* Contenido del tercer recuadro aquí */}
                             <div className=' pb-2'>
 
                                 <Label style={{ color: '#03104A' }} htmlFor='email' className='font-bold' value='Correo' />
@@ -435,20 +451,11 @@ const RegisterPerson = () => {
                                             <span className="text-red-600">{formik.errors.email}</span>
                                         )
                                     } />
-
-
-                                <div className=' pb-2' hidden>
-                                    <Label style={{ color: '#03104A' }} htmlFor='roles' className='font-bold' value='roles' />
-                                    <Select id="role" name="roles" >
-                                        <option selected value='Paciente'>Paciente</option>
-                                    </Select>
-                                </div>
-
                             </div>
 
 
                             <div className=''>
-                                <div className='grid-col-6 pb-2'>
+                                <div className='flex-col-6 pb-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='password' className='font-bold' value='Contraseña' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }} type='password' placeholder="************" id="password" name="password"
                                         value={formik.values.password}
@@ -475,34 +482,68 @@ const RegisterPerson = () => {
                                             )
                                         } />
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
 
-                       
+                        
 
-                        <div className='flex justify-end space-x-4 mt-6'>
+                    </div>
 
-                            <Link to={'/pacientes'} > <Button color="failure" style={{ outline: 'none', boxShadow: 'none' }}>Cancelar</Button> </Link>
+                    <hr />
 
+                    <div className='flex justify-center space-x-4 mt-6'>
+                            <Link to={'/medicos'} > <Button color="failure" className='' style={{ outline: 'none', boxShadow: 'none' }}>Cancelar</Button> </Link>
                             <Button
                                 style={{ backgroundColor: '#03257A', color: '#fff' }}
                                 className=''
                                 type='submit'
                                 form='patientForm'
-                                disabled={formik.isSubmitting || !formik.isValid}
                                 color='succes'>
                                 Guardar
                             </Button>
-
-
                         </div>
 
 
-                    </div>
                 </form>
+
             </div>
+
+
         </>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     )
 }
 

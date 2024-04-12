@@ -124,7 +124,7 @@ const Dropzone = () => {
           <FileInput id="dropzone-file" className="hidden" onChange={handleFileChange} />
         </Label>
       </div>
-      <div className='grid mt-6 '> <Button onClick={handleSubmit}>Enviar</Button> </div>
+      <div className='grid mt-6 '> <Button style={{backgroundColor:'#03257A'}} onClick={handleSubmit}>Enviar</Button> </div>
     </>
   );
 };

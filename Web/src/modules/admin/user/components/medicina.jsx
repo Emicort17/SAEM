@@ -87,7 +87,7 @@ const Medicina = () => {
 
                             <div className='grid-col-4 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='name' className='font-bold' value='Medicina' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Apellido paterno" id="name" name="name"
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Nombre" id="name" name="name"
                                     value={formik.values.name}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
@@ -96,11 +96,12 @@ const Medicina = () => {
                                         formik.errors.name && (
                                             <span className='text-red-600'>{formik.errors.name}</span>
                                         )
+                                        
                                     }
                                 />
                             </div>
                             <div className='grid-col-4 pb-2'>
-                                <Label style={{ color: '#03104A' }} htmlFor='presentation' className='font-bold' value='Presentacion' />
+                                <Label style={{ color: '#03104A' }} htmlFor='presentation' className='font-bold' value='Presentación' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Presentacion " id="presentation" name="presentation"
                                     value={formik.values.presentation}
                                     onChange={formik.handleChange}

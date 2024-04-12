@@ -56,11 +56,14 @@ const ListMedicina = () => { // Cambio de listMedicine a ListMedicina
 
                     <div className="flex flex-col w-full ">
                         <Alert color="info" icon={HiInformationCircle} className='w-full '>
-                            <span className="font-medium te">No hay diagnósticos disponibles</span>
+                            <span className="font-medium te">No hay Medicinas disponibles</span>
 
 
                         </Alert>
-                        <div className='w-full  flex flex-row justify-center items-center mt-5 p-3 ' style={{borderRadius:'100px', backgroundColor:'#0F2AA3', color:'#fff' }} onClick={() => { gomedicine() }} > <button> <FaPlus/>  </button>  </div> 
+                        <div className='w-full flex justify-center items-center'>
+                        <div className='w-1/3  flex flex-row justify-center items-center mt-5 p-3 ' style={{borderRadius:'100px', backgroundColor:'#0F2AA3', color:'#fff' }} onClick={() => { gomedicine() }} > <button> <FaPlus/>  </button>  </div> 
+
+                        </div>
 
                     </div>
 

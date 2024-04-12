@@ -189,14 +189,16 @@ const UserPage = () => {
 
     return (
         <section className='w-full px-4 pt-4 flex flex-col gap-4'>
-                <div className='w-full flex'> 
-                <h1 className=' text-3xl  mt-3 mx-4'>Pacientes</h1>
+             
 
-                </div>
+            <div className='w-full flex justify-end px-3 pt-6'>
+           <div className='w-full'>
+           <h1 className=' text-3xl  mt-3 mx-4'>Pacientes</h1>
 
-            <div className='w-full flex justify-end p-5'>
+           </div>
 
-                <div className='max-w-screen-md flex justify-between  items-center'>
+                <div className='max-w-screen-md flex flex-row justify-between  items-center'>
+                    
                     <div className='max-w-64  mx-4'>
                         <TextInput rightIcon={IoSearchOutline} value={query} onChange={(e) => handleSearch(e)} type='text' id='filter' placeholder='Buscar...' />
                     </div>

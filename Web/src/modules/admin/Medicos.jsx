@@ -86,7 +86,7 @@ const Medicos = () => {
             sortable: false,
         },
         {
-            name: 'Cedula',
+            name: 'Cédula',
             cell: (row) => <>{asignation(row.card)}</>,
             sortable: false,
         },
@@ -133,13 +133,23 @@ const Medicos = () => {
 
     return (
         <section className='w-full px-4 pt-4 flex flex-col gap-4'>
-            <h1 className='text-2xl'>Medicos</h1>
 
-            <div className='flex justify-between'>
-                <div className='max-w-64'>
-                    <TextInput  rightIcon={IoSearchOutline} value={query} onChange={(e) => handleSearch(e)} type='text' id='filter' placeholder='Buscar...'/>
+              <div className='w-full flex justify-end px-3 pt-6'>
+           <div className='w-full'>
+           <h1 className=' text-3xl  mt-3 mx-4'>Médicos</h1>
+
+           </div>
+
+                <div className='max-w-screen-md flex flex-row justify-between  items-center'>
+                    
+                    <div className='max-w-64  mx-4'>
+                        <TextInput rightIcon={IoSearchOutline} value={query} onChange={(e) => handleSearch(e)} type='text' id='filter' placeholder='Buscar...' />
+                    </div>
+               
+
                 </div>
             </div>
+
 
             <CustomDataTable
                 columns={columns}
