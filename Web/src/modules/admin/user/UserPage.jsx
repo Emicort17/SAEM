@@ -221,7 +221,7 @@ const UserPage = () => {
             />
 
 
-            <div className='flex justify-end'>
+            <div className='flex justify-end px-5'>
 
 
                 <Link to={'/registerperson'} > <Button className='showSelection' style={{ background: '#03104A', borderRadius: '100%', width: '48px', outline: 'none' }} pill> <LuPlus size={24} /></Button> </Link>

@@ -4,12 +4,15 @@ import AxiosClient from '../../../../config/http-client/axios-client';
 
 import { useFormik } from 'formik';
 import *  as yup from "yup"
-import { Link } from 'react-router-dom';
 import * as React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 
 const RegisterMedical = () => {
+
+    const navigate = useNavigate();
+
 
     const formik = useFormik({
         initialValues: {
@@ -104,6 +107,10 @@ const RegisterMedical = () => {
                             'El usuario se ha registrado correctamente',
                             'success');
                     }
+
+                    navigate('/pacientes');
+
+
                 } catch (error) {
                     customAlert(
                         'Ocurrio un error',
@@ -119,16 +126,17 @@ const RegisterMedical = () => {
 
     return (
         <>
+            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', padding: '50px', color: '#03104A' }}>
+                {/* Primer recuadro */}
+                <form id='doctorForm' name='doctorForm' style={{ width: '100%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px', marginRight: '20px' }} noValidate onSubmit={formik.handleSubmit} className='p-5'>
 
-            <div style={{ display: 'flex', justifyContent: 'center', width: '100%', padding: '50px', color: '#03104A', }}>
+                    <div className='w-full flex flex-row  justify-between px-5 py-5'>
 
-                <form id='doctorForm' name='doctorForm' style={{ width: '50%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px' }} noValidate onSubmit={formik.handleSubmit}>
 
-                    <div className='flex flex-col gap-3' >
+                        <div className='flex flex-col gap-3 w-1/2' >
 
-                        <h3 className='font-bold text-2xl text-center'>Medicos</h3>
+                            <h3 className='font-bold text-2xl text-center'>Medicos</h3>
 
-                        <div className='flex flex-col gap-2 pb-2'>
                             <div className='grid-col-4'>
                                 <Label style={{ color: '#03104A' }} htmlFor='name' className='font-bold' value='Nombre' />
                                 <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Nombre" id="name"
@@ -165,9 +173,7 @@ const RegisterMedical = () => {
                                         )
                                     } />
                             </div>
-                        </div>
 
-                        <div className=' gap-2 pb-2'>
 
                             <div className='grid-col-6 pb-2' >
                                 <Label style={{ color: '#03104A' }} htmlFor='curp' className='font-bold' value='CURP' />
@@ -260,6 +266,11 @@ const RegisterMedical = () => {
                                         )
                                     } />
                             </div>
+                        </div>
+
+
+                        <div className='flex flex-col gap-3 w-1/2 space-x-8' >
+                            <h3 className='font-bold text-2xl text-center'>Dirección</h3>
 
                             <div className='grid-col-6 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='state' className='font-bold' value='Estado' />
@@ -330,7 +341,7 @@ const RegisterMedical = () => {
                                         )
                                     } />
                             </div>
-                            <div className='flex flex-row justify-between'>
+                            <div className='flex flex-row justify-between space-x-5'>
                                 <div className='grid-col-6 pb-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='interiorNumber' className='font-bold' value='Numero Interior' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }}
@@ -400,10 +411,17 @@ const RegisterMedical = () => {
                                     } />
                             </div>
 
+
+
+                            
+                        </div>
+                        <div className='flex flex-col gap-3 w-1/2 space-x-8' >
+                            <h3 className='font-bold text-2xl text-center'>Cuenta</h3>
+                            {/* Contenido del tercer recuadro aquí */}
                             <div className=' pb-2'>
 
                                 <Label style={{ color: '#03104A' }} htmlFor='email' className='font-bold' value='Correo' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Correo" id="email"
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Correo" id="email" name="email"
                                     value={formik.values.email}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
@@ -413,15 +431,13 @@ const RegisterMedical = () => {
                                             <span className="text-red-600">{formik.errors.email}</span>
                                         )
                                     } />
-
-
                             </div>
 
 
                             <div className=''>
-                                <div className='grid-col-6 pb-2'>
+                                <div className='flex-col-6 pb-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='password' className='font-bold' value='Contraseña' />
-                                    <TextInput style={{ backgroundColor: '#E6ECF1' }} type='password' placeholder="************" id="password"
+                                    <TextInput style={{ backgroundColor: '#E6ECF1' }} type='password' placeholder="************" id="password" name="password"
                                         value={formik.values.password}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
@@ -435,7 +451,7 @@ const RegisterMedical = () => {
 
                                 <div className='pb-2'>
                                     <Label style={{ color: '#03104A' }} htmlFor='confirmPassword' className='font-bold' value='Confirmar contraseña' />
-                                    <TextInput style={{ backgroundColor: '#E6ECF1' }} type='password' placeholder="************" id="confirmPassword"
+                                    <TextInput style={{ backgroundColor: '#E6ECF1' }} type='password' placeholder="************" id="confirmPassword" name="confirmPassword"
                                         value={formik.values.confirmPassword}
                                         onChange={formik.handleChange}
                                         onBlur={formik.handleBlur}
@@ -448,21 +464,24 @@ const RegisterMedical = () => {
                                 </div>
 
                             </div>
-
                         </div>
 
-                        <div className='flex justify-end space-x-4 mt-6'>
-                            <Link to={'/medicos'} > <Button color="failure" style={{ outline: 'none', boxShadow: 'none' }}>Cancelar</Button> </Link>
-                            <Button
-                                style={{ backgroundColor: '#03257A', color: '#fff' }}
-                                className=''
-                                type='submit'
-                                form='doctorForm'
-                                color='succes'>
-                                Guardar
-                            </Button>
-                        </div>
                     </div>
+
+                    <hr />
+
+                    <div className='flex justify-center space-x-4 mt-6'>
+                        <Link to={'/medicos'} > <Button color="failure" style={{ outline: 'none', boxShadow: 'none' }}>Cancelar</Button> </Link>
+                        <Button
+                            style={{ backgroundColor: '#03257A', color: '#fff' }}
+                            className=''
+                            type='submit'
+                            form='doctorForm'
+                            color='succes'>
+                            Guardar
+                        </Button>
+                    </div>
+
                 </form>
             </div>
         </>
