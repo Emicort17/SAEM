@@ -139,7 +139,7 @@ const EditPerson = () => {
         <>
         <div style={{ display: 'flex', justifyContent: 'center', width: '100%', padding: '50px', color: '#03104A' }}>
             {/* Primer recuadro */}
-            <form id='Editperson' name='Editperson' style={{ width: '80%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px', marginRight: '20px' }} noValidate onSubmit={formik.handleSubmit} className='p-5'>
+            <form id='Editperson' name='Editperson' style={{ width: '100%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px', marginRight: '20px' }} noValidate onSubmit={formik.handleSubmit} className='p-5'>
 
                 <div className='w-full flex flex-row  justify-around  px-5 py-5  space-x-8' >
                     <div className='flex flex-col gap-3 w-1/2' >
@@ -261,9 +261,22 @@ const EditPerson = () => {
                             <option value='Mujer'>Mujer</option>
                         </Select>
                     </div>
+                    </div>  
 
 
-                    <div className='flex-col-6 pb-2'>
+                    <div className='flex flex-col gap-3 w-1/2' >
+                        <h3 className='font-bold text-2xl text-center'>Dirección</h3>
+                        {/* Contenido del segundo recuadro aquí */}
+                        <div className='flex-col-7'>
+                            <Label htmlFor='sex' className='font-bold' value='Sexo' />
+                            <Select style={{ backgroundColor: '#E6ECF1' }} id="sex" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
+                                <option value=''>Seleccionar</option>
+                                <option value='Hombre'>Hombre</option>
+                                <option value='Mujer'>Mujer</option>
+                            </Select>
+                        </div>
+
+                        <div className='flex-col-6 pb-2'>
                             <Label style={{ color: '#03104A' }} htmlFor='birthplace' className='font-bold' value='Lugar de nacimiento' />
                             <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                 type='text'
@@ -280,16 +293,6 @@ const EditPerson = () => {
                                     )
                                 } />
                         </div>
-                    </div>  
-
-                    
-
-
-                    <div className='flex flex-col gap-3 w-1/2' >
-                        <h3 className='font-bold text-2xl text-center'>Dirección</h3>
-                        {/* Contenido del segundo recuadro aquí */}
-                   
-                      
 
 
                         <div className='flex-col-6 pb-2'>

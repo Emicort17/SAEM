@@ -25,7 +25,7 @@ const SignInPage = () => {
       password: '',
     },
     validationSchema: yup.object().shape({
-      username: yup.string().required('Campo obligatorio').matches(/^[/^[a-zA-Z0-9@._-]+$/,'No se permiten caracteres especiales'),
+      username: yup.string().required('Campo obligatorio').matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ.@_-]+$/,'No se permiten caracteres especiales'),
       password: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9@._-]+$/, 'No se permiten tildes ni espacios en blanco')
       .max(60,'No se permiten mas de 60 caracteres'),
     }),

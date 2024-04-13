@@ -67,7 +67,7 @@ const Citas = () => {
                                     Enfermedad: {diagnostic.disease}
                                 </p>
                                 <div className="items-center justify-center space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
-                                    <button className='w-full h-7 text-xl bg-blue-800 ' style={{backgroundColor:'#061F8E'}} onClick={() => pasardatos(diagnostic)}>Más </button>
+                                    <Button className='w-full h-7 text-xl' color="dark" onClick={() => pasardatos(diagnostic)}>Mas </Button>
                                 </div>
                             </Card>
                         ))}
