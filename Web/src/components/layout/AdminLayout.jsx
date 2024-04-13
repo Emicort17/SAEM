@@ -224,7 +224,7 @@ const AdminLayout = () => {
         </Navbar>
       </header>
 
-      <main>
+      <main className='' >
         <aside>
           <Menu styles={styles}
             noOverlay isOpen={menuOpen} disableCloseOnEsc>
@@ -371,19 +371,22 @@ const AdminLayout = () => {
             </Sidebar>
           </Menu>
         </aside>
-        <section style={{ marginTop: '50px', marginLeft: menuOpen ? '250px' : '0' }}>
+        <section style={{ marginTop: '50px', marginLeft: menuOpen ? '250px' : '0' }} className=''>
           {isRoot ? (
-            <div className="w-full flex justify-center items-center text-center  pt-52">
-              <img
-                src={welcomeImage}
-                alt="Bienvenida"
-                style={{ maxWidth: '100%', height: '100%' }}
-                onClick={handleWelcomeImageClick}
-              />
-              {showLemon && (
-                <img src={limon} alt="Limon" style={{ maxWidth: '100%', height: '100%' }} />
-              )}
-            </div>
+
+            (<div className="w-full flex justify-center items-center text-center p-8">
+            <img
+              src={welcomeImage}
+              alt="Bienvenida"
+              style={{ maxWidth: '100%', height: '100%' }}
+              onClick={handleWelcomeImageClick}
+              className=' cursor-pointer'
+            />
+            {showLemon && (
+              <img src={limon} alt="Limon" style={{ maxWidth: '100%', height: '100%' }} />
+            )}
+          </div>)
+        
           ) : (
             <Outlet />
           )}
