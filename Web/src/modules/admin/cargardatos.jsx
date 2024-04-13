@@ -33,7 +33,7 @@ const Subirdatos = () => {
 
                 <div style={{ width: '100%', flexDirection: 'row' }} className='p-5 flex-row'>
                     <Alert color="info" icon={HiInformationCircle} className='p-5 flex flex-row'>
-                        <span className="font-medium flex flex-row">Info alert! Los archivos a subir deben de contener el siguiente formato. <BsBoxArrowUpRight onClick={() => setOpenModal(true)} style={{ marginLeft: '5px', width: '14PX', marginTop: '2PX' }}> </BsBoxArrowUpRight> </span>
+                        <span className="font-medium flex flex-row">Info alert! Los archivos a subir deben de contener el siguiente formato. <BsBoxArrowUpRight onClick={() => setOpenModal(true)} style={{ marginLeft: '5px', width: '14PX', marginTop: '2PX' }} className=' cursor-pointer'> </BsBoxArrowUpRight > </span>
                     </Alert>
 
                     <Modal show={openModal} onClose={() => setOpenModal(false)} size={'5xl'}>

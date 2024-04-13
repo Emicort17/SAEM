@@ -95,9 +95,6 @@ const RegisterPerson = () => {
                                 }
                             }
                         }
-
-
-
                     };
                     const response = await AxiosClient({
                         method: 'POST',
@@ -132,6 +129,7 @@ const RegisterPerson = () => {
                 <form id='patientForm' name='patientForm' style={{ width: '100%', padding: '20px', border: '1px solid #ccc', color: '#03104A', borderRadius: '10px', marginRight: '20px' }} noValidate onSubmit={formik.handleSubmit} className='p-5'>
 
                     <div className='w-full flex flex-row  justify-between px-5 py-5'>
+
                         <div className='flex flex-col gap-3' >
                             <h3 className='font-bold text-2xl text-center'>Datos</h3>
                             {/* Contenido del primer recuadro aquí */}
@@ -190,68 +188,68 @@ const RegisterPerson = () => {
                                         )
                                     } />
                             </div>
-                       
-
-                        <div className='grid-col-4 pb-2' >
-                            <Label style={{ color: '#03104A' }} htmlFor='curp' className='font-bold' value='CURP' />
-                            <TextInput style={{ backgroundColor: '#E6ECF1' }} type='curp' placeholder="CURP" id="curp" name="curp"
-                                value={formik.values.curp}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                helperText={
-                                    formik.touched.curp &&
-                                    formik.errors.curp && (
-                                        <span className='text-red-600'>{formik.errors.curp}</span>
-                                    )
-                                }
-                            />
-                        </div>
-                        <div className='grid-col-4 pb-2'>
-                            <Label style={{ color: '#03104A' }} htmlFor='phoneNumber' className='font-bold' value='Número de Teléfono' />
-                            <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                type='number'
-                                title="phoneNumber"
-                                id='phoneNumber'
-                                name='phoneNumber'
-                                value={formik.values.phoneNumber}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                helperText={
-                                    formik.touched.phoneNumber &&
-                                    formik.errors.phoneNumber && (
-                                        <span className='text-red-600'>{formik.errors.phoneNumber}</span>
-                                    )
-                                } />
-                        </div>
 
 
-                        <div className='grid-col-4 pb-2'>
-                            <Label style={{ color: '#03104A' }} htmlFor='birthdate' className='font-bold' value='Fecha de nacimiento' />
-                            <TextInput style={{ backgroundColor: '#E6ECF1' }}
-                                type='date'
-                                title="Fecha de nacimiento"
-                                id='birthdate'
-                                name='birthdate'
-                                value={formik.values.birthdate}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                helperText={
-                                    formik.touched.birthdate &&
-                                    formik.errors.birthdate && (
-                                        <span className='text-red-600'>{formik.errors.curp}</span>
-                                    )
-                                } />
-                        </div>
+                            <div className='grid-col-4 pb-2' >
+                                <Label style={{ color: '#03104A' }} htmlFor='curp' className='font-bold' value='CURP' />
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type='curp' placeholder="CURP" id="curp" name="curp"
+                                    value={formik.values.curp}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    helperText={
+                                        formik.touched.curp &&
+                                        formik.errors.curp && (
+                                            <span className='text-red-600'>{formik.errors.curp}</span>
+                                        )
+                                    }
+                                />
+                            </div>
+                            <div className='grid-col-4 pb-2'>
+                                <Label style={{ color: '#03104A' }} htmlFor='phoneNumber' className='font-bold' value='Número de Teléfono' />
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                    type='number'
+                                    title="phoneNumber"
+                                    id='phoneNumber'
+                                    name='phoneNumber'
+                                    value={formik.values.phoneNumber}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    helperText={
+                                        formik.touched.phoneNumber &&
+                                        formik.errors.phoneNumber && (
+                                            <span className='text-red-600'>{formik.errors.phoneNumber}</span>
+                                        )
+                                    } />
+                            </div>
 
-                        <div className='grid-col-4'>
-                            <Label htmlFor='sex' className='font-bold' value='Sexo' />
-                            <Select style={{ backgroundColor: '#E6ECF1' }} id="sex" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
-                                <option value=''>Seleccionar</option>
-                                <option value='Hombre'>Hombre</option>
-                                <option value='Mujer'>Mujer</option>
-                            </Select>
+
+                            <div className='grid-col-4 pb-2'>
+                                <Label style={{ color: '#03104A' }} htmlFor='birthdate' className='font-bold' value='Fecha de nacimiento' />
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }}
+                                    type='date'
+                                    title="Fecha de nacimiento"
+                                    id='birthdate'
+                                    name='birthdate'
+                                    value={formik.values.birthdate}
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    helperText={
+                                        formik.touched.birthdate &&
+                                        formik.errors.birthdate && (
+                                            <span className='text-red-600'>{formik.errors.curp}</span>
+                                        )
+                                    } />
+                            </div>
+
+                            <div className='grid-col-4'>
+                                <Label htmlFor='sex' className='font-bold' value='Sexo' />
+                                <Select style={{ backgroundColor: '#E6ECF1' }} id="sex" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
+                                    <option value=''>Seleccionar</option>
+                                    <option value='Hombre'>Hombre</option>
+                                    <option value='Mujer'>Mujer</option>
+                                </Select>
+                            </div>
                         </div>
-                        </div>  
 
 
                         <div className='flex flex-col gap-3' >
@@ -486,23 +484,23 @@ const RegisterPerson = () => {
                             </div>
                         </div>
 
-                        
+
 
                     </div>
 
                     <hr />
 
                     <div className='flex justify-center space-x-4 mt-6'>
-                            <Link to={'/medicos'} > <Button color="failure" className='' style={{ outline: 'none', boxShadow: 'none' }}>Cancelar</Button> </Link>
-                            <Button
-                                style={{ backgroundColor: '#03257A', color: '#fff' }}
-                                className=''
-                                type='submit'
-                                form='patientForm'
-                                color='succes'>
-                                Guardar
-                            </Button>
-                        </div>
+                        <Link to={'/medicos'} > <Button color="failure" className='' style={{ outline: 'none', boxShadow: 'none' }}>Cancelar</Button> </Link>
+                        <Button
+                            style={{ backgroundColor: '#03257A', color: '#fff' }}
+                            className=''
+                            type='submit'
+                            form='patientForm'
+                            color='succes'>
+                            Guardar
+                        </Button>
+                    </div>
 
 
                 </form>
