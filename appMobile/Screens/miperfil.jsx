@@ -71,7 +71,12 @@ Perfil = () => {
 
   useEffect(() => {
     getPerson();
-  }, []); // Solo depende de datos
+    const intervalId = setInterval(() => {
+      getPerson();
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
 
 

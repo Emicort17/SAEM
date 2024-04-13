@@ -87,7 +87,7 @@ const TabNav = () => {
           tabBarLabelStyle: { fontSize: 25, },
           headerRight: () => (
             <TouchableOpacity onPress={handleButtonPress} style={styles.headerButton}>
-              <Feather name="power" size={24} color="#fff" />
+              <Feather name="log-out" size={32} color="#fff" />
             </TouchableOpacity>
           ),
           tabBarIcon: ({ color, size, focused }) => (

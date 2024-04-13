@@ -2,6 +2,11 @@ import { StyleSheet, Text, View, TextInput, Alert, ScrollView, TouchableOpacity 
 import { useAuth } from '../config/context/AuthContext';
 import { useEffect, useState } from 'react';
 import AxiosClient from '../config/http/AxiosClient';
+import CustomAlert from '../assets/Alert/CustomAlert';
+import {Button, Input, Icon} from "@rneui/themed";
+import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
+
+
 
 const Configuracion = () => {
     const { userData } = useAuth('');
@@ -16,6 +21,19 @@ const Configuracion = () => {
     const [newPassword, setNewPassword] = useState('');
     const [curp, setCurp] = useState('');
     const [external, setExternal] = useState(false);
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [animationName, setAnimationName] = useState('');
+
+    const handleUpdateError = (message, animation) => {
+        setAlertMessage(message);
+        setAnimationName(animation);
+        setAlertVisible(true);
+    };
+
+    const closeAlert = () => {
+        setAlertVisible(false);
+    };
 
     useEffect(() => {
         const getPerson = async () => {
@@ -42,7 +60,34 @@ const Configuracion = () => {
         console.log(userData.user.id)
     }, [userData.user.personBean.curp]);
 
+
     const actualizarDatos = async () => {
+        if (!telefono.trim() || !estado.trim() || !municipio.trim() || !cp.trim() || !calle.trim() ) {
+            handleUpdateError("Por favor, completa todos los campos antes de actualizar.", 'error');
+            return;
+        }
+
+        if(telefono.length != 10){
+            handleUpdateError("El número de télefono debe de tener 10 caracteres.", 'error');
+            return;
+        }
+
+        if(cp.length != 5){
+            handleUpdateError("El Código Postal debe de tener 5 caracteres.", 'error');
+            return;
+        }
+
+        if (!/^\d+$/.test(telefono) || !/^\d+$/.test(cp)) {
+            handleUpdateError("El número de teléfono y el código postal deben ser numéricos y no contener letras o símbolos.", "error");
+            return;
+        }
+        const regexTexto = /^$|^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+        if (!regexTexto.test(estado) || !regexTexto.test(municipio) || !regexTexto.test(calle) || !regexTexto.test(calle2)) {
+            handleUpdateError("Los campos de texto solo deben contener letras, acentos y espacios.", "error");
+            return;
+        }
+
+
         const datosActualizados = {
             external: external,
             userBean: {
@@ -77,19 +122,23 @@ const Configuracion = () => {
 
         try {
             const response = await AxiosClient.put('patient/update', datosActualizados);
-            if (response.status == "OK") {
-                Alert.alert("Éxito", "Datos actualizados correctamente");
+            if (response.status === "OK") {
+                handleUpdateError("Datos actualizados correctamente", 'success');
             } else {
-                Alert.alert("Error", "La actualización no fue exitosa");
+                handleUpdateError( "La actualización no fue exitosa", 'success');
             }
         } catch (error) {
             console.error("Error al actualizar datos:", error);
-            Alert.alert("Error", "No se pudieron actualizar los datos");
+            handleUpdateError("No se pudieron actualizar los datos", 'sucess');
         }
     };
 
 
     const cambiarContraseña = async () => {
+        if (!oldPassword.trim() || !newPassword.trim()  ) {
+            handleUpdateError("Por favor, completa todos los campos antes de actualizar.", 'error');
+            return;
+        }
         const datosParaCambiarContraseña = {
             curp: curp,
             oldPassword: oldPassword,
@@ -100,10 +149,10 @@ const Configuracion = () => {
             const response = await AxiosClient.post('patient/changePassword', datosParaCambiarContraseña);
             console.log(response);
             if (response.status === "OK") {
-                Alert.alert("Éxito", "Contraseña actualizada correctamente");
+                handleUpdateError("Contraseña actualizada correctamente", 'success');
             }
         } catch (error) {
-            Alert.alert("Error", "No se pudo cambiar la contraseña");
+            handleUpdateError("No se pudo cambiar la contraseña", 'error');
         }
     };
 
@@ -112,78 +161,158 @@ const Configuracion = () => {
             <View style={styles.allScreen}>
                 <View style={styles.container}>
                     <Text style={styles.title}>Perfil</Text>
+                    <MaterialCommunityIcons
+                        name="account-circle"
+                        size={120   }
+                        color="#092088"
+                        style={{ alignSelf: 'center', marginBottom: 20 }}
+                    />
                     <View style={styles.contImputs}>
                         <Text style={styles.comp}>Teléfono</Text>
-                        <TextInput style={styles.input} value={telefono} onChangeText={setTelefono}/>
+                        <Input
+                            placeholder="Teléfono"
+                            value={telefono}
+                            onChangeText={setTelefono}
+                            leftIcon={
+                                <Icon
+                                    name="phone"
+                                    type="font-awesome"
+                                    size={24}
+                                    color="black"
+                                />
+                            }
+                        />
 
                         <Text style={styles.comp}>Estado</Text>
-                        <TextInput style={styles.input} value={estado} onChangeText={setEstado}/>
+                        <Input
+                            placeholder="Estado"
+                            value={estado}
+                            onChangeText={setEstado}
+                            leftIcon={
+                                <MaterialCommunityIcons
+                                    name="map-marker-outline"
+                                    size={24}
+                                    color="black"
+                                />
+                            }
+                        />
+
+
 
                         <Text style={styles.comp}>Municipio</Text>
-                        <TextInput style={styles.input} value={municipio} onChangeText={setMunicipio}/>
+                        <Input
+                            placeholder="Municipio"
+                            value={municipio}
+                            onChangeText={setMunicipio}
+                            leftIcon={
+                                <FontAwesome5
+                                    name="city"
+                                    size={24}
+                                    color="black"
+                                />
+                            }
+                        />
+
 
                         <Text style={styles.comp}>Código Postal</Text>
-                        <TextInput style={styles.input} value={cp} onChangeText={setCP}/>
+                        <Input
+                            placeholder="Código Postal"
+                            value={cp}
+                            onChangeText={setCP}
+                            leftIcon={
+                                <MaterialCommunityIcons
+                                    name="mailbox-up-outline"
+                                    size={24}
+                                    color="black"
+                                />
+                            }
+                        />
 
                         <Text style={styles.comp}>Calle 1</Text>
-                        <TextInput style={styles.input} value={calle} onChangeText={setCalle}/>
+                        <Input
+                            placeholder="Calle 1"
+                            value={calle}
+                            onChangeText={setCalle}
+                            leftIcon={
+                                <Icon
+                                    name="road"
+                                    type="font-awesome"
+                                    size={24}
+                                    color="black"
+                                />
+                            }
+                        />
 
                         <Text style={styles.comp}>Calle 2</Text>
-                        <TextInput style={styles.input} value={calle2} onChangeText={setCalle2}/>
-
+                        <Input
+                            placeholder="Calle 2"
+                            value={calle2}
+                            onChangeText={setCalle2}
+                            leftIcon={
+                                <Icon
+                                    name="road"
+                                    type="font-awesome"
+                                    size={24}
+                                    color="black"
+                                />
+                            }
+                        />
                     </View>
                 </View>
-                <TouchableOpacity style={styles.btnActualizar} onPress={actualizarDatos}>
-                    <Text style={styles.titlebtn}>Actualizar</Text>
-                </TouchableOpacity>
+                <Button size="md" radius='lg' onPress={actualizarDatos}>
+                    <Text style={styles.titlebtn}>Actualizar Datos</Text>
+                </Button>
+                <CustomAlert
+                    isVisible={alertVisible}
+                    onClose={closeAlert}
+                    message={alertMessage}
+                    animationName={animationName}
+                />
             </View>
 
             <View style={styles.allScreen}>
                 <View style={styles.container}>
                     <Text style={styles.title}>Cambiar Contraseña</Text>
                     <View style={styles.contImputs}>
-                        <Text style={styles.comp}>Contraseña Actual</Text>
-                        <TextInput style={styles.input} value={oldPassword} secureTextEntry onChangeText={setOldPassword}/>
-
-                        <Text style={styles.comp}>Nueva Contraseña</Text>
-                        <TextInput style={styles.input} value={newPassword} secureTextEntry onChangeText={setNewPassword}/>
+                        <Text style={styles.comp2}>Contraseña Actual</Text>
+                        <Input placeholder="Escribe la contraseña anterior" value={oldPassword} secureTextEntry onChangeText={setOldPassword}/>
+                        <Text style={styles.comp2}>Nueva Contraseña</Text>
+                        <Input placeholder="Escribe la contraseña nueva" value={newPassword} secureTextEntry onChangeText={setNewPassword}/>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.btnActualizar} onPress={cambiarContraseña}>
+                <Button size="md" radius='lg'
+                      onPress={cambiarContraseña}>
                     <Text style={styles.titlebtn}>Cambiar Contraseña</Text>
-                </TouchableOpacity>
+                </Button>
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-
-    title: {
-        width: '100%',
-        fontSize: 25,
-        textAlign: 'center',
-        marginBottom:10,
-        fontWeight: 'bold',
-        color: '#092088'
-
-
-    },
     allScreen: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#ffff',
+        backgroundColor: '#f0eeeb',
     },
     container: {
-        top:10,
-        padding:20,
-        marginBottom:50,
+        top: 10,
+        padding: 20,
+        marginBottom: 50,
         alignItems: 'center',
         backgroundColor: 'white',
         width: 350,
         borderRadius: 20,
-        borderWidth:1,
+        borderWidth: 4,
+    },
+    title: {
+        width: '100%',
+        fontSize: 40,
+        textAlign: 'center',
+        marginBottom: 10,
+        fontWeight: 'bold',
+        color: '#092088',
     },
     img: {
         position: 'absolute',
@@ -193,16 +322,20 @@ const styles = StyleSheet.create({
         height: 180,
     },
     contImputs: {
-
-        justifyContent: 'center',
+        justifyContent: 'center', // Centra los elementos hijos horizontalmente
+        alignItems: 'center', // Centra los elementos hijos verticalmente para alineación completa
         width: 300,
     },
 
     comp: {
-        fontSize: 15,
+        fontSize: 32,
         color: '#092088',
-        fontWeight: 'bold'
-
+        fontWeight: 'bold',
+    },
+    comp2: {
+        fontSize: 24,
+        color: '#092088',
+        fontWeight: 'bold',
     },
 
     input: {
@@ -227,7 +360,8 @@ const styles = StyleSheet.create({
     },
     titlebtn: {
         marginHorizontal: 5,
-        fontSize: 18
+        fontSize: 18,
+        color: "white"
     },
     forgetpass: {
         marginTop: 20,
@@ -237,12 +371,7 @@ const styles = StyleSheet.create({
     }, status: {
         color: '#000000'
     }
-
-
-
-
-
-})
+});
 
 
 export default Configuracion;
