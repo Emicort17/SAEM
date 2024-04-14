@@ -1,12 +1,11 @@
-import { StyleSheet, Text, View, TextInput, Alert, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View,Platform ,TextInput, Alert, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useAuth } from '../config/context/AuthContext';
 import { useEffect, useState } from 'react';
 import AxiosClient from '../config/http/AxiosClient';
 import CustomAlert from '../assets/Alert/CustomAlert';
-import {Button, Input, Icon} from "@rneui/themed";
+import { Button, Input, Icon } from "@rneui/themed";
 import { MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons';
-
-
+import Fondo from './../assets/Images/fondo.png'
 
 const Configuracion = () => {
     const { userData } = useAuth('');
@@ -56,23 +55,23 @@ const Configuracion = () => {
             }
         };
         getPerson();
-        console.log("Settings curp "+userData.user.personBean.curp);
+        console.log("Settings curp " + userData.user.personBean.curp);
         console.log(userData.user.id)
     }, [userData.user.personBean.curp]);
 
 
     const actualizarDatos = async () => {
-        if (!telefono.trim() || !estado.trim() || !municipio.trim() || !cp.trim() || !calle.trim() ) {
+        if (!telefono.trim() || !estado.trim() || !municipio.trim() || !cp.trim() || !calle.trim()) {
             handleUpdateError("Por favor, completa todos los campos antes de actualizar.", 'error');
             return;
         }
 
-        if(telefono.length != 10){
+        if (telefono.length != 10) {
             handleUpdateError("El número de télefono debe de tener 10 caracteres.", 'error');
             return;
         }
 
-        if(cp.length != 5){
+        if (cp.length != 5) {
             handleUpdateError("El Código Postal debe de tener 5 caracteres.", 'error');
             return;
         }
@@ -125,7 +124,7 @@ const Configuracion = () => {
             if (response.status === "OK") {
                 handleUpdateError("Datos actualizados correctamente", 'success');
             } else {
-                handleUpdateError( "La actualización no fue exitosa", 'success');
+                handleUpdateError("La actualización no fue exitosa", 'success');
             }
         } catch (error) {
             console.error("Error al actualizar datos:", error);
@@ -135,7 +134,7 @@ const Configuracion = () => {
 
 
     const cambiarContraseña = async () => {
-        if (!oldPassword.trim() || !newPassword.trim()  ) {
+        if (!oldPassword.trim() || !newPassword.trim()) {
             handleUpdateError("Por favor, completa todos los campos antes de actualizar.", 'error');
             return;
         }
@@ -158,15 +157,17 @@ const Configuracion = () => {
 
     return (
         <ScrollView>
+              
             <View style={styles.allScreen}>
+
+
+            <Image source={Fondo} style={styles.backgroundImage} />
+                <View style={styles.img}>
+                <Text style={styles.compimg}>M</Text>
+                </View>
+
                 <View style={styles.container}>
-                    <Text style={styles.title}>Perfil</Text>
-                    <MaterialCommunityIcons
-                        name="account-circle"
-                        size={120   }
-                        color="#092088"
-                        style={{ alignSelf: 'center', marginBottom: 20 }}
-                    />
+                    
                     <View style={styles.contImputs}>
                         <Text style={styles.comp}>Teléfono</Text>
                         <Input
@@ -178,7 +179,6 @@ const Configuracion = () => {
                                     name="phone"
                                     type="font-awesome"
                                     size={24}
-                                    color="black"
                                 />
                             }
                         />
@@ -192,13 +192,9 @@ const Configuracion = () => {
                                 <MaterialCommunityIcons
                                     name="map-marker-outline"
                                     size={24}
-                                    color="black"
                                 />
                             }
                         />
-
-
-
                         <Text style={styles.comp}>Municipio</Text>
                         <Input
                             placeholder="Municipio"
@@ -208,7 +204,6 @@ const Configuracion = () => {
                                 <FontAwesome5
                                     name="city"
                                     size={24}
-                                    color="black"
                                 />
                             }
                         />
@@ -223,7 +218,6 @@ const Configuracion = () => {
                                 <MaterialCommunityIcons
                                     name="mailbox-up-outline"
                                     size={24}
-                                    color="black"
                                 />
                             }
                         />
@@ -237,8 +231,7 @@ const Configuracion = () => {
                                 <Icon
                                     name="road"
                                     type="font-awesome"
-                                    size={24}
-                                    color="black"
+                                    size={18}
                                 />
                             }
                         />
@@ -253,38 +246,40 @@ const Configuracion = () => {
                                     name="road"
                                     type="font-awesome"
                                     size={24}
-                                    color="black"
                                 />
                             }
                         />
                     </View>
+                    <Button buttonStyle={styles.btnLogin} size="md" radius='lg' onPress={actualizarDatos}>
+                        <Text style={styles.titlebtn}>Actualizar Datos</Text>
+                    </Button>
                 </View>
-                <Button size="md" radius='lg' onPress={actualizarDatos}>
-                    <Text style={styles.titlebtn}>Actualizar Datos</Text>
-                </Button>
+
                 <CustomAlert
                     isVisible={alertVisible}
                     onClose={closeAlert}
                     message={alertMessage}
                     animationName={animationName}
                 />
-            </View>
-
-            <View style={styles.allScreen}>
-                <View style={styles.container}>
+                <View style={styles.cont}>
                     <Text style={styles.title}>Cambiar Contraseña</Text>
                     <View style={styles.contImputs}>
-                        <Text style={styles.comp2}>Contraseña Actual</Text>
-                        <Input placeholder="Escribe la contraseña anterior" value={oldPassword} secureTextEntry onChangeText={setOldPassword}/>
-                        <Text style={styles.comp2}>Nueva Contraseña</Text>
-                        <Input placeholder="Escribe la contraseña nueva" value={newPassword} secureTextEntry onChangeText={setNewPassword}/>
+                        <Text style={styles.comp}>Contraseña Actual</Text>
+                        <Input placeholder="Escribe la contraseña anterior" value={oldPassword} secureTextEntry onChangeText={setOldPassword} />
+                        <Text style={styles.comp}>Nueva Contraseña</Text>
+                        <Input placeholder="Escribe la contraseña nueva" value={newPassword} secureTextEntry onChangeText={setNewPassword} />
                     </View>
+                    <Button size="md" radius='lg'
+                        buttonStyle={styles.btnLogin}
+
+                        onPress={cambiarContraseña}>
+                        <Text style={styles.titlebtn}>Cambiar Contraseña</Text>
+                    </Button>
                 </View>
-                <Button size="md" radius='lg'
-                      onPress={cambiarContraseña}>
-                    <Text style={styles.titlebtn}>Cambiar Contraseña</Text>
-                </Button>
+
             </View>
+
+
         </ScrollView>
     );
 }
@@ -292,52 +287,106 @@ const Configuracion = () => {
 const styles = StyleSheet.create({
     allScreen: {
         flex: 1,
+        alignItems: 'center',
+        backgroundColor: '#ffff',
+    },
+    backgroundImage: {
+        height: 150,
+        width: '100%',
+        zIndex: -10,
+        position: 'absolute',
+    },
+    img: {
+        display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f0eeeb',
+        width: 120,
+        height: 120,
+        backgroundColor: '#092088',
+        borderRadius: 100,
+        position: 'absolute',
+        zIndex: 10,
+        top: 50,
+        borderWidth: 5,
+        borderColor: '#ccc'
     },
     container: {
-        top: 10,
+        marginTop: 155,
         padding: 20,
-        marginBottom: 50,
-        alignItems: 'center',
+        marginBottom: 30,
+        alignItems: 'left',
         backgroundColor: 'white',
-        width: 350,
+        width: 343,
         borderRadius: 20,
-        borderWidth: 4,
+        zIndex:-1,
+        alignItems: 'center',
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 3,
+              },
+              shadowOpacity: 0.27,
+              shadowRadius: 4.65,
+            },
+            android: {
+              elevation: 5,
+            },
+          }),
+      
+    },
+    compimg: {
+        fontSize: 50,
+        color: '#ffff',
+        fontWeight: 'bold',
+        marginBottom: 5,
+      },
+    cont: {
+        marginTop: 10,
+        padding: 20,
+        marginBottom: 30,
+        alignItems: 'left',
+        backgroundColor: 'white',
+        width: 343,
+        borderRadius: 20,
+        zIndex:-1,
+        alignItems: 'center',
+        ...Platform.select({
+            ios: {
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 3,
+              },
+              shadowOpacity: 0.27,
+              shadowRadius: 4.65,
+            },
+            android: {
+              elevation: 5,
+            },
+          }),
+      
     },
     title: {
         width: '100%',
-        fontSize: 40,
+        fontSize: 32,
         textAlign: 'center',
         marginBottom: 10,
         fontWeight: 'bold',
         color: '#092088',
     },
-    img: {
-        position: 'absolute',
-        top: 0,
-        marginTop: 90,
-        width: 180,
-        height: 180,
-    },
     contImputs: {
-        justifyContent: 'center', // Centra los elementos hijos horizontalmente
-        alignItems: 'center', // Centra los elementos hijos verticalmente para alineación completa
-        width: 300,
+        width: 310,
+        paddingHorizontal: 6,
     },
-
     comp: {
-        fontSize: 32,
-        color: '#092088',
+        fontSize: 18,
+        color: '#014242',
         fontWeight: 'bold',
+        textAlign: 'left',
+        marginHorizontal: 8
     },
-    comp2: {
-        fontSize: 24,
-        color: '#092088',
-        fontWeight: 'bold',
-    },
-
     input: {
         padding: 12,
         width: 300,
@@ -345,13 +394,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 10,
         height: 50,
-        fontSize: 20,
+        fontSize: 10,
         borderWidth: 1,
-        borderColor: '#7C7C7C', // Color del borde
-
+        borderColor: '#7C7C7C',
     },
-
-    btnlogin: {
+    btnLogin: {
         marginTop: 20,
         width: 250,
         margin: 5,

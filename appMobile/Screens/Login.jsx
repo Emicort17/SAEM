@@ -72,7 +72,6 @@ const Login = () => {
           <View style={styles.contInputs}>
             <TextInput
               style={styles.input}
-
               placeholder='Usuario'
               value={username}
               onChangeText={handleUsernameChange}
@@ -87,8 +86,8 @@ const Login = () => {
 
             <Button
               type="clear"
-              buttonStyle={{ width: 250 }}
-              containerStyle={{ margin: 5 }}
+              buttonStyle={{ width: 250}}
+              containerStyle={{ margin: 1 }}
               disabledStyle={{ borderWidth: 2 }}
               linearGradientProps={null}
               loadingProps={{ animating: true }}
@@ -134,49 +133,51 @@ const styles = StyleSheet.create({
   },
   allScreen: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent:'flex-end',
     alignItems: 'center',
     backgroundColor: '#03104A',
+    paddingHorizontal:20
   },
   container: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    width: 350,
-    height: 650,
-    borderRadius: 20
+    width: 340,
+    height: 600,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   img: {
     position: 'absolute',
     top: 0,
-    marginTop: 90,
-    width: 180,
-    height: 180,
+    marginTop: 10,
+    width: 350,
+    height: 350,
   },
   contInputs: {
-
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 150,
+    marginTop: 200,
     width: 300,
     height: 200,
   },
 
   input: {
-    padding: 12,
+    paddingVertical: 3,
+    paddingHorizontal:12,
     width: 300,
-    borderRadius: 5,
+    borderRadius: 0,
     marginBottom: 10,
     marginTop: 10,
-    height: 50,
+    height: 40,
     fontSize: 20,
-    borderWidth: 1,
-    borderColor: '#7C7C7C', // Color del borde
+    borderBottomWidth: 1,
+    borderBottomColor: '#cccc', // Color del borde
 
   },
 
   btnLogin: {
-    marginTop: 20,
+    marginTop: 50,
     width: 250,
     margin: 5,
     borderRadius: 5,
@@ -187,7 +188,6 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   forgetPass: {
-    marginTop: 20,
     width: 250,
     margin: 5,
     borderRadius: 5,

@@ -39,7 +39,7 @@ const TabNav = () => {
   return (
     <Tab.Navigator >
       <Tab.Screen
-        name="Diagnosticos"
+        name="Diagnósticos"
         component={Perfil}
         options={{
           tabBarShowLabel: false,
@@ -75,7 +75,7 @@ const TabNav = () => {
         }}
       />
       <Tab.Screen
-        name="Configuracion"
+        name="Configuración"
         component={Configuracion}
         options={{
           tabBarShowLabel: false,
