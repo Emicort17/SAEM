@@ -21,7 +21,7 @@ const EditPerson = () => {
     const [checked, setChecked] = React.useState(datos.external);
 
     const handleChange = () => {
-        setChecked(!checked); // Cambiamos el estado del switch al valor opuesto cada vez que se haga clic en él
+        setChecked(!checked); 
     };
 
 
@@ -68,7 +68,7 @@ const EditPerson = () => {
             state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
             municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
             
-            interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9]+$/, 'Solo se permiten letras y números'),
+            interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^\d+$/, 'Solo se permiten digitos'),
             exteriorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^\d+$/, 'Solo se permiten dígitos'),
             
             cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^\d+$/, 'Solo se permiten dígitos'),
@@ -257,14 +257,17 @@ const EditPerson = () => {
                             } />
                     </div>
 
-                    <div className='grid-col-4'>
-                        <Label htmlFor='sex' className='font-bold' value='Sexo' />
-                        <Select style={{ backgroundColor: '#E6ECF1' }} id="sex" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
-                            <option value=''>Seleccionar</option>
-                            <option value='Hombre'>Hombre</option>
-                            <option value='Mujer'>Mujer</option>
-                        </Select>
-                    </div>
+                      <div className='grid-col-4'>
+                                <Label htmlFor='sex' className='font-bold' value='Sexo' />
+                                <Select style={{ backgroundColor: '#E6ECF1' }} id="sex" name="sexo" value={formik.values.sexo} onChange={formik.handleChange}>
+                                    <option value='' disabled>Seleccionar</option>
+                                    <option value='Hombre'>Hombre</option>
+                                    <option value='Mujer'>Mujer</option>
+                                </Select>
+                                {formik.touched.sexo && formik.errors.sexo && (
+                                    <span className='text-red-600'>{formik.errors.sexo}</span>
+                                )}
+                            </div>
 
 
                     <div className='flex-col-6 pb-2'>

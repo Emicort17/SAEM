@@ -21,8 +21,8 @@ export const customAlert = (title, text, icon) => {
 };
 
 export const confimAlert= (preConfirm)=> SweetAlert.fire({
-    title:'Estas seguro de realizar accion?',
-    text:'Le solicitamos esperar a que termine la acciom',
+    title:'Estas seguro de realizar acción?',
+    text:'Le solicitamos esperar a que termine la acción',
     icon:'info',
     confirmButtonColor:"#0e7490",
     confirmButtonText:'Aceptar',

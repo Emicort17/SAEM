@@ -95,38 +95,32 @@ const ListMedicina = () => { // Cambio de listMedicine a ListMedicina
 
                 ) : (
                     <>
-                        <div className='flex flex-wrap justify-center gap-4 '>
-                            {medicines.map((medicine, index) => ( // Cambio aquí: medicine en lugar de medicines
-                                <Card key={index} className="relativemax-w-sm border border-gray-200   rounded-lg  shadow-md overflow-hidden hover:shadow-lg transition duration-300 ease-in-out" >
-
-                                    <div className="px-5 ">
-                                        <h5 className="mb-3 text-xl font-semibold  text-blue-900   dark:text-white text-center"> {medicine.name}</h5> {/* Cambio aquí: medicine.id en lugar de medicines.data.id */}
-                                        <p className="mb-1 text-base text-gray-600 dark:text-gray-400">
-                                            <span className="font-semibold  text-blue-900 ">Nombre:</span> {medicine.name}<br /> {/* Cambio aquí: medicine.name en lugar de medicines.data.name */}
-                                            <span className="font-semibold  text-blue-900 ">Presentacion:</span> {medicine.presentation}<br /> {/* Cambio aquí: medicine.presentation en lugar de medicines.data.presentation */}
-                                            <span className="font-semibold  text-blue-900 ">Fabricante:</span> {medicine.manufacturer} {/* Cambio aquí: medicine.manufacturer en lugar de medicines.data.manufacturer */}
-                                        </p>
-                                    </div>
-                                    <hr className=' bg-blue-950' style={{ backgroundColor: '#061F8E' }} />
-                                    <div className="flex px-4 top-0">
-
-                                        <button className='w-full flex  justify-start cursor-pointer' onClick={() => { pasardatos(medicine) }}  > <CiEdit size={20} /> </button>
-                                        <button className='w-full flex  justify-end  cursor-pointer' onClick={() => { deleteMedicine(medicine.id) }}  ><AiOutlineDelete size={20} className=' cursor-pointer ' /></button>
-                                    </div>
-                                </Card>
-
-                            ))}
-
-
+                    <div className='flex flex-wrap justify-center gap-4 '>
+                        {medicines.map((medicine, index) => (
+                            <Card key={index} className="relative max-w-sm border border-gray-200 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300 ease-in-out" style={{ minWidth: '250px',maxWidth:'300' }}>
+                                <div className="px-5">
+                                    <h5 className="mb-3 text-xl font-semibold text-blue-900 dark:text-white text-center">{medicine.name}</h5>
+                                    <p className="mb-1 text-base text-gray-600 dark:text-gray-400">
+                                        <span className="font-semibold text-blue-900">Nombre:</span> {medicine.name}<br />
+                                        <span className="font-semibold text-blue-900">Presentacion:</span> {medicine.presentation}<br />
+                                        <span className="font-semibold text-blue-900">Fabricante:</span> {medicine.manufacturer}
+                                    </p>
+                                </div>
+                                <hr className='bg-blue-950' style={{ backgroundColor: '#061F8E' }} />
+                                <div className="flex px-4 top-0">
+                                    <button className='w-full flex justify-start cursor-pointer' onClick={() => { pasardatos(medicine) }}><CiEdit size={20} /></button>
+                                    <button className='w-full flex justify-end cursor-pointer' onClick={() => { deleteMedicine(medicine.id) }}><AiOutlineDelete size={20} className='cursor-pointer' /></button>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                    <div className='w-full flex justify-center items-center'>
+                        <div className='max-w-sm flex justify-center items-center mt-5 p-3' style={{ borderRadius: '100px', backgroundColor: '#0F2AA3', color: '#fff' }} onClick={() => { gomedicine() }}>
+                            <button><FaPlus /></button>
                         </div>
-                        <div className='w-full flex justify-center items-center'>
-                            <div className='max-w-sm  flex  justify-center items-center mt-5 p-3 ' style={{ borderRadius: '100px', backgroundColor: '#0F2AA3', color: '#fff' }} onClick={() => { gomedicine() }} > <button> <FaPlus />  </button>  </div>
-
-                        </div>
-
-
-
-                    </>
+                    </div>
+                </>
+                
 
 
 
