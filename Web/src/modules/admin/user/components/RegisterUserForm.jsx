@@ -33,13 +33,15 @@ const RegisterUserForm = ({ isCreating, setIsCreating, getAllUsers }) => {
             email: yup.string().required("Campo obligatorio").email("Ingresa un correo electrónico válido").min(3, "Mínimo 3 caracteres").max(45, "Máximo 45 caracteres").matches(/^[a-zA-Z0-9\s@.]+$/, 'No se permiten caracteres especiales'),
             password: yup.string().required("Campo obligatorio").min(8, "Mínimo 8 caracteres").max(45, "Máximo 45 caracteres").matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
             confirmPassword: yup.string().required("Campo obligatorio").min(8, "Mínimo 8 caracteres").max(45, "Máximo 45 caracteres").matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
-            name: yup.string().required("Campo obligatorio").min(3, "Mínimo 3 caracteres").max(45, "Máximo 45 caracteres").matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            surname: yup.string().required("Campo obligatorio").min(3, "Mínimo 3 caracteres").max(45, "Máximo 45 caracteres").matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            lastname: yup.string().min(3, "Mínimo 3 caracteres").max(45, "Máximo 45 caracteres").matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            curp: yup.string().required("Campo obligatorio").min(18, "Mínimo 18 caracteres").max(18, "Máximo 18 caracteres").matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            phoneNumber: yup.string().required("Campo obligatorio").matches(/^\d{10}$/, "El número de teléfono debe tener 10 dígitos"),
-            birthdate: yup.string().required("Campo obligatorio")
-
+            
+            name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            surname: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            lastname: yup.string().min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            
+            curp: yup.string().required('Campo obligatorio').min(18, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres').matches(/^[a-zA-Z0-9]+$/, 'No se permiten caracteres especiales'),
+            phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos').matches(/^\d+$/, 'Solo se permiten dígitos'),
+            birthdate: yup.string().required('Campo obligatorio'),
+            
 
         }),
         onSubmit: async (values, { setSubmitting }) => {

@@ -28,9 +28,9 @@ const Medicina = () => {
 
         },
         validationSchema: yup.object().shape({
-            name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            presentation: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            manufacturer: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_-]+$/, 'No se permiten caracteres especiales'),
+            presentation: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_-]+$/, 'No se permiten caracteres especiales'),
+            manufacturer: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_-]+$/, 'No se permiten caracteres especiales'),
 
         }),
         onSubmit: async () => {
@@ -102,7 +102,7 @@ const Medicina = () => {
                             </div>
                             <div className='grid-col-4 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='presentation' className='font-bold' value='Presentación' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Presentacion " id="presentation" name="presentation"
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type="text" placeholder="Presentación " id="presentation" name="presentation"
                                     value={formik.values.presentation}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}

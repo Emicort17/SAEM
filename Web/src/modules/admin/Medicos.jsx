@@ -86,7 +86,7 @@ const Medicos = () => {
             sortable: false,
         },
         {
-            name: 'Cédula',
+            name: 'Cédula profesional',
             cell: (row) => <>{asignation(row.card)}</>,
             sortable: false,
         },

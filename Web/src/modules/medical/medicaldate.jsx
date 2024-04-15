@@ -67,7 +67,7 @@ const MedicalDate = () => {
                                     Enfermedad: {diagnostic.disease}
                                 </p>
                                 <div className="items-center justify-center space-y-4 sm:flex sm:space-x-4 sm:space-y-0">
-                                    <button className='w-full h-7 text-sm bg-blue-800 rounded-xl '  style={{color:'#fff'}}  onClick={() => pasardatos(diagnostic)}>Más </button>
+                                    <button className='w-full h-7 text-sm bg-blue-800 rounded-xl '  style={{color:'#fff'}}  onClick={() => pasardatos(diagnostic)}><b>Más</b></button>
                                 </div>
                             </Card>
                         ))}

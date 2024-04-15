@@ -80,7 +80,7 @@ const Patients = () => {
             sortable: false,
         },
         {
-            name: 'No Expediente',
+            name: 'No. Expediente',
             cell: (row) => <>{row.medicalRecordBean ? row.medicalRecordBean.number : 'Sin asignar'}</>,
             sortable: false,
         },

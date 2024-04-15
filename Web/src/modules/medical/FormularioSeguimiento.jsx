@@ -74,18 +74,23 @@ const FormularioSeguimiento = () => {
 
         },
         validationSchema: yup.object().shape({
-            enfermedad: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+
+            enfermedad: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_-]+$/, 'No se permiten caracteres especiales'),
             fecha: yup.string().required('Campo obligatorio'),
-            resultado: yup.string().required('Campo obligatorio'),
-            cargaviral: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            ast: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            plaquetas: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+
+            resultado: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_-]+$/, 'No se permiten caracteres especiales'),
+            
+            cargaviral: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
+            ast: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
+            plaquetas: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
             fecharesultado: yup.string().required('Campo obligatorio'),
-            creatinina: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            alt: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
+            creatinina: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
+            alt: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
             antigen: yup.string().required('Campo obligatorio'),
-            indicaciones: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(255, 'Máximo 255 caracteres').matches(/^[a-zA-Z0-9\s]+$/, 'No se permiten caracteres especiales'),
-            medicina: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').min(1, 'Seleccionar al menos un medicamento es obligatorio'),
+
+
+            indicaciones: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(255, 'Máximo 255 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_"'-]+$/, 'No se permiten caracteres especiales'),
+            medicina: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').min(1, 'Seleccionar al menos un medicamento, es obligatorio'),
 
         }),
         onSubmit: async () => {
@@ -163,10 +168,10 @@ const FormularioSeguimiento = () => {
 
                                         customAlert(
                                             'Registro exitoso',
-                                            'El usuario se ha registrado correctamente',
+                                            'Registrado correctamente',
                                             'success');
-
-                                    } else {
+                                    } 
+                                    else {
                                         customAlert(
                                             'Ocurrio un error',
                                             'Error al registrar los resultados del laboratorio',
@@ -237,7 +242,7 @@ const FormularioSeguimiento = () => {
 
                     <div className='flex flex-col gap-3' >
 
-                        <h3 className='font-bold text-2xl text-center'>Diagnostico</h3>
+                        <h3 className='font-bold text-2xl text-center'>Diagnóstico</h3>
 
                         <div className='flex flex-col gap-2 pb-1'>
 
@@ -450,7 +455,7 @@ const FormularioSeguimiento = () => {
                                 </div>
 
                                 <div className='grid-col-6 pb-2 w-full md:w-1/3 ml-2 mr-2'>
-                                    <Label style={{ color: '#03104A' }} htmlFor='antigen' className='font-bold' value='Antigeno' />
+                                    <Label style={{ color: '#03104A' }} htmlFor='antigen' className='font-bold' value='Antígeno' />
                                     <div className='grid-col-7'>
                                         <Select style={{ backgroundColor: '#E6ECF1' }} id="antigen" name="antigen" value={formik.values.antigen} onChange={e => {
                                             formik.handleChange(e);

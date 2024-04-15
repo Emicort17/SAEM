@@ -47,21 +47,27 @@ const EditMedical = () => {
             email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(10, 'Mínimo 10 caracteres').max(60, 'Máximo 60 caracteres'),
             password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres'),
             confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
-            name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            surname: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            lastname: yup.string().min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            curp: yup.string().required('Campo obligatorio').min(18, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            
+            name: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            surname: yup.string().required('Campo obligatorio').min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            lastname: yup.string().min(3, 'Minimo 3 caracteres').max(45, 'Maximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            
+            curp: yup.string().required('Campo obligatorio').min(18, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres').matches(/^[a-zA-Z0-9]+$/, 'No se permiten caracteres especiales'),
+            phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos').matches(/^\d+$/, 'Solo se permiten dígitos'),
             birthdate: yup.string().required('Campo obligatorio'),
-            state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            birthplace: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            exteriorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            
+            state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            
+            birthplace: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            
+            interiorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^[a-zA-Z0-9]+$/, 'Solo se permiten letras y números'),
+            exteriorNumber: yup.string().required('Campo obligatorio').min(2, 'Mínimo 2 caracteres').max(5, 'Máximo 5 caracteres').matches(/^\d+$/, 'Solo se permiten dígitos'),
+            
+            cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^\d+$/, 'Solo se permiten dígitos'),
             sexo: yup.string().required('Campo obligatorio'),
-            calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
-            cedula: yup.string().required('Campo obligatorio').min(7, 'Mínimo 7 caracteres').max(7, 'Máximo 7 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚ_]+$/, 'No se permiten caracteres especiales'),
+            calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
+            cedula: yup.string().required('Campo obligatorio').min(7, 'Mínimo 7 caracteres').max(7, 'Máximo 7 caracteres').matches(/^\d+$/, 'Solo se permiten números'),
 
         }),
 
@@ -190,8 +196,8 @@ const EditMedical = () => {
                             </div>
 
                             <div className='grid-col-6 pb-2' >
-                                <Label style={{ color: '#03104A' }} htmlFor='cedula' className='font-bold' value='Cedula' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type='text' placeholder="Cedula" id="cedula"
+                                <Label style={{ color: '#03104A' }} htmlFor='cedula' className='font-bold' value='Cédula profesional' />
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type='text' placeholder="Cédula profesional" id="cedula"
                                     value={formik.values.cedula}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
@@ -342,7 +348,7 @@ const EditMedical = () => {
                             </div>
                             <div className='flex flex-row justify-between space-x-5'>
                                 <div className='grid-col-6 pb-2'>
-                                    <Label style={{ color: '#03104A' }} htmlFor='interiorNumber' className='font-bold' value='Numero Interior' />
+                                    <Label style={{ color: '#03104A' }} htmlFor='interiorNumber' className='font-bold' value='Número Interior' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                         type='interiorNumber'
                                         title="interiorNumber"
@@ -359,7 +365,7 @@ const EditMedical = () => {
                                         } />
                                 </div>
                                 <div className='grid-col-6 pb-2'>
-                                    <Label style={{ color: '#03104A' }} htmlFor='exteriorNumber' className='font-bold' value='Numero exterior' />
+                                    <Label style={{ color: '#03104A' }} htmlFor='exteriorNumber' className='font-bold' value='Número exterior' />
                                     <TextInput style={{ backgroundColor: '#E6ECF1' }}
                                         type='exteriorNumber'
                                         title="exteriorNumber"
