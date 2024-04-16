@@ -1,8 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native'; 7
 import { AuthProvider, useAuth } from './config/context/AuthContext';
 import Mainroutes from './routes/mainroutes';
-import Login from './Screens/Login';
-import Animation from './Screens/animation';
 import OtherRoutes from './routes/otherRoutes';
 
 const MainApp = () => {
