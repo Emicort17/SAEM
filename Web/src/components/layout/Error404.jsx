@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Error404.css'; // Estilos CSS personalizados
 import { useLocation,useNavigate } from 'react-router-dom';
+import error from '../../assets/Images/error.jpg'
 
 const Error404 = () => {
 
@@ -22,7 +23,7 @@ const Error404 = () => {
                
             </div>
             <div className="error-image">
-                <img className=' cursor-pointer' src="../../../public/assets/error.jpg" alt="Error 404" onClick={volver} />
+                <img className=' cursor-pointer' src={error} alt="Error 404" onClick={volver} />
             </div>
         </div>
     );

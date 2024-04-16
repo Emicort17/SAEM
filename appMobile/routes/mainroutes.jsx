@@ -17,7 +17,7 @@ const MainRoutes = () => {
     <Stack.Navigator>
     
       <Stack.Screen name="TabNav" component={TabNav} options={{ headerShown: false }} />
-      <Stack.Screen name="Seguimiento" component={Seguimiento} options={{
+      <Stack.Screen name="Informe" component={Seguimiento} options={{
         tabBarShowLabel: false,
         headerShown: true,
         headerTitleStyle: { color: '#fff' },

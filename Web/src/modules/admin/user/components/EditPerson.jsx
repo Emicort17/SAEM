@@ -206,20 +206,20 @@ const EditPerson = () => {
                         </div>
                    
 
-                    <div className='grid-col-4 pb-2' >
-                        <Label style={{ color: '#03104A' }} htmlFor='curp' className='font-bold' value='CURP' />
-                        <TextInput style={{ backgroundColor: '#E6ECF1' }} type='curp' placeholder="CURP" id="curp" name="curp"
-                            value={formik.values.curp}
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            helperText={
-                                formik.touched.curp &&
-                                formik.errors.curp && (
-                                    <span className='text-red-600'>{formik.errors.curp}</span>
-                                )
-                            }
-                        />
-                    </div>
+                        <div className='grid-col-4 pb-2'>
+                                <Label style={{ color: '#03104A' }} htmlFor='curp' className='font-bold' value='CURP' />
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type='text' placeholder="CURP" id="curp" name="curp"
+                                    value={formik.values.curp.toUpperCase()}
+                                    onChange={(e) => formik.setFieldValue('curp', e.target.value.toUpperCase())} // Convertir a mayúsculas al escribir
+                                    onBlur={formik.handleBlur}
+                                    helperText={
+                                        formik.touched.curp &&
+                                        formik.errors.curp && (
+                                            <span className='text-red-600'>{formik.errors.curp}</span>
+                                        )
+                                    }
+                                />
+                            </div>
                     <div className='grid-col-4 pb-2'>
                         <Label style={{ color: '#03104A' }} htmlFor='phoneNumber' className='font-bold' value='Número de Teléfono' />
                         <TextInput style={{ backgroundColor: '#E6ECF1' }}

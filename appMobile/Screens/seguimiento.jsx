@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import AxiosClient from '../config/http/AxiosClient'; // Asegúrate de que la ruta sea correcta
+import AxiosClient from '../config/http/AxiosClient';
 
 const Seguimiento = ({ route }) => {
     const [detallesMedicina, setDetallesMedicina] = useState({});
     const seguimiento = route.params.seguimiento;
 
     const obtenerDetallesMedicinaPorId = async (id) => {
-        if (!detallesMedicina[id]) { // Verifica si ya hemos cargado los detalles de esta medicina
+        if (!detallesMedicina[id]) {
             try {
                 const response = await AxiosClient.get(`medicine/getOne/${id}`);
                 if (response.status === "OK" && !response.error) {
-                    // Actualiza el estado con los nuevos detalles de la medicina
                     setDetallesMedicina(prevState => ({
                         ...prevState,
                         [id]: response.data
@@ -25,7 +24,6 @@ const Seguimiento = ({ route }) => {
         }
     };
 
-    // Carga los detalles de las medicinas por ID cuando el componente se monta
     useEffect(() => {
         seguimiento.treatmentBeans.forEach(treatment => {
             treatment.medicineBeans.forEach(medicineId => {
@@ -37,15 +35,17 @@ const Seguimiento = ({ route }) => {
     }, [seguimiento.treatmentBeans]);
 
     return (
-        <ScrollView style={styles.allScreen} contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={styles.title}>Informe de visita</Text>
-            <View style={styles.container}>
+        <ScrollView style={styles.allScreen} contentContainerStyle={{ alignItems: 'center' }}>
+            <Text></Text>
+            <Text style={styles.title}>Informe de Diagnóstico</Text>
+            <Text></Text>
+            <View style={styles.centeredContainer}>
                 {seguimiento.treatmentBeans && seguimiento.treatmentBeans.map((treatment, index) => (
-                    <View key={index}>
-                        <Text style={styles.comp}>Tratamiento {index + 1}</Text>
+                    <View key={index} style={styles.card}>
+                        <Text style={styles.comp2}>Tratamiento {index + 1}</Text>
                         <Text style={styles.comp}>Indicaciones: <Text style={styles.compdatos}>{treatment.indications ?? 'Sin datos'}</Text></Text>
                         {treatment.medicineBeans.map((medicineId, medIndex) => (
-                            <View key={medIndex}>
+                            <View key={medIndex} style={styles.infoContainer}>
                                 <Text style={styles.comp}>Medicina {medIndex + 1}:</Text>
                                 {typeof medicineId === 'number' ? (
                                     detallesMedicina[medicineId] ? (
@@ -68,6 +68,8 @@ const Seguimiento = ({ route }) => {
                         ))}
                     </View>
                 ))}
+            </View>
+            <View style={styles.card}>
 
                     <Text style={styles.comp} >Resultado:<Text style={styles.compdatos}> {seguimiento.result ?? 'Sin datos'}</Text></Text>
                     <Text style={styles.comp} >Fecha de resultados:<Text style={styles.compdatos}>
@@ -116,14 +118,28 @@ export default Seguimiento;
                     flex: 1,
                     backgroundColor: '#ffff',
                 },
-                    container: {
-                    top: 20,
-                    padding: 40,
-                    marginBottom: 50,
+
+                centeredContainer: {
+                    flex: 1,
                     alignItems: 'center',
-                    backgroundColor: 'white',
-                    width: 350,
+                    justifyContent: 'center',
+                },
+                card: {
+                    marginBottom: 20,
+                    padding: 20,
+                    backgroundColor: '#fff',
                     borderRadius: 20,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                        width: 0,
+                        height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5,
+                },
+                infoContainer: {
+                    marginBottom: 10,
                 },
                     img: {
                     width: 150,

@@ -42,10 +42,19 @@ const SignInPage = () => {
 
         console.log(response);
         if (!response.error) {
-          console.log('Supuesto token guardado');
-          console.log(response.data);
-          dispatch({ type: 'SIGNIN', payload: response.data });
-          navigate('/', { replace: true });
+
+          if (response.data.authorities[0].authority === "PATIENT_ROLE") {
+            customAlert('Iniciar sesión', 'El usuario no teiene acceso a esta seccion', 'info');
+
+          }else{
+
+            console.log('Supuesto token guardado');
+            console.log(response.data);
+            dispatch({ type: 'SIGNIN', payload: response.data });
+            navigate('/', { replace: true });
+
+          }
+     
         } else {
           throw Error('Error');
         }

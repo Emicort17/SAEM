@@ -181,11 +181,11 @@ const RegisterMedical = () => {
                             </div>
 
 
-                            <div className='grid-col-6 pb-2' >
+                            <div className='grid-col-4 pb-2'>
                                 <Label style={{ color: '#03104A' }} htmlFor='curp' className='font-bold' value='CURP' />
-                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type='text' placeholder="CURP" id="curp"
-                                    value={formik.values.curp}
-                                    onChange={formik.handleChange}
+                                <TextInput style={{ backgroundColor: '#E6ECF1' }} type='text' placeholder="CURP" id="curp" name="curp"
+                                    value={formik.values.curp.toUpperCase()}
+                                    onChange={(e) => formik.setFieldValue('curp', e.target.value.toUpperCase())} // Convertir a mayúsculas al escribir
                                     onBlur={formik.handleBlur}
                                     helperText={
                                         formik.touched.curp &&

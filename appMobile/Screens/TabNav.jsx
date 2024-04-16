@@ -10,6 +10,7 @@ import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 
 import { useAuth } from '../config/context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,6 +31,7 @@ const TabNav = () => {
           text: "Aceptar",
           onPress: () => {
             onLoginSuccess(null);
+            AsyncStorage.removeItem('user');
           }
         }
       ]

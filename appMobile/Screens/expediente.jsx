@@ -54,11 +54,9 @@ Expediente = () => {
                   Nombre:
                 </Text>
                 <View style={styles.dato}>
-
                   <Text style={styles.compdatos}>
-                    {(datos?.userBean.personBean.name ?? 'Sin datos ') +
-                      (datos?.userBean.personBean.middleName ?? ' ') +
-                      (datos?.userBean.personBean.lastName ?? ' ')}
+                    {(datos?.userBean.personBean.name ?? 'Sin datos ') +' '+(datos?.userBean.personBean.middleName ?? ' ') +
+                    ' '+  (datos?.userBean.personBean.lastName ?? ' ')}
                   </Text>
                 </View>
                 <Text style={styles.comp} >Teléfono: </Text>
@@ -183,13 +181,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderRadius: 5,
   }
-
-
-
-
-
-
-
-
 
 })

@@ -6,12 +6,26 @@ import { useNavigation } from '@react-navigation/native';
 import AxiosClient from '../config/http/AxiosClient'; // Importa tu objeto AxiosClient
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../config/context/AuthContext';
+import CustomAlert from '../assets/Alert/CustomAlert';
 import { useEffect } from 'react';
 
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [animationName, setAnimationName] = useState('');
+
+  const handleUpdateError = (message, animation) => {
+      setAlertMessage(message);
+      setAnimationName(animation);
+      setAlertVisible(true);
+  };
+
+  const closeAlert = () => {
+      setAlertVisible(false);
+  };
 
   const handleUsernameChange = (text) => {
     setUsername(text.trim());
@@ -37,20 +51,31 @@ const Login = () => {
         await AsyncStorage.setItem('user', JSON.stringify(response.data));
         onLoginSuccess(response.data);
         console.log('entramos');
-      } else (Alert.alert("El usuario no tiene acceso a esta app"))
+      } else (handleUpdateError("El usuario no tiene acceso a esta app", "error"))
 
 
     } catch (error) {
-      Alert.alert("Usuario o contraseña incorrectos");
+      handleUpdateError("Usuario o contraseña incorrectos", "error");
       onLoginSuccess(null);
     }
   };
 
-  useEffect(() => {
-    if (userData) {
-      onLoginSuccess(userData);
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('user');
+      if (value !== null) {
+        // We have data!!
+        onLoginSuccess(JSON.parse(value))
+      }
+    } catch (error) {
+      // Error retrieving data
     }
-  }, [userData, onLoginSuccess]);
+  };
+
+  useEffect(() => {
+    _retrieveData()
+  }, []);
 
   const goToForgetPasswordScreen = () => {
     // Navega a la pantalla 'ForgetPass' para recuperar la contraseña
@@ -111,6 +136,13 @@ const Login = () => {
 
       </View>
 
+      <CustomAlert
+                    isVisible={alertVisible}
+                    onClose={closeAlert}
+                    message={alertMessage}
+                    animationName={animationName}
+                />
+
     </View>
 
   );
@@ -133,20 +165,18 @@ const styles = StyleSheet.create({
   },
   allScreen: {
     flex: 1,
-    justifyContent:'flex-end',
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#03104A',
-    paddingHorizontal:20
-  },
-  container: {
+},
+container: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    width: 340,
-    height: 600,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
+    width: 350,
+    height: 650,
+    borderRadius: 20
+},
   img: {
     position: 'absolute',
     top: 0,

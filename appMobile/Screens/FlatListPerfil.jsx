@@ -10,7 +10,7 @@ FlatListPerfil= ({fecha,resultado, enfermedad,seguimiento,}) =>{
 
   let send=()=>{
 
-    navigation.navigate('Seguimiento', { seguimiento: seguimiento });
+    navigation.navigate('Informe', { seguimiento: seguimiento });
 }
 
     return(
@@ -25,7 +25,7 @@ FlatListPerfil= ({fecha,resultado, enfermedad,seguimiento,}) =>{
                 <Button
                     buttonStyle={styles.btn}
                     onPress={send}
-                    title="Ver mas"
+                    title="Ver más"
                     titleStyle={styles.titlebtn}
                 />
             </View>
