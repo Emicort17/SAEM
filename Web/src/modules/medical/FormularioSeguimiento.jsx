@@ -14,6 +14,9 @@ import { TiDelete } from "react-icons/ti";
 const FormularioSeguimiento = () => {
     const location = useLocation();
     const datos = location.state || {};
+    const today = new Date();
+    const localToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString().substring(0, 10);
+
 
     const [medicamento, setMedicamento] = useState([]);
 
@@ -65,7 +68,7 @@ const FormularioSeguimiento = () => {
             cargaviral: "",
             ast: "",
             plaquetas: "",
-            fecharesultado: "",
+            fecharesultado: today,
             creatinina: "",
             alt: "",
             antigen: "",
@@ -76,14 +79,14 @@ const FormularioSeguimiento = () => {
         validationSchema: yup.object().shape({
 
             enfermedad: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_-]+$/, 'No se permiten caracteres especiales'),
-            fecha: yup.string().required('Campo obligatorio'),
+            fecha: yup.string().required('Campo obligatorio').max(today, 'La fecha no puede ser futura.'),
 
             resultado: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_-]+$/, 'No se permiten caracteres especiales'),
             
             cargaviral: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
             ast: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
             plaquetas: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
-            fecharesultado: yup.string().required('Campo obligatorio'),
+            fecharesultado: yup.string().required('Campo obligatorio').max(today, 'La fecha no puede ser futura.'),
             creatinina: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
             alt: yup.string().required('Campo obligatorio').matches(/^[0-9]+$/, 'Solo se permiten números'),
             antigen: yup.string().required('Campo obligatorio'),
@@ -274,6 +277,7 @@ const FormularioSeguimiento = () => {
                                             value={formik.values.fecha}
                                             onChange={formik.handleChange}
                                             onBlur={formik.handleBlur}
+                                            max={localToday}
                                             className='disabled'
                                             helperText={
                                                 formik.touched.fecha &&
@@ -333,6 +337,7 @@ const FormularioSeguimiento = () => {
                                                 value={formik.values.fecharesultado}
                                                 onChange={formik.handleChange}
                                                 onBlur={formik.handleBlur}
+                                                max={localToday}
                                                 helperText={
                                                     formik.touched.fecharesultado &&
                                                     formik.errors.fecharesultado && (

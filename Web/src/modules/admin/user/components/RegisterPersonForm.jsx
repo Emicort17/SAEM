@@ -11,6 +11,8 @@ import Switch from '@mui/material/Switch';
 
 
 const RegisterPerson = () => {
+    const today = new Date();
+    const localToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString().substring(0, 10);
 
     const navigate = useNavigate();
 
@@ -55,7 +57,7 @@ const RegisterPerson = () => {
 
             curp: yup.string().required('Campo obligatorio').min(18, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres').matches(/^[a-zA-Z0-9]+$/, 'No se permiten caracteres especiales'),
             phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos').matches(/^\d+$/, 'Solo se permiten dígitos'),
-            birthdate: yup.string().required('Campo obligatorio'),
+            birthdate: yup.string().required('Campo obligatorio').max(today, 'La fecha no puede ser futura.'),
 
             state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
             municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
@@ -139,7 +141,6 @@ const RegisterPerson = () => {
 
                         <div className='flex flex-col gap-3' >
                             <h3 className='font-bold text-2xl text-center'>Datos</h3>
-                            {/* Contenido del primer recuadro aquí */}
                             <div className='flex flex-row'>
                                 <div className='w-full'>
                                     <Label style={{ color: '#03104A' }} htmlFor='name' className='font-bold' value='Nombre' />
@@ -242,6 +243,7 @@ const RegisterPerson = () => {
                                     value={formik.values.birthdate}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
+                                    max={localToday}
                                     helperText={
                                         formik.touched.birthdate &&
                                         formik.errors.birthdate && (
