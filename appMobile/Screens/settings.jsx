@@ -319,7 +319,6 @@ const styles = StyleSheet.create({
         width: 343,
         borderRadius: 20,
         zIndex:-1,
-        alignItems: 'center',
         ...Platform.select({
             ios: {
               shadowColor: '#000',
@@ -351,7 +350,6 @@ const styles = StyleSheet.create({
         width: 343,
         borderRadius: 20,
         zIndex:-1,
-        alignItems: 'center',
         ...Platform.select({
             ios: {
               shadowColor: '#000',

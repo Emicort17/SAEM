@@ -137,6 +137,9 @@ export default Seguimiento;
                     shadowOpacity: 0.25,
                     shadowRadius: 3.84,
                     elevation: 5,
+                    maxWidth: 340,
+                    width: '90%',
+                    alignSelf: 'center',
                 },
                 infoContainer: {
                     marginBottom: 10,

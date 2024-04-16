@@ -19,11 +19,11 @@
     "axios": "^1.6.8",
     "expo": "~50.0.15",
     "expo-status-bar": "~1.11.1",
+    "expo-updates": "~0.24.12",
     "lottie-react-native": "^6.5.1",
     "react": "18.2.0",
     "react-native": "^0.73.6",
-    "react-native-vector-icons": "^10.0.3",
-    "expo-updates": "~0.24.12"
+    "react-native-vector-icons": "^10.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

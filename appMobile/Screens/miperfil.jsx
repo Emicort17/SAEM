@@ -16,6 +16,7 @@ import FlatListPerfil from './FlatListPerfil';
 import { useAuth } from '../config/context/AuthContext';
 import { useEffect, useState } from 'react';
 import AxiosClient from '../config/http/AxiosClient';
+import {SearchBar} from "@rneui/themed";
 
 Perfil = () => {
   const { userData, onLoginSuccess } = useAuth('');
@@ -24,26 +25,23 @@ Perfil = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [query, setQuery] = useState('')
   const [filterData, setFilterData] = useState([])
-  const handleSearch = () =>{
+  const handleSearch = (q) => {
+    let getSearch = q;
 
-    if(query !== ''){
-      const searchData = filterData.filter((item) => search(item, query))
-
-      setPersonResponse(searchData)
-
-      console.log(searchData)
-      console.log(query)
-    }else{
-      //setUsers(filterData)
-      console.log('HOla '+query)
+    if (getSearch !== '') {
+      const searchData = filterData.filter((item) => search(item, getSearch));
+      setPersonResponse(searchData);
+    } else {
+      setPersonResponse(filterData);
     }
-
+    setQuery(getSearch);
   }
 
-  const search = (item, search) =>{
-    const {disease, startDate, result} = item
-
-    return  disease.toLowerCase().includes(search.toLowerCase()) || startDate.toLowerCase().includes(search.toLowerCase()) || result.toLowerCase().includes(search.toLowerCase())
+  const search = (item, search) => {
+    const { disease, startDate, result } = item;
+    return disease.toLowerCase().includes(search.toLowerCase()) ||
+        startDate.toLowerCase().includes(search.toLowerCase()) ||
+        result.toLowerCase().includes(search.toLowerCase());
   }
 
   const onRefresh = React.useCallback(async () => {
@@ -84,19 +82,16 @@ Perfil = () => {
 
     <View style={styles.allScreen}>
       <View style={styles.contSearch}>
-        <TextInput style={styles.search} value={query} onChangeText={setQuery} placeholder='Buscar...' />
-        <Button
-            buttonStyle={styles.btnSearch}
-            containerStyle={{}}
-            linearGradientProps={null}
-            icon={<Icon name="magnify" size={25} color="#ffffff" />}
-            iconContainerStyle={{ background: "#03104A" }}
-            loadingProps={{ animating: true }}
-            loadingStyle={{}}
-            onPress={handleSearch}
-            titleProps={{}}
-            titleStyle={{ marginHorizontal: 5 }}
+        <SearchBar
+            placeholder="Buscar..."
+            onChangeText={handleSearch}
+            value={query}
+            containerStyle={styles.containerSearch}  // Estilos para el contenedor exterior
+            inputContainerStyle={styles.inputContainerSearch}  // Estilos para el contenedor interno del input
+            inputStyle={styles.inputSearch}  // Estilos para el input
+            placeholderTextColor='rgba(255, 255, 255, 0.7)'  // Color del placeholder
         />
+
       </View>
 
       <SafeAreaView style={styles.list}>
@@ -120,7 +115,7 @@ Perfil = () => {
                 )}
                 ListHeaderComponent={() => (
                     <View style={styles.header}>
-                      <Text style={{marginBottom: 8}}>Arrastra la pantalla hacia abajo para restablecer</Text>
+                      <Text style={{marginBottom: 8}}>Arrastra la pantalla hacia abajo para actualizar</Text>
                     </View>
                 )}
             />
@@ -130,7 +125,7 @@ Perfil = () => {
                 refreshControl={
               <RefreshControl style={{ alignSelf: 'center' }} refreshing={refreshing} onRefresh={onRefresh} />
             }>
-              { refreshing? (<Text style={{color:'gray'}}>Cargando...</Text>): (<Text style={{color: 'gray', textAlign:'center'}}>No hay datos disponibles. Arrastre la pantlla hacia abajo para actualizarla</Text>)}
+              { refreshing? (<Text style={{color:'gray'}}>Cargando...</Text>): (<Text style={{color: 'gray', textAlign:'center'}}>No hay datos disponibles. Arrastre la pantlla hacia abajo para restablecer</Text>)}
             </ScrollView>
         )}
       </SafeAreaView>
@@ -146,6 +141,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ffffff',
   },
+  containerSearch: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+    width: '100%',
+  },
+  inputContainerSearch: {
+    backgroundColor: '#083565',
+    borderRadius: 10,
+  },
+  inputSearch: {
+    color: 'white',
+    fontSize: 18,
+  },
+  contSearch: {
+    position: 'absolute',
+    marginTop: 25,
+    top: 0,
+    flexDirection: 'row',
+    width: '100%',
+    paddingHorizontal: 20,
+  },
+  search: {
+    flex: 1,
+    height: 50,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#083565',
+    color: 'white',
+    fontSize: 18,
+    backgroundColor: '#083565',
+    paddingLeft: 15,
+  },
   circulo: {
     borderRadius: 100,
     backgroundColor: 'black',
@@ -158,25 +186,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 20
   },
-  contSearch: {
-    position: 'absolute',
-    marginTop: 25,
-    top: 0,
-    flexDirection: 'row'
-  },
-  search: {
-    padding: 10,
-    color: 'gray',
-    fontSize: 15,
-    width: 250,
-    height: 50,
-    borderLeftWidth: 1,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderRadius: 5,
-
-
-  }, img: {
+  img: {
     position: 'absolute',
     top: 0,
     marginTop: 90,

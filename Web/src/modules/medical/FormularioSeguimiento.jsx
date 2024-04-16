@@ -144,7 +144,7 @@ const FormularioSeguimiento = () => {
                                     console.log('se guardo el tratamiento')
 
                                     const results = {
-                                        resultDate: formik.values.fecha,
+                                        resultDate: formik.values.fecharesultado,
                                         diagnosticBean: {
                                             id: response.data.id,
                                         },
