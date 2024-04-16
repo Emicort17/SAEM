@@ -5,15 +5,43 @@ import { useNavigate } from 'react-router-dom';
 import React, { useMemo, useState, useEffect } from 'react'
 import { BsFileEarmarkText } from "react-icons/bs";
 import { CiEdit } from "react-icons/ci";
+import { IoSearchOutline } from "react-icons/io5";
+
 
 const Patients = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
+    const [filterData, setFilterData] = useState([])
+    const [query, setQuery] = useState('')
 
     const handleSectionChange = (section) => {
         setSelectedSection(section);
     };
+
+    const handleSearch = (event) => {
+        const getSearch = event.target.value
+
+        if (getSearch.length > 0) {
+            const searchData = filterData.filter((item) => search(item, getSearch))
+
+            setUsers(searchData)
+
+            console.log(searchData)
+        } else {
+            setUsers(filterData)
+        }
+        setQuery(getSearch)
+    }
+
+    const search = (item, search) => {
+        const { name, middleName, lastName } = item.userBean.personBean
+        const { number } = item.medicalRecordBean
+
+        const fullName = `${name} ${middleName} ${lastName}`
+
+        return fullName.toLowerCase().includes(search.toLowerCase()) || number.includes(search)
+    }
 
     const loadCurp = async (row) => {
         try {
@@ -29,7 +57,7 @@ const Patients = () => {
         }
     };
 
-    const getCard = async (curpdata , data) => {
+    const getCard = async (curpdata, data) => {
         try {
             console.log("CURP antes de hacer la solicitud:", curpdata);
             const response = await AxiosClient({
@@ -37,23 +65,23 @@ const Patients = () => {
                 method: 'GET',
             });
             if (!response.error) {
-                pasardatos(response.data , data); // Actualizar el estado de card
-              
+                pasardatos(response.data, data); // Actualizar el estado de card
+
             }
         } catch (error) {
             console.log(error);
         }
     };
 
-    const pasardatos = (datocard,data) => {
+    const pasardatos = (datocard, data) => {
         console.log(datocard);
-          navigate('/formularioSeguimiento', { state: {datocard, data}});
+        navigate('/formularioSeguimiento', { state: { datocard, data } });
     }
-    
+
     const citas = (Noexp) => {
         navigate('/diagnosticos', { state: Noexp });
     }
-    
+
     const estado = (estado) => {
         return estado ? 'Activo' : 'Inactivo'; // Simplificación del código
     }
@@ -105,9 +133,13 @@ const Patients = () => {
             const response = await AxiosClient({
                 url: "/patient/findAll",
                 method: 'GET',
+
             });
             console.log(response);
-            if (!response.error) setUsers(response.data);
+            if (!response.error) {
+                setUsers(response.data);
+                setFilterData(response.data)
+            }
         } catch (error) {
             console.log(error);
         } finally {
@@ -130,20 +162,19 @@ const Patients = () => {
         fetchData();
     }, []);
 
-    
+
 
     return (
         <section className='w-full px-4 pt-4 flex flex-col gap-4'>
-                <h1 className=' text-3xl  mt-3 mx-4'>Pacientes</h1>
+            <h1 className=' text-3xl  mt-3 mx-4'>Pacientes</h1>
 
             <div className='w-full flex justify-end p-5'>
 
-            <div className='max-w-screen-md flex justify-between items-center'>
-            <div className='max-w-64  mx-4'>
-                    <Label htmlFor='' />
-                    <TextInput type='text' id='filter' placeholder='Buscar...' />
+                <div className='max-w-screen-md flex justify-between items-center'>
+                    <div className='max-w-64  mx-4'>
+                        <TextInput rightIcon={IoSearchOutline} value={query} onChange={(e) => handleSearch(e)} type='text' id='filter' placeholder='Buscar...' />
+                    </div>
                 </div>
-            </div>
             </div>
 
             <CustomDataTable
