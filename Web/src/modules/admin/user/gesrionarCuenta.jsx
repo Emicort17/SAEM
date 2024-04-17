@@ -1,11 +1,7 @@
 
-import { Button, Card, Label, Select, TextInput } from 'flowbite-react'
+import { Button,  Label,  TextInput } from 'flowbite-react'
 import { confimAlert, customAlert } from '../../../config/alerts/alert';
-import { Avatar } from "flowbite-react";
-import { FileInput, } from "flowbite-react";
-import { GrUpdate } from "react-icons/gr";
 import { useLocation, useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
 import AxiosClient from '../../../config/http-client/axios-client';
 
 import { useFormik } from 'formik';
@@ -17,17 +13,20 @@ const GetionarCuenta = () => {
     const datos = location.state || {};
 
 
+    console.log(datos.datocard)
     const navigate = useNavigate();
 
-    console.log(datos);
+    console.log( datos.data.user.email);
+
+    const initialEmail = datos.data.user.email.endsWith('e') ? datos.data.user.email.slice(0, -1) : datos.data.user.email;
+
     const formik = useFormik({
         initialValues: {
             cedula: datos.datocard,
-            email: datos.data.user.email,
+            email: initialEmail,
             password: datos.data.user.password,
             confirmPassword: datos.data.user.password,
             status: datos.data.user.status,
-
             name: datos.data.user.personBean.name,
             surname: datos.data.user.personBean.middleName,
             lastname: datos.data.user.personBean.lastName,
@@ -36,7 +35,6 @@ const GetionarCuenta = () => {
             birthdate: datos.data.user.personBean.birthdate,
             birthplace: datos.data.user.personBean.birthplace,
             phoneNumber: datos.data.user.personBean.phoneNumber,
-
             state: datos.data.user.personBean.addressBean.state,
             municipio: datos.data.user.personBean.addressBean.town,
             cp: datos.data.user.personBean.addressBean.zip,
@@ -45,10 +43,6 @@ const GetionarCuenta = () => {
             calle3: datos.data.user.personBean.addressBean.street3,
             interiorNumber: datos.data.user.personBean.addressBean.interiorNumber,
             exteriorNumber: datos.data.user.personBean.addressBean.exteriorNumber,
-
-       
-
-
         },
         validationSchema: yup.object().shape({
             newpass: yup.string().required('Campo obligatorio').min(8, 'Mínimo 8 caracteres').max(45, 'Máximo 45 caracteres'),
@@ -61,12 +55,12 @@ const GetionarCuenta = () => {
             email: yup.string().required('Campo obligatorio').email('Ingresa un correo electrónico válido').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\s@.]+$/, 'No se permiten caracteres especiales'),
             password: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres'),
             confirmPassword: yup.string().required('Campo obligatorio').min(8, 'Minimo 8 caracteres').test("password-matches", "Las contraseñas no coinciden", function (value) { return value === this.parent.password }),
-            
+
             phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos').matches(/^\d+$/, 'Solo se permiten dígitos'),
-            
+
             state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
             municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
-            
+
             cp: yup.string().required('Campo obligatorio').min(5, 'Mínimo 5 caracteres').max(5, 'Máximo 5 caracteres').matches(/^\d+$/, 'Solo se permiten dígitos'),
             calle: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
 
@@ -77,7 +71,7 @@ const GetionarCuenta = () => {
                     const payload = {
                         card: datos.datocard,
                         userBean: {
-                            email: formik.values.email,
+                            email:  datos.data.user.email,
                             password: formik.values.password,
                             status: formik.values.status,
                             personBean: {
@@ -101,8 +95,6 @@ const GetionarCuenta = () => {
                                 }
                             }
                         }
-
-
                     };
                     console.log(payload);
                     const response = await AxiosClient({
@@ -153,7 +145,6 @@ const GetionarCuenta = () => {
                         card: datos.datocard,
                         oldPassword: formik2.values.passactually,
                         newPassword: formik2.values.newpass
-
 
                     };
                     console.log(payload);

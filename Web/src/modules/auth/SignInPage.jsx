@@ -34,28 +34,54 @@ const SignInPage = () => {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const response = await AxiosClient.post('/auth/signIn', {
+        // Primer intento con el usuario ingresado
+        let response = await AxiosClient.post('/auth/signIn', {
           emailOrUsername: values.username,
           password: values.password,
         });
 
         if (!response.error) {
-          if (response.data.authorities[0].authority === "PATIENT_ROLE") {
-            customAlert('Iniciar sesión', 'El usuario no tiene acceso a esta sección', 'info');
-          } else {
-            dispatch({ type: 'SIGNIN', payload: response.data });
-            navigate('/', { replace: true });
-          }
+          handleSuccess(response);
         } else {
-          throw new Error('Error');
+          // Si falla y el usuario no termina con 'e', prueba añadiendo 'e'
+          if (!values.username.endsWith('e')) {
+            response = await AxiosClient.post('/auth/signIn', {
+              emailOrUsername: `${values.username}e`,
+              password: values.password,
+            });
+
+            if (!response.error) {
+              handleSuccess(response);
+            } else {
+              // Si el segundo intento también falla
+              handleError();
+            }
+          } else {
+            // Si falla y el usuario ya terminaba con 'e'
+            handleError();
+          }
         }
       } catch (error) {
-        customAlert('Iniciar sesión', 'Usuario y/o contraseña incorrectos', 'info');
+        // Maneja cualquier otro error
+        handleError();
       } finally {
         setSubmitting(false);
       }
     },
   });
+
+  function handleSuccess(response) {
+    if (response.data.authorities[0].authority === "PATIENT_ROLE") {
+      customAlert('Iniciar sesión', 'El usuario no tiene acceso a esta sección', 'info');
+    } else {
+      dispatch({ type: 'SIGNIN', payload: response.data });
+      navigate('/', { replace: true });
+    }
+  }
+
+  function handleError() {
+    customAlert('Iniciar sesión', 'Usuario y/o contraseña incorrectos', 'info');
+  }
 
   return (
       <>
