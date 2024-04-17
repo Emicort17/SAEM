@@ -61,8 +61,15 @@ public class PatientService {
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> save(PatientBean patient){
         String curp = patient.getUserBean().getPersonBean().getCurp();
+        String email = patient.getUserBean().getEmail();
+
         if(repository.findByUserBeanPersonBeanCurp(curp).isPresent()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El curp del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
+        }
+        if(userRepository.findByEmail(email).isPresent() && !userRepository.findByEmail(email).get().getEmail().endsWith("e")){
+            email = email.concat("e");
+        }else{
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo ya esta registrado a un paciente"), HttpStatus.BAD_REQUEST);
         }
 
         AddressBean savedAddress = addressRepository.save(patient.getUserBean().getPersonBean().getAddressBean());
@@ -72,6 +79,7 @@ public class PatientService {
         PersonBean savedPerson = personRepository.save(personBean);
 
         UserBean userBean = patient.getUserBean();
+        userBean.setEmail(email);
         userBean.setPersonBean(savedPerson);
         userBean.setPassword(passwordEncoder.encode(userBean.getPassword()));
         UserBean savedUser = userRepository.save(userBean);
