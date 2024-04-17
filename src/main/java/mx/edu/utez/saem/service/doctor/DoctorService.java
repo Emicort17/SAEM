@@ -56,8 +56,15 @@ public class DoctorService {
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> save(DoctorBean doctor){
         String card = doctor.getCard();
+        String email = doctor.getUserBean().getEmail();
         if(repository.findByCard(card).isPresent()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "La cedula del doctor ya está registrada."), HttpStatus.BAD_REQUEST);
+        }
+
+        if(userRepository.findByEmail(email).isPresent() && !userRepository.findByEmail(email).get().getEmail().endsWith("e")){
+            email = email.concat("e");
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del doctor ya está registrado."), HttpStatus.BAD_REQUEST);
         }
 
         AddressBean savedAddress = addressRepository.save(doctor.getUserBean().getPersonBean().getAddressBean());
@@ -67,6 +74,7 @@ public class DoctorService {
         PersonBean savedPerson = personRepository.save(personBean);
 
         UserBean userBean = doctor.getUserBean();
+        userBean.setEmail(email);
         userBean.setPersonBean(savedPerson);
         userBean.setPassword(passwordEncoder.encode(userBean.getPassword()));
         UserBean savedUser = userRepository.save(userBean);
