@@ -112,7 +112,7 @@ public class DoctorService {
         UserBean foundUser = foundDoctor.getUserBean();
 
         foundUser.setEmail(updatedUser.getEmail());
-        foundUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        foundUser.setPassword((updatedUser.getPassword()));
         foundUser.setStatus(updatedUser.getStatus());
 
         PersonBean updatedPerson = updatedUser.getPersonBean();
