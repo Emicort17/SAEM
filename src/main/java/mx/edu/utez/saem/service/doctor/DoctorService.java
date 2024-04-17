@@ -58,15 +58,19 @@ public class DoctorService {
         String card = doctor.getCard();
         String email = doctor.getUserBean().getEmail();
 
-        // Verificar si la cédula del doctor ya está registrada
-        if(repository.findByCard(card).isPresent()) {
+        if (repository.findByCard(card).isPresent()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "La cédula del doctor ya está registrada."), HttpStatus.BAD_REQUEST);
         }
 
-        // Verificar si el correo del doctor ya está registrado
-        if(userRepository.findByEmail(email).isPresent()) {
+        Optional<UserBean> userByEmail = userRepository.findByEmail(email);
+        if (userByEmail.isPresent() && !email.endsWith("e")) {
+            email += "e";
+        }
+
+        if (userRepository.findByEmail(email).isPresent()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del doctor ya está registrado."), HttpStatus.BAD_REQUEST);
         }
+
 
         // Guardar la dirección
         AddressBean savedAddress = addressRepository.save(doctor.getUserBean().getPersonBean().getAddressBean());

@@ -63,20 +63,16 @@ public class PatientService {
         String curp = patient.getUserBean().getPersonBean().getCurp();
         String email = patient.getUserBean().getEmail();
 
-        // Verificar si el CURP ya está registrado
         if (repository.findByUserBeanPersonBeanCurp(curp).isPresent()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El CURP del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
         }
 
         Optional<UserBean> userByEmail = userRepository.findByEmail(email);
-        if (userByEmail.isPresent()) {
-            if (email.endsWith("e")) {
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo ya está registrado a un paciente y no se puede modificar."), HttpStatus.BAD_REQUEST);
-            }
-            email = email.concat("e");
+        if (userByEmail.isPresent() && !email.endsWith("b")) {
+            email += "b";
         }
 
-        if(userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.findByEmail(email).isPresent()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
         }
 
