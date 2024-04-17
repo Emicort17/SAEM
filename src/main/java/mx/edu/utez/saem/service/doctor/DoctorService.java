@@ -6,6 +6,7 @@ import mx.edu.utez.saem.model.address.AddressBean;
 import mx.edu.utez.saem.model.address.AddressRepository;
 import mx.edu.utez.saem.model.doctor.DoctorBean;
 import mx.edu.utez.saem.model.doctor.DoctorRepository;
+import mx.edu.utez.saem.model.patient.PatientRepository;
 import mx.edu.utez.saem.model.person.PersonBean;
 import mx.edu.utez.saem.model.person.PersonRepository;
 import mx.edu.utez.saem.model.user.UserBean;
@@ -28,6 +29,7 @@ public class DoctorService {
     private final PersonRepository personRepository;
     private final UserRepository userRepository;
     private final DoctorRepository repository;
+    private final PatientRepository patientRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
@@ -56,9 +58,17 @@ public class DoctorService {
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> save(DoctorBean doctor){
         String card = doctor.getCard();
+        String email = doctor.getUserBean().getEmail();
         if(repository.findByCard(card).isPresent()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "La cedula del doctor ya está registrada."), HttpStatus.BAD_REQUEST);
         }
+        if (userRepository.findByEmail(email).isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del doctor ya está registrado."), HttpStatus.BAD_REQUEST);
+        }
+        if (patientRepository.findByUserBeanEmail(email).isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del doctor ya está registrado como paciente."), HttpStatus.BAD_REQUEST);
+        }
+
 
         AddressBean savedAddress = addressRepository.save(doctor.getUserBean().getPersonBean().getAddressBean());
 

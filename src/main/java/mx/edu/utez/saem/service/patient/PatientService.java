@@ -6,6 +6,7 @@ import mx.edu.utez.saem.model.address.AddressBean;
 import mx.edu.utez.saem.model.address.AddressRepository;
 import mx.edu.utez.saem.model.diagnostic.DiagnosticBean;
 import mx.edu.utez.saem.model.diagnostic.DiagnosticRepository;
+import mx.edu.utez.saem.model.doctor.DoctorRepository;
 import mx.edu.utez.saem.model.medicalRecord.MedicalRecordBean;
 import mx.edu.utez.saem.model.medicalRecord.MedicalRecordRepository;
 import mx.edu.utez.saem.model.patient.PatientBean;
@@ -39,7 +40,7 @@ public class PatientService {
     private final PasswordEncoder passwordEncoder;
     private final MedicalRecordRepository medicalRecordRepository;
     private final DiagnosticRepository diagnosticRepository;
-
+    private final DoctorRepository doctorRepository;
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
         List<PatientBean> patients = repository.findAll();
@@ -61,8 +62,15 @@ public class PatientService {
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> save(PatientBean patient){
         String curp = patient.getUserBean().getPersonBean().getCurp();
+        String email = patient.getUserBean().getEmail();
         if(repository.findByUserBeanPersonBeanCurp(curp).isPresent()) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El curp del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
+        }
+        if (userRepository.findByEmail(email).isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
+        }
+        if(doctorRepository.findByUserBeanEmail(email).isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
         }
 
         AddressBean savedAddress = addressRepository.save(patient.getUserBean().getPersonBean().getAddressBean());
