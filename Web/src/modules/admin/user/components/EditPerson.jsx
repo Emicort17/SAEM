@@ -16,7 +16,8 @@ const EditPerson = () => {
     const location = useLocation();
     const datos = location.state || {};
     const navigate = useNavigate();
-
+    const today = new Date();
+    const localToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString().substring(0, 10);
 
     const [checked, setChecked] = React.useState(datos.external);
 
@@ -63,7 +64,7 @@ const EditPerson = () => {
             
             curp: yup.string().required('Campo obligatorio').min(18, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres').matches(/^[a-zA-Z0-9]+$/, 'No se permiten caracteres especiales'),
             phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos').matches(/^\d+$/, 'Solo se permiten dígitos'),
-            birthdate: yup.string().required('Campo obligatorio'),
+            birthdate: yup.string().required('Campo obligatorio').max(today, 'La fecha no puede ser futura.'),
             
             state: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
             municipio: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z\sáéíóúÁÉÍÓÚñÑ]+$/, 'No se permiten caracteres especiales'),
@@ -249,6 +250,7 @@ const EditPerson = () => {
                             value={formik.values.birthdate}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
+                            max={localToday}
                             helperText={
                                 formik.touched.birthdate &&
                                 formik.errors.birthdate && (

@@ -6,6 +6,8 @@ import React from 'react'
 import *  as yup from "yup"
 
 const RegisterUserForm = ({ isCreating, setIsCreating, getAllUsers }) => {
+    const today = new Date();
+    const localToday = new Date(today.getFullYear(), today.getMonth(), today.getDate()).toISOString().substring(0, 10);
     const closeModal = () => {
         formik.resetForm();
         setIsCreating(false);
@@ -40,7 +42,7 @@ const RegisterUserForm = ({ isCreating, setIsCreating, getAllUsers }) => {
             
             curp: yup.string().required('Campo obligatorio').min(18, 'Minimo 18 caracteres').max(18, 'Maximo 18 caracteres').matches(/^[a-zA-Z0-9]+$/, 'No se permiten caracteres especiales'),
             phoneNumber: yup.string().required('Campo obligatorio').matches(/^\d{10}$/, 'El número de teléfono debe tener 10 dígitos').matches(/^\d+$/, 'Solo se permiten dígitos'),
-            birthdate: yup.string().required('Campo obligatorio'),
+            birthdate: yup.string().required('Campo obligatorio').max(today, 'La fecha no puede ser futura.'),
             
 
         }),
@@ -239,6 +241,7 @@ const RegisterUserForm = ({ isCreating, setIsCreating, getAllUsers }) => {
                                     value={formik.values.birthdate}
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
+                                    max={localToday}
                                     helperText={
                                         formik.touched.birthdate &&
                                         formik.errors.birthdate && (
