@@ -62,15 +62,12 @@ public class DoctorService {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "La cédula del doctor ya está registrada."), HttpStatus.BAD_REQUEST);
         }
 
-        Optional<UserBean> userByEmail = userRepository.findByEmail(email);
-        if (userByEmail.isPresent() && !email.endsWith("d")) {
+        Optional<UserBean> userByEmail = userRepository.findByEmail(email.concat("d"));
+        if (userByEmail.isEmpty()) {
             email += "d";
-        }
-
-        if (userRepository.findByEmail(email).isPresent()) {
+        }else{
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del doctor ya está registrado."), HttpStatus.BAD_REQUEST);
         }
-
 
         // Guardar la dirección
         AddressBean savedAddress = addressRepository.save(doctor.getUserBean().getPersonBean().getAddressBean());

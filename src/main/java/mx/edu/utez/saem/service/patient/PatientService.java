@@ -67,12 +67,10 @@ public class PatientService {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El CURP del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
         }
 
-        Optional<UserBean> userByEmail = userRepository.findByEmail(email);
-        if (userByEmail.isPresent() && !email.endsWith("p")) {
+        Optional<UserBean> userByEmail = userRepository.findByEmail(email.concat("p"));
+        if (userByEmail.isEmpty()) {
             email += "p";
-        }
-
-        if (userRepository.findByEmail(email).isPresent()) {
+        }else{
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
         }
 
