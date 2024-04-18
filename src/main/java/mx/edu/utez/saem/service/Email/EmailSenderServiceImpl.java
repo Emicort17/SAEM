@@ -50,7 +50,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     @Override
     public Boolean sendEmail_password(String toEmail){
         Optional<UserBean> foundUser = userService.findUserByEmail(toEmail);
-        if(toEmail.endsWith("p")){//a ver si asi
+        if(toEmail.endsWith("p")){
             toEmail = toEmail.substring(0, toEmail.length()-1);
         }else if(toEmail.endsWith("d")){
             toEmail = toEmail.substring(0, toEmail.length()-1);

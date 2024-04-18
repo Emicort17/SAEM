@@ -54,7 +54,7 @@ public class DoctorService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> save(DoctorBean doctor){
+    public ResponseEntity<ApiResponse> save(DoctorBean doctor) {
         String card = doctor.getCard();
         String email = doctor.getUserBean().getEmail();
 
@@ -65,7 +65,7 @@ public class DoctorService {
         Optional<UserBean> userByEmail = userRepository.findByEmail(email.concat("d"));
         if (userByEmail.isEmpty()) {
             email += "d";
-        }else{
+        } else {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del doctor ya está registrado."), HttpStatus.BAD_REQUEST);
         }
 
