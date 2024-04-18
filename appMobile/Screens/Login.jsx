@@ -41,7 +41,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await AxiosClient.post('auth/signIn', {
-        emailOrUsername: username,
+        emailOrUsername: (username+'p'),
         password: password
       });
 

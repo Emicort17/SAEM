@@ -78,7 +78,7 @@ const FormularioSeguimiento = () => {
         },
         validationSchema: yup.object().shape({
 
-            enfermedad: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(45, 'Máximo 45 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_-]+$/, 'No se permiten caracteres especiales'),
+            enfermedad: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(20, 'Máximo 20 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_-]+$/, 'No se permiten caracteres especiales'),
             fecha: yup.string().required('Campo obligatorio').max(today, 'La fecha no puede ser futura.'),
 
             resultado: yup.string().required('Campo obligatorio').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_-]+$/, 'No se permiten caracteres especiales'),
@@ -92,7 +92,7 @@ const FormularioSeguimiento = () => {
             antigen: yup.string().required('Campo obligatorio'),
 
 
-            indicaciones: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').max(255, 'Máximo 255 caracteres').matches(/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ_"'-]+$/, 'No se permiten caracteres especiales'),
+            indicaciones: yup.string().required('Campo obligatorio'),
             medicina: yup.string().required('Campo obligatorio').min(3, 'Mínimo 3 caracteres').min(1, 'Seleccionar al menos un medicamento, es obligatorio'),
 
         }),

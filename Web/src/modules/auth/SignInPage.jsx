@@ -34,21 +34,54 @@ const SignInPage = () => {
     }),
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const response = await AxiosClient.post('/auth/signIn', {
-          emailOrUsername: values.username,
-          password: values.password,
-        });
 
-        if (!response.error) {
-          if (response.data.authorities[0].authority === "PATIENT_ROLE") {
-            customAlert('Iniciar sesión', 'El usuario no tiene acceso a esta sección', 'info');
+        if(values.username.includes('@')){
+
+          const response = await AxiosClient.post('/auth/signIn', {
+            emailOrUsername: (values.username + 'd'),
+            password: values.password,
+
+
+
+          });
+
+          if (!response.error) {
+            if (response.data.authorities[0].authority === "PATIENT_ROLE") {
+              customAlert('Iniciar sesión', 'El usuario no tiene acceso a esta sección', 'info');
+            } else {
+              dispatch({ type: 'SIGNIN', payload: response.data });
+              navigate('/', { replace: true });
+            }
           } else {
-            dispatch({ type: 'SIGNIN', payload: response.data });
-            navigate('/', { replace: true });
+            throw new Error('Error');
           }
-        } else {
-          throw new Error('Error');
+
+
+
+        }else{
+
+          const response = await AxiosClient.post('/auth/signIn', {
+            emailOrUsername: values.username,
+            password: values.password,
+
+          });
+
+          if (!response.error) {
+            if (response.data.authorities[0].authority === "PATIENT_ROLE") {
+              customAlert('Iniciar sesión', 'El usuario no tiene acceso a esta sección', 'info');
+            } else {
+              dispatch({ type: 'SIGNIN', payload: response.data });
+              navigate('/', { replace: true });
+            }
+          } else {
+            throw new Error('Error');
+          }
+
         }
+
+      
+
+       
       } catch (error) {
         customAlert('Iniciar sesión', 'Usuario y/o contraseña incorrectos', 'info');
       } finally {

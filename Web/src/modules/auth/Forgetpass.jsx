@@ -12,13 +12,17 @@ import { customAlert } from '../../config/alerts/alert';
 import AuthContext from '../../config/context/auth-context';
 import { Alert } from 'flowbite-react';
 import { HiInformationCircle } from 'react-icons/hi';
+import { MdKeyboardBackspace } from "react-icons/md";
 
 import './style.css';
 
 const Forgetpass = () => {
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
+  const regresar = () => {
+    navigate('/');
 
+  }
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -32,7 +36,7 @@ const Forgetpass = () => {
           url: '/auth/recover/send-mail',
           method: 'POST',
           data: {
-            toEmail: values.email,
+            toEmail: (values.email+'d'),
           },
 
         });
@@ -44,6 +48,9 @@ const Forgetpass = () => {
             'La contraseña fue enviada al correo',
             'info'
           );
+
+          navigate('/');
+
 
         } else throw Error('Error');
       } catch (error) {
@@ -76,10 +83,15 @@ const Forgetpass = () => {
         <section className=" dark:bg-gray-900 w-full  max-w-lg">
           <div className="  flex flex-col items-center px-4 mx-auto" style={{ marginTop: '2rem' }}>
             <div className="cont w-full bg-white rounded-lg shadow shadow-zinc-300 dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+              <div className=' cursor-pointer p-5 absolute' onClick={() => { regresar() }}><MdKeyboardBackspace  size={30} />
+              </div>
+                 
+                
 
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <h1 className="text-xl font-bold text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Recuperar Contraseña               </h1>
+
+              <h1 className="text-xl font-bold text-center leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                  Recuperar Contraseña </h1>
 
                 <Alert color="info" icon={HiInformationCircle} className='p-5 flex flex-row' >
                   <span className="font-medium flex flex-row">La contraseña será enviada al correo enlazado a la cuenta </span>

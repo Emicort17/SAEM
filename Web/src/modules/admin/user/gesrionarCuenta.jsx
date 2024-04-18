@@ -3,6 +3,7 @@ import { Button, Label, Select, TextInput } from 'flowbite-react'
 import { confimAlert, customAlert } from '../../../config/alerts/alert';
 import { useLocation, useNavigate } from 'react-router-dom';
 import AxiosClient from '../../../config/http-client/axios-client';
+import React from 'react'
 
 import { useFormik } from 'formik';
 import *  as yup from "yup"
@@ -19,36 +20,44 @@ const GetionarCuenta = () => {
     const navigate = useNavigate();
 
     console.log(datos);
+
+  
     const formik = useFormik({
         initialValues: {
-            cedula: datos.datocard,
-            email: datos.data.user.email,
-            password: datos.data.user.password,
-            confirmPassword: datos.data.user.password,
-            status: datos.data.user.status,
-
-            name: datos.data.user.personBean.name,
-            surname: datos.data.user.personBean.middleName,
-            lastname: datos.data.user.personBean.lastName,
-            curp: datos.data.user.personBean.curp,
-            sexo: datos.data.user.personBean.sex,
-            birthdate: datos.data.user.personBean.birthdate,
-            birthplace: datos.data.user.personBean.birthplace,
-            phoneNumber: datos.data.user.personBean.phoneNumber,
-
-            state: datos.data.user.personBean.addressBean.state,
-            municipio: datos.data.user.personBean.addressBean.town,
-            cp: datos.data.user.personBean.addressBean.zip,
-            calle: datos.data.user.personBean.addressBean.street1,
-            calle2: datos.data.user.personBean.addressBean.street2,
-            calle3: datos.data.user.personBean.addressBean.street3,
-            interiorNumber: datos.data.user.personBean.addressBean.interiorNumber,
-            exteriorNumber: datos.data.user.personBean.addressBean.exteriorNumber,
+            cedula: datos.data.card,
+            
+            email: datos.data.userBean.email.slice(0, -1),
 
 
+            password: datos.data.userBean.password,
+            confirmPassword: datos.data.userBean.password,
+            status: datos.data.userBean.status,
 
+            name: datos.data.userBean.personBean.name,
+            surname: datos.data.userBean.personBean.middleName,
+            lastname: datos.data.userBean.personBean.lastName,
+            curp: datos.data.userBean.personBean.curp,
+            sexo: datos.data.userBean.personBean.sex,
+            birthdate: datos.data.userBean.personBean.birthdate,
+            birthplace: datos.data.userBean.personBean.birthplace,
+            phoneNumber: datos.data.userBean.personBean.phoneNumber,
+
+            state: datos.data.userBean.personBean.addressBean.state,
+            municipio: datos.data.userBean.personBean.addressBean.town,
+            cp: datos.data.userBean.personBean.addressBean.zip,
+            calle: datos.data.userBean.personBean.addressBean.street1,
+            calle2: datos.data.userBean.personBean.addressBean.street2,
+            calle3: datos.data.userBean.personBean.addressBean.street3,
+            interiorNumber: datos.data.userBean.personBean.addressBean.interiorNumber,
+            exteriorNumber: datos.data.userBean.personBean.addressBean.exteriorNumber,
+
+
+         
 
         },
+
+        
+
         validationSchema: yup.object().shape({
             newpass: yup.string().required('Campo obligatorio').min(8, 'Mínimo 8 caracteres').max(45, 'Máximo 45 caracteres'),
             passactually: yup.string().required('Campo obligatorio').max(45, 'Máximo 45 caracteres'),
@@ -72,11 +81,13 @@ const GetionarCuenta = () => {
         }),
         onSubmit: async () => {
             confimAlert(async () => {
+
+               
                 try {
                     const payload = {
-                        card: datos.datocard,
+                        card: formik.values.cedula,
                         userBean: {
-                            email: formik.values.email,
+                            email: (formik.values.email+'d'),
                             password: formik.values.password,
                             status: formik.values.status,
                             personBean: {
@@ -133,6 +144,8 @@ const GetionarCuenta = () => {
         }
     })
 
+
+
     const handleStateChange = (state) => {
         formik.setFieldValue('state', state);
         setMunicipios(estadosMunicipios[state]);
@@ -147,6 +160,7 @@ const GetionarCuenta = () => {
 
     const formik2 = useFormik({
         initialValues: {
+            cedula: datos.data.card,
             newpass: '',
             passactually: '',
         },
@@ -159,7 +173,7 @@ const GetionarCuenta = () => {
 
                 try {
                     const payload = {
-                        card: datos.datocard,
+                        card: formik2.values.cedula,
                         oldPassword: formik2.values.passactually,
                         newPassword: formik2.values.newpass
 
@@ -175,7 +189,7 @@ const GetionarCuenta = () => {
                     if (!response.error) {
                         customAlert(
                             'Actualización exitosa',
-                            'La contraeña se ha actualizado correctamente',
+                            'La contraseña se ha actualizado correctamente',
                             'success');
                     }
 
@@ -408,19 +422,7 @@ const GetionarCuenta = () => {
 
 
                     <div className=''>
-                        <div className='grid-col-6 pb-2'>
-                            <Label style={{ color: '#03104A' }} htmlFor='newpass' className='font-bold' value='Contraseña nueva' />
-                            <TextInput style={{ backgroundColor: '#E6ECF1' }} hidden type='password' placeholder="************" id="newpass" name="newpass"
-                                       value={formik2.values.newpass}
-                                       onChange={formik2.handleChange}
-                                       onBlur={formik2.handleBlur}
-                                       helperText={
-                                           formik2.touched.newpass &&
-                                           formik2.errors.newpass && (
-                                               <span className="text-red-600">{formik2.errors.newpass}</span>
-                                           )
-                                       } />
-                        </div>
+                 
 
                         <div className='pb-2'>
                             <Label style={{ color: '#03104A' }} htmlFor='passactually' className='font-bold' value=' Anterior contraseña' />
@@ -432,6 +434,20 @@ const GetionarCuenta = () => {
                                            formik2.touched.passactually &&
                                            formik2.errors.passactually && (
                                                <span className="text-red-600">{formik2.errors.passactually}</span>
+                                           )
+                                       } />
+                        </div>
+
+                        <div className='grid-col-6 pb-2'>
+                            <Label style={{ color: '#03104A' }} htmlFor='newpass' className='font-bold' value='Contraseña nueva' />
+                            <TextInput style={{ backgroundColor: '#E6ECF1' }} hidden type='password' placeholder="************" id="newpass" name="newpass"
+                                       value={formik2.values.newpass}
+                                       onChange={formik2.handleChange}
+                                       onBlur={formik2.handleBlur}
+                                       helperText={
+                                           formik2.touched.newpass &&
+                                           formik2.errors.newpass && (
+                                               <span className="text-red-600">{formik2.errors.newpass}</span>
                                            )
                                        } />
                         </div>

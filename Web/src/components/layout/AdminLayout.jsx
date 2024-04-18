@@ -67,14 +67,14 @@ const AdminLayout = () => {
       if (userData) {
         const user = JSON.parse(userData);
         console.log("CURP del usuario:", user.user.personBean.curp);
-        await getCard(user.user.personBean.curp, user); // Esperar a que getCard se complete antes de continuar
+        await getCard(user.user.personBean.curp); // Esperar a que getCard se complete antes de continuar
       }
     } catch (error) {
       console.error('Error al encontrar la cedula:', error);
     }
   };
 
-  const getCard = async (curpdata, data) => {
+  const getCard = async (curpdata) => {
     try {
       console.log("CURP antes de hacer la solicitud:", curpdata);
       const response = await AxiosClient({
@@ -82,7 +82,8 @@ const AdminLayout = () => {
         method: 'GET',
       });
       if (!response.error) {
-        pasardatos(response.data, data); // Actualizar el estado de card
+       await getdatos(response.data); 
+       console.log(response);
 
       }
     } catch (error) {
@@ -90,9 +91,26 @@ const AdminLayout = () => {
     }
   };
 
-  const pasardatos = (datocard, data) => {
-    console.log(datocard);
-    navigate('/gestionarCuenta', { state: { datocard, data } });
+
+  const getdatos = async (card) => {
+    try {
+      console.log("CURP antes de hacer la solicitud:", card);
+      const response = await AxiosClient({
+        url: `/doctor/findOne/${card}`,
+        method: 'GET',
+      });
+      if (!response.error) {
+        pasardatos(response.data); // Actualizar el estado de card
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const pasardatos = (data) => {
+
+    navigate('/gestionarCuenta', { state: {  data } });
   }
 
   const loadUserName = async () => {

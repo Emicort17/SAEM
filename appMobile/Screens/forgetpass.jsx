@@ -17,7 +17,7 @@ ForgetPass = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(emailRegex.test(userEmail)){
             const json = {
-                toEmail: userEmail
+                toEmail: (userEmail+'p')
             }
             try {
                 console.log(userEmail);
