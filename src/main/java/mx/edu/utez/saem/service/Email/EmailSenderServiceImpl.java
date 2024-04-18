@@ -50,6 +50,11 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     @Override
     public Boolean sendEmail_password(String toEmail){
         Optional<UserBean> foundUser = userService.findUserByEmail(toEmail);
+        if(toEmail.endsWith("p")){
+            toEmail = toEmail.substring(0, toEmail.length()-1);
+        }else if(toEmail.endsWith("d")){
+            toEmail = toEmail.substring(0, toEmail.length()-1);
+        }
         if(foundUser.isPresent()){
             String saemTempPassword = generateRandomPassword();
 
@@ -59,7 +64,8 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom("SAEMcor@gmail.com");
             message.setTo(toEmail);
-            message.setText( "Hola "+ foundUser.get().getPersonBean().getName() + " Su contraseña temporal es " + saemTempPassword );
+            message.setText( "Hola "+ foundUser.get().getPersonBean().getName() + " Su nueva contraseña es " + saemTempPassword
+                    + ", por favor cambie su contraseña dentro de la aplicación después de iniciar sesión.");
             message.setSubject("Recuperación de contraseña");
             mailSender.send(message);
 

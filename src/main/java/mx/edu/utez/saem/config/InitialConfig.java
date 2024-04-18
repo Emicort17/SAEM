@@ -106,8 +106,8 @@ public class InitialConfig implements CommandLineRunner {
 
 
 
-        UserBean doctorUser = getOrSaveUser(new UserBean("isai331417@gmail.com", passwordEncoder.encode("123"), true, doctorPerson));
-        UserBean patientUser = getOrSaveUser(new UserBean("patient@gmail.com", passwordEncoder.encode("1234"), true, patientPerson));
+        UserBean doctorUser = getOrSaveUser(new UserBean("isai331417@gmail.comd", passwordEncoder.encode("123"), true, doctorPerson));
+        UserBean patientUser = getOrSaveUser(new UserBean("patient@gmail.comp", passwordEncoder.encode("1234"), true, patientPerson));
 
         DoctorBean doctor = getOrSaveDoctor(new DoctorBean("12344264123", doctorUser));
         PatientBean patient = getOrSavePatient(new PatientBean(false, patientUser));

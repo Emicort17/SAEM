@@ -68,8 +68,8 @@ public class PatientService {
         }
 
         Optional<UserBean> userByEmail = userRepository.findByEmail(email);
-        if (userByEmail.isPresent() && !email.endsWith("b")) {
-            email += "b";
+        if (userByEmail.isPresent() && !email.endsWith("p")) {
+            email += "p";
         }
 
         if (userRepository.findByEmail(email).isPresent()) {
