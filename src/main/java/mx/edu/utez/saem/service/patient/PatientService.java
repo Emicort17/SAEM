@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import mx.edu.utez.saem.config.ApiResponse;
 import mx.edu.utez.saem.model.address.AddressBean;
 import mx.edu.utez.saem.model.address.AddressRepository;
+import mx.edu.utez.saem.model.diagnostic.DiagnosticBean;
+import mx.edu.utez.saem.model.diagnostic.DiagnosticRepository;
 import mx.edu.utez.saem.model.medicalRecord.MedicalRecordBean;
 import mx.edu.utez.saem.model.medicalRecord.MedicalRecordRepository;
 import mx.edu.utez.saem.model.patient.PatientBean;
@@ -36,11 +38,17 @@ public class PatientService {
     private final PatientRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final MedicalRecordRepository medicalRecordRepository;
+    private final DiagnosticRepository diagnosticRepository;
 
     @Transactional(readOnly = true)
     public ResponseEntity<ApiResponse> getAll(){
         List<PatientBean> patients = repository.findAll();
         return new ResponseEntity<>(new ApiResponse(patients, HttpStatus.OK, "Ok"), HttpStatus.OK);
+    }
+    @Transactional(readOnly = true)
+    public ResponseEntity<ApiResponse> getAllDiagnostics(Long id){
+        List<DiagnosticBean> foundDiagnostics = diagnosticRepository.findAllByMedicalRecordBean_PatientBean_UserBean_IdOrderByStartDateDesc(id);
+        return new ResponseEntity<>(new ApiResponse(foundDiagnostics, HttpStatus.OK, "Recuperado" ), HttpStatus.OK);
     }
 
     @Transactional(readOnly = true)
@@ -51,44 +59,47 @@ public class PatientService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> save(PatientBean patient){
+    public ResponseEntity<ApiResponse> save(PatientBean patient) {
         String curp = patient.getUserBean().getPersonBean().getCurp();
-        if(repository.findByUserBeanPersonBeanCurp(curp).isPresent()) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El curp del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
+        String email = patient.getUserBean().getEmail();
+
+        if (repository.findByUserBeanPersonBeanCurp(curp).isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El CURP del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
         }
 
-        AddressBean savedAddress = addressRepository.save(patient.getUserBean().getPersonBean().getAddressBean());
+        Optional<UserBean> userByEmail = userRepository.findByEmail(email.concat("p"));
+        if (userByEmail.isEmpty()) {
+            email += "p";
+        }else{
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del paciente ya está registrado."), HttpStatus.BAD_REQUEST);
+        }
 
+        // Proceder con el registro del paciente
+        AddressBean savedAddress = addressRepository.save(patient.getUserBean().getPersonBean().getAddressBean());
         PersonBean personBean = patient.getUserBean().getPersonBean();
         personBean.setAddressBean(savedAddress);
         PersonBean savedPerson = personRepository.save(personBean);
 
         UserBean userBean = patient.getUserBean();
+        userBean.setEmail(email);
         userBean.setPersonBean(savedPerson);
         userBean.setPassword(passwordEncoder.encode(userBean.getPassword()));
         UserBean savedUser = userRepository.save(userBean);
 
         patient.setUserBean(savedUser);
-
-
         PatientBean savedPatient = repository.saveAndFlush(patient);
 
-
-        String formatnumber = String.format("%04d", savedPatient.getId());
-
-        char inicialNombre = savedPatient.getUserBean().getPersonBean().getName().charAt(0);
-        char inicialApellido = savedPatient.getUserBean().getPersonBean().getMiddleName().charAt(0);
-        char inicialApellido2 = savedPatient.getUserBean().getPersonBean().getLastName().isEmpty() ? 'X' : savedPatient.getUserBean().getPersonBean().getLastName().charAt(0);
-
-        String numExp = inicialNombre + "" + inicialApellido + "" + inicialApellido2 + formatnumber;
+        // Configurar y guardar el expediente médico
+        String formatNumber = String.format("%04d", savedPatient.getId());
+        char initialFirstName = savedPatient.getUserBean().getPersonBean().getName().charAt(0);
+        char initialMiddleName = savedPatient.getUserBean().getPersonBean().getMiddleName().charAt(0);
+        char initialLastName = savedPatient.getUserBean().getPersonBean().getLastName().isEmpty() ? 'X' : savedPatient.getUserBean().getPersonBean().getLastName().charAt(0);
+        String recordNumber = initialFirstName + "" + initialMiddleName + "" + initialLastName + formatNumber;
 
         MedicalRecordBean medicalRecordBean = new MedicalRecordBean();
-
-        medicalRecordBean.setNumber(numExp);
+        medicalRecordBean.setNumber(recordNumber);
         medicalRecordBean.setPatientBean(savedPatient);
-        medicalRecordBean.setDiagnosticBeans(null);
-
-        MedicalRecordBean savemedicalrecord = medicalRecordRepository.save(medicalRecordBean);
+        medicalRecordRepository.save(medicalRecordBean);
 
         return new ResponseEntity<>(new ApiResponse(savedPatient, HttpStatus.OK, "Guardado Exitosamente"), HttpStatus.OK);
     }

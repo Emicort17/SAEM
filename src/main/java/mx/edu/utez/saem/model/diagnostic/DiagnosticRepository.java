@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface DiagnosticRepository extends JpaRepository<DiagnosticBean, Long> {
     List<DiagnosticBean> findAllByOrderByStartDateDesc();
+
+    List<DiagnosticBean> findAllByMedicalRecordBean_PatientBean_UserBean_IdOrderByStartDateDesc(Long id);
 }

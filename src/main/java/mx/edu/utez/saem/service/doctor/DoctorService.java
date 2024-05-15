@@ -54,28 +54,43 @@ public class DoctorService {
     }
 
     @Transactional(rollbackFor = {SQLException.class})
-    public ResponseEntity<ApiResponse> save(DoctorBean doctor){
+    public ResponseEntity<ApiResponse> save(DoctorBean doctor) {
         String card = doctor.getCard();
-        if(repository.findByCard(card).isPresent()) {
-            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "La cedula del doctor ya está registrada."), HttpStatus.BAD_REQUEST);
+        String email = doctor.getUserBean().getEmail();
+
+        if (repository.findByCard(card).isPresent()) {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "La cédula del doctor ya está registrada."), HttpStatus.BAD_REQUEST);
         }
 
+        Optional<UserBean> userByEmail = userRepository.findByEmail(email.concat("d"));
+        if (userByEmail.isEmpty()) {
+            email += "d";
+        } else {
+            return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST, true, "El correo del doctor ya está registrado."), HttpStatus.BAD_REQUEST);
+        }
+
+        // Guardar la dirección
         AddressBean savedAddress = addressRepository.save(doctor.getUserBean().getPersonBean().getAddressBean());
 
+        // Guardar los datos personales
         PersonBean personBean = doctor.getUserBean().getPersonBean();
         personBean.setAddressBean(savedAddress);
         PersonBean savedPerson = personRepository.save(personBean);
 
+        // Configurar y guardar los datos del usuario
         UserBean userBean = doctor.getUserBean();
+        userBean.setEmail(email);
         userBean.setPersonBean(savedPerson);
         userBean.setPassword(passwordEncoder.encode(userBean.getPassword()));
         UserBean savedUser = userRepository.save(userBean);
 
+        // Configurar y guardar los datos del doctor
         doctor.setUserBean(savedUser);
-
         DoctorBean savedDoctor = repository.saveAndFlush(doctor);
+
         return new ResponseEntity<>(new ApiResponse(savedDoctor, HttpStatus.OK, "Guardado Exitosamente"), HttpStatus.OK);
     }
+
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<ApiResponse> update(DoctorBean updatedDoctor) {
@@ -94,7 +109,7 @@ public class DoctorService {
         UserBean foundUser = foundDoctor.getUserBean();
 
         foundUser.setEmail(updatedUser.getEmail());
-        foundUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        foundUser.setPassword((updatedUser.getPassword()));
         foundUser.setStatus(updatedUser.getStatus());
 
         PersonBean updatedPerson = updatedUser.getPersonBean();

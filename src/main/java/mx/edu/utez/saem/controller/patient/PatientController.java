@@ -15,6 +15,7 @@ import mx.edu.utez.saem.model.patient.PatientBean;
 import mx.edu.utez.saem.model.person.PersonBean;
 import mx.edu.utez.saem.model.user.UserBean;
 import mx.edu.utez.saem.service.patient.PatientService;
+import mx.edu.utez.saem.util.ExcelUploadService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -96,8 +97,14 @@ public class PatientController {
 
     @PostMapping("/import")
     public ResponseEntity<ApiResponse> importPatientsFromExcel(@RequestParam("file") MultipartFile file) {
-        this.service.savePatientsWithExcel(file);
-        return new ResponseEntity<>(new ApiResponse(null, HttpStatus.OK, "Pacientes Agregados Exitosamente"), HttpStatus.OK);
+        if (!ExcelUploadService.isValidExcelFile(file)) {
+            return ResponseEntity.badRequest().body(new ApiResponse("El archivo no es un Excel válido", HttpStatus.BAD_REQUEST, "Error: Tipo de archivo no soportado"));
+        }
+        try {
+            return this.service.savePatientsWithExcel(file);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse("Error interno del servidor al procesar el archivo", HttpStatus.INTERNAL_SERVER_ERROR, "Error"));
+        }
     }
 
     @PostMapping("/save")
@@ -123,6 +130,10 @@ public class PatientController {
     @GetMapping("/findOne/{curp}")
     public ResponseEntity<ApiResponse> verUno(@PathVariable String curp){
         return service.getOne(curp);
+    }
+    @GetMapping("/diagnostic/findAll/{id}")
+    public ResponseEntity<ApiResponse> patientDiagnostics(@PathVariable Long id){
+        return service.getAllDiagnostics(id);
     }
 
     @PostMapping("/changePassword")

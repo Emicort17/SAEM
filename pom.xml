@@ -11,7 +11,7 @@
     <groupId>mx.edu.utez</groupId>
     <artifactId>SAEM</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>SAEM1.0.0</name>
     <description>SAEM1.0.0</description>
     <properties>
@@ -102,6 +102,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <mainClass>mx.edu.utez.saem.Application</mainClass>
+                    <layout>JAR</layout>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
